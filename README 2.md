@@ -1,7 +1,7 @@
 # Angular Material Admin Lite - free and open source angular admin dashboard template
 Including responsive layout and high quality UI built with Angular Material.
 
-[Demo](https://flatlogic.com/templates/angular-material-admin/demo) | [Download](https://github.com/flatlogic/angular-material-admin/archive/master.zip) | [Available versions](https://demo.flatlogic.com/angular-material-admin/) | [More templates](https://flatlogic.com/admin-dashboards) | [Support forum](https://flatlogic.com/forum)
+[Demo](https://flatlogic.com/templates/ez-lesson/demo) | [Download](https://github.com/flatlogic/ez-lesson/archive/master.zip) | [Available versions](https://demo.flatlogic.com/ez-lesson/) | [More templates](https://flatlogic.com/admin-dashboards) | [Support forum](https://flatlogic.com/forum)
 
 ![1 (1)](https://user-images.githubusercontent.com/17360676/84912599-41a99c00-b0c2-11ea-8d9b-6c05a398b8ca.jpg)
 
@@ -35,8 +35,8 @@ Building a project from scratch means that there is a lot of things to keep trac
 You can start by cloning the latest version of Angular Material Admin on your local machine by running:
 
 ```shell
-$ git clone -o angular-material-admin -b master --single-branch \
-      https://github.com/flatlogic/angular-material-admin.git MyApp
+$ git clone -o ez-lesson -b master --single-branch \
+      https://github.com/flatlogic/ez-lesson.git MyApp
 $ cd MyApp
 ```
 

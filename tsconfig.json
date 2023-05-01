@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -14,7 +14,12 @@
     "lib": [
       "es2020",
       "dom"
-    ]
+    ],
+    "paths": {    
+            "@env/*": ["environments/*"],
+            "@app/*": ["app/*"],
+            "@service/*": ["app/shared/services*"]
+          }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

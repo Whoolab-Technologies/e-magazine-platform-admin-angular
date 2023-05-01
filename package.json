@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod",
+    "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "lint": "ng lint",
-    "hmr": "ng serve --configuration hmr"
+    "hmr": "ng serve --configuration hmr",
+    "build:deploy": "ng build --configuration production && firebase deploy"
   },
   "private": true,
   "dependencies": {
@@ -22,6 +24,7 @@
     "@angular/router": "~15.2.8",
     "apexcharts": "^3.39.0",
     "echarts": "^5.4.2",
+    "firebase": "^9.21.0",
     "font-awesome": "^4.7.0",
     "ng-apexcharts": "^1.7.5",
     "ngx-echarts": "^6.0.1",

@@ -26,22 +26,22 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$angular-material-admin-primary: mat.define-palette(theme.$md-primary);
-$angular-material-admin-accent: mat.define-palette(theme.$md-accent);
+$ez-lesson-primary: mat.define-palette(theme.$md-primary);
+$ez-lesson-accent: mat.define-palette(theme.$md-accent);
 
 // The warn palette is optional (defaults to red).
-$angular-material-admin-warn: mat.define-palette(theme.$md-warn);
+$ez-lesson-warn: mat.define-palette(theme.$md-warn);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$angular-material-admin-theme: mat.define-light-theme($angular-material-admin-primary, $angular-material-admin-accent, $angular-material-admin-warn);
+$ez-lesson-theme: mat.define-light-theme($ez-lesson-primary, $ez-lesson-accent, $ez-lesson-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 
 
-@include mat.all-legacy-component-themes($angular-material-admin-theme);
-@include component.app-component($angular-material-admin-theme);
+@include mat.all-legacy-component-themes($ez-lesson-theme);
+@include component.app-component($ez-lesson-theme);
 
 
 
