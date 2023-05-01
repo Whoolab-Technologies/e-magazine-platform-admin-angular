@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { routes } from '../../consts/routes';
+import { menu } from '../../consts/routes';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,7 +7,7 @@ import { routes } from '../../consts/routes';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent {
-  public routes: typeof routes = routes;
+  public menu = menu;
   public isOpenUiElements = false;
 
   public openUiElements() {

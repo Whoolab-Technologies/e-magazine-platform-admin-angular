@@ -11,8 +11,8 @@
     $warn: map.get($color-config, 'warn');
     
     .sidebar{
-        .mat-list-base {
-            & .mat-list-item {
+        .mat-mdc-list-base {
+            & .mat-mdc-list-item {
               &.active {
                 color: mat.get-color-from-palette($primary) !important;
                 background-color: $sidebar-background-color-hover;

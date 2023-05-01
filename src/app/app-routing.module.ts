@@ -1,8 +1,8 @@
-import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { DashboardPageComponent } from './pages/dashboard/containers';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-import {AuthGuard} from './pages/auth/guards';
+import { AuthGuard } from './pages/auth/guards';
 
 const routes: Routes = [
   {
@@ -11,18 +11,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     component: DashboardPageComponent
   },
-  {
-    path: 'typography',
-    pathMatch: 'full',
-    canActivate: [AuthGuard],
-    loadChildren: () => import('./pages/typography/typography.module').then(m => m.TypographyModule)
-  },
-  {
-    path: 'tables',
-    pathMatch: 'full',
-    canActivate: [AuthGuard],
-    loadChildren: () => import('./pages/tables/tables.module').then(m => m.TablesModule)
-  },
+
   {
     path: 'notification',
     pathMatch: 'full',
@@ -30,9 +19,16 @@ const routes: Routes = [
     loadChildren: () => import('./pages/notification/notification.module').then(m => m.NotificationModule)
   },
   {
-    path: 'ui',
+    path: 'students',
+    pathMatch: 'full',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./pages/ui-elements/ui-elements.module').then(m => m.UiElementsModule)
+    loadChildren: () => import('./pages/students/students.module').then(m => m.StudentsModule)
+  },
+  {
+    path: 'editions',
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/editions/editions.module').then(m => m.EditionsModule)
   },
   {
     path: '404',
@@ -51,9 +47,9 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-    useHash: true,
-    preloadingStrategy: PreloadAllModules
-})
+      useHash: false,
+      preloadingStrategy: PreloadAllModules
+    })
   ],
   exports: [RouterModule]
 })

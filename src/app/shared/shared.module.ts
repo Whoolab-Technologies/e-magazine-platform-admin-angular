@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
+//import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
+import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
