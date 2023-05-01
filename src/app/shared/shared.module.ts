@@ -1,0 +1,49 @@
+import { NgModule } from '@angular/core';
+import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { CommonModule } from '@angular/common';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
+import { FormsModule } from '@angular/forms';
+import { MatSidenavModule } from '@angular/material/sidenav';
+
+import { HeaderModule } from './header/header.module';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { FooterComponent } from './footer/footer.component';
+import { SettingsMenuComponent } from './ui-elements/settings-menu/settings-menu.component';
+import { DateMenuComponent } from './ui-elements/date-menu/date-menu.component';
+import { LayoutComponent } from './layout/layout.component';
+
+
+@NgModule({
+  declarations: [
+    SidebarComponent,
+    FooterComponent,
+    SettingsMenuComponent,
+    DateMenuComponent,
+    LayoutComponent
+  ],
+  imports: [
+    HeaderModule,
+    MatListModule,
+    MatIconModule,
+    RouterModule,
+    MatButtonModule,
+    CommonModule,
+    MatMenuModule,
+    MatSelectModule,
+    FormsModule,
+    MatSidenavModule
+  ],
+  exports: [
+    HeaderModule,
+    SidebarComponent,
+    FooterComponent,
+    SettingsMenuComponent,
+    DateMenuComponent,
+    LayoutComponent
+  ]
+})
+export class SharedModule { }

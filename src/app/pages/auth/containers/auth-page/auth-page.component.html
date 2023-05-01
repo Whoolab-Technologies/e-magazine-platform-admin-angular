@@ -1,0 +1,26 @@
+<div class="auth-page">
+
+  <div class="auth-page__logo">
+    <div class="auth-page__logo-wrapper">
+      <div class="auth-page__content-block">
+        <div class="auth-page__content-wrapper">
+          <div class="auth-page__group">
+
+            <h4 class="auth-page__group-title">Good Morning, User</h4>
+
+            <div class="auth-page__border-wrapper">
+
+            </div>
+
+            <app-login-form (sendLoginForm)="sendLoginForm()"></app-login-form>
+
+          </div>
+
+
+        </div>
+        <p class="auth-page__footer-title">© 2014-{{todayDate | year}} <a href="https://flatlogic.com/">Flatlogic</a>,
+          LLC. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</div>

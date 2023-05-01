@@ -1,0 +1,28 @@
+@import '/src/assets/styles/styles';
+
+.settings-button {
+  box-shadow: none;
+  background-color: $settings-button-background-color;
+  color: $settings-button-color;
+
+  &:hover {
+    background-color: $blue;
+    color: $settings-button-color-hover;
+  }
+
+  &__icon {
+    color: inherit;
+  }
+}
+
+.settings-menu {
+  position: absolute;
+
+  &__item {
+    color: $dark-grey;
+
+    &:hover {
+      background-color: $settings-menu-background-color-hover;
+    }
+  }
+}
