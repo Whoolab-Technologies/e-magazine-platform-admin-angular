@@ -1,0 +1,46 @@
+
+@use 'sass:map';
+@use '@angular/material' as mat;
+@import '/src/assets/styles/styles';
+
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary: map.get($color-config, 'primary');
+  $accent: map.get($color-config, 'accent');
+  $warn: map.get($color-config, 'warn');
+
+ 
+.user-button {
+    background-color: mat.get-color-from-palette($primary,200);
+    
+    &__icon {
+     color: mat.get-color-from-palette($primary, '500-contrast');
+    }
+  }
+
+
+.user-menu {
+    &__item-title {
+      color: $light-grey;
+  
+      &:hover {
+        color:mat.get-color-from-palette($primary);
+        background-color: mat.get-color-from-palette($warn);
+  
+        & .user-menu-icon {
+            color: mat.get-color-from-palette($primary);
+          }
+      }
+    }
+  }
+  
+}
+
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+}

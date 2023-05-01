@@ -1,0 +1,12 @@
+@use '/src/app/shared/header/containers/header/header.component.theme' as header;
+@use '/src/app/shared/header/components/user/user.component.theme' as user;
+@use '/src/app/shared/sidebar/sidebar.component.theme' as sidebar;
+@use '/src/app/pages/auth/containers/auth-page/auth-page.component.theme.scss' as auth;
+
+
+@mixin app-component($theme){
+    @include header.theme($theme);
+    @include user.theme($theme);
+    @include sidebar.theme($theme);
+    @include auth.theme($theme);
+}

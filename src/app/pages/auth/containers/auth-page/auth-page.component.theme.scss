@@ -1,0 +1,28 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@import '/src/assets/styles/styles';
+
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary: map.get($color-config, 'primary');
+  $accent: map.get($color-config, 'accent');
+  $warn: map.get($color-config, 'warn');
+
+  .auth-page {
+    &__content-block {
+        background-color:  mat.get-color-from-palette($accent,100);
+    }
+    &__logo {
+        background-color:  mat.get-color-from-palette($primary);
+    }
+  }
+
+}
+
+@mixin theme($theme) {
+    $color-config: mat.get-color-config($theme);
+    @if $color-config != null {
+      @include color($theme);
+    }
+  
+}
