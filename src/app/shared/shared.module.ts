@@ -15,6 +15,14 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import { LayoutComponent } from './layout/layout.component';
 
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatLegacyProgressBarModule as MatProgressBarModule } from '@angular/material/legacy-progress-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
+import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
+
+
 
 @NgModule({
   declarations: [
@@ -38,7 +46,8 @@ import { LayoutComponent } from './layout/layout.component';
     HeaderModule,
     SidebarComponent,
     FooterComponent,
-    LayoutComponent
+    LayoutComponent, MatCardModule, MatProgressBarModule, MatToolbarModule,
+    MatGridListModule, MatInputModule, MatTableModule
   ]
 })
 export class SharedModule { }

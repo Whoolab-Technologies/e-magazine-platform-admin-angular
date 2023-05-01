@@ -7,11 +7,11 @@ import {
   ApexStroke,
   ApexYAxis,
   ApexTitleSubtitle,
-  ApexLegend, ApexGrid
+  ApexLegend, ApexGrid, ApexFill
 } from 'ng-apexcharts';
 
 import { ServerChartData } from '../../models';
-import {colors} from '../../../../consts';
+import { colors } from '../../../../consts';
 
 type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -56,7 +56,7 @@ export class ServerChartComponent implements OnInit {
   }
 
   public initChart(data: number[], color: string): Partial<ChartOptions> {
-    return  {
+    return {
       chart: {
         type: 'area',
         height: 80,

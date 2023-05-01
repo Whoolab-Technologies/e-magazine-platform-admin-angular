@@ -19,6 +19,7 @@ export class LayoutComponent implements OnDestroy {
     this.mobileQuery.addListener(this.mobileQueryListener);
 
     this.isShowSidebar = !this.mobileQuery.matches;
+    console.log(this.isShowSidebar)
   }
 
   public ngOnDestroy(): void {

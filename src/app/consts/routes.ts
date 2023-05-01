@@ -1,4 +1,7 @@
-
+export enum routes {
+  DASHBOARD = '/dashboard',
+  LOGIN = '/'
+}
 export const menu = [
   {
     id: 'dashboards',
@@ -11,14 +14,14 @@ export const menu = [
     title: 'Students',
     type: 'basic',
     icon: 'people',
-    link: '/typography',
+    link: '/students',
   },
   {
     id: 'edition',
     title: 'Editions',
     type: 'basic',
     icon: 'feeds',
-    link: '/tables',
+    link: '/editions',
   },
   {
     id: 'notification',

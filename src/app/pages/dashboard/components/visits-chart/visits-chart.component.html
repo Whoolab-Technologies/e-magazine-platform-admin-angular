@@ -2,20 +2,14 @@
   <mat-card-title class="visits-chart__header">
     <h5 class="visits-chart__title">Visits Today</h5>
 
-    <app-settings-menu></app-settings-menu>
+    <!-- <app-settings-menu></app-settings-menu> -->
   </mat-card-title>
 
   <mat-card-content class="visits-chart__content">
     <div class="visits-chart__content-info">
       <h6 class="visits-chart__content-info-title">{{visitsChartData.all}}</h6>
-      <ngx-trend
-        class="visits-chart__content-info-chart"
-        [data]="visitsChartData.data"
-        [gradient]="[colors.GREEN]"
-        [height]="44"
-        [smooth]="true"
-        [strokeWidth]="5"
-      ></ngx-trend>
+      <ngx-trend class="visits-chart__content-info-chart" [data]="visitsChartData.data" [gradient]="[colors.GREEN]"
+        [height]="44" [smooth]="true" [strokeWidth]="5"></ngx-trend>
     </div>
 
     <div class="visits-chart__content-stats">

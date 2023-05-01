@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { ProjectStatData, ProjectTimeData } from '../../models';
 import { colors } from '../../../../consts';
+import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexFill, ApexGrid, ApexLegend, ApexPlotOptions, ApexStroke, ApexTooltip, ApexXAxis, ApexYAxis } from 'ng-apexcharts';
 
 type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -121,7 +122,7 @@ export class ProjectStatChartComponent implements OnInit {
           default:
             this.selectedStatsLightBlueData = this.projectsStatsData.lightBlue.daily;
         }
-      break;
+        break;
       case this.projectsType.SingApp:
         switch (dateType) {
           case 'Weekly':
@@ -133,7 +134,7 @@ export class ProjectStatChartComponent implements OnInit {
           default:
             this.selectedStatsSingAppData = this.projectsStatsData.singApp.daily;
         }
-      break;
+        break;
       case this.projectsType.RNS:
         switch (dateType) {
           case 'Weekly':
@@ -145,7 +146,7 @@ export class ProjectStatChartComponent implements OnInit {
           default:
             this.selectedStatsRNSData = this.projectsStatsData.rns.daily;
         }
-      break;
+        break;
     }
   }
 }
