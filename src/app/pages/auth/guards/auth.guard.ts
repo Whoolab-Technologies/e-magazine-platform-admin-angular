@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { routes } from '../../../consts';
 
 @Injectable()
-export class AuthGuard implements CanActivate{
+export class AuthGuard implements CanActivate {
   public routers: typeof routes = routes;
 
   constructor(private router: Router) {
