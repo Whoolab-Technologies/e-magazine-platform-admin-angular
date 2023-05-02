@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { StudentsComponent } from './students.component';
-import { StudentsListComponent } from './students-list/students-list.component';
+import { StudentsComponent } from '@app/pages/students/students.component';
+import { StudentsListComponent } from '@app/pages/students/students-list/students-list.component';
+import { StudentsResolver } from '@app/pages/students/resolver/students.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: StudentsComponent,
+    resolve: {
+      staffs: StudentsResolver,
+    },
     children: [{
       path: '',
       component: StudentsListComponent

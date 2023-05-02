@@ -3,7 +3,7 @@ import { environment as env, app } from '@env/environment';
 import 'firebase/storage';
 import 'firebase/firestore';
 import 'firebase/auth';
-import { getFirestore, collection, getDocs, Firestore } from 'firebase/firestore/lite';
+import { getFirestore, collection, getDocs, Firestore, DocumentData } from 'firebase/firestore';
 import { getAuth, Auth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getStorage, TaskState, TaskEvent, FirebaseStorage } from 'firebase/storage';
 import { from } from 'rxjs';
@@ -50,4 +50,28 @@ export class FirebaseService {
       })
     );
   }
+
+  getCollection(collectionName: string) {
+    return from(getDocs(collection(this.database, collectionName)));
+  }
 }
+
+export const snapshotToArray = (snapshot) => {
+  let returnArr: any = [];
+  snapshot.forEach((childSnapshot) => {
+    let item = childSnapshot.data();
+    item.id = childSnapshot.id;
+    returnArr.push(item);
+  });
+
+  return returnArr;
+};
+export const snapshot = (doc: DocumentData) => {
+  let returnDoc: any = {};
+  if (doc.exists) {
+    returnDoc = doc.data();
+    returnDoc.id = doc.id;
+  }
+  return returnDoc;
+};
+

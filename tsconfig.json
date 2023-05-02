@@ -18,7 +18,7 @@
     "paths": {    
             "@env/*": ["environments/*"],
             "@app/*": ["app/*"],
-            "@service/*": ["app/shared/services*"]
+            "@services/*": ["app/shared/services/*"]
           }
   },
   "angularCompilerOptions": {
