@@ -10,7 +10,7 @@ import { Student } from '@app/pages/students/models/student';
   styleUrls: ['./students-list.component.scss']
 })
 export class StudentsListComponent implements OnInit, OnDestroy {
-  public displayedColumns: string[] = ['name', 'email', 'product', 'price', 'date', 'city', 'status'];
+  public displayedColumns: string[] = ['name', 'email', 'address', 'class', 'subjects'];
   public dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
