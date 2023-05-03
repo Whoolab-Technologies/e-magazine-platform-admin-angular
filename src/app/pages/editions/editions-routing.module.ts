@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EditionsComponent } from './editions.component';
-import { EditionsListComponent } from './editions-list/editions-list.component';
+import { EditionsComponent } from '@app/pages/editions/editions.component';
+import { EditionsListComponent } from '@app/pages/editions/editions-list/editions-list.component';
+import { EditionsResolver } from '@app/pages/editions/resolver/editions.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: EditionsComponent,
+    resolve: {
+      editions: EditionsResolver
+    },
     children: [{
       path: '',
       component: EditionsListComponent

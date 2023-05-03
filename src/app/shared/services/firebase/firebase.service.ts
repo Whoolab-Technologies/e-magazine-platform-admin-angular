@@ -51,8 +51,10 @@ export class FirebaseService {
     );
   }
 
-  getCollection(collectionName: string) {
-    return from(getDocs(collection(this.database, collectionName)));
+  getCollection(collectionName: string, orderBy = null) {
+    return orderBy ?
+      from(getDocs(collection(this.database, collectionName))) :
+      from(getDocs(collection(this.database, collectionName)));
   }
 }
 
