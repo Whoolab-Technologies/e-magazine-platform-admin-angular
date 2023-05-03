@@ -1,20 +1,30 @@
-
 @use 'sass:map';
 @use '@angular/material' as mat;
+@import '/src/assets/styles/styles';
 
 @mixin color($theme) {
   $color-config: mat.get-color-config($theme);
   $primary: map.get($color-config, 'primary');
+  $accent: map.get($color-config, 'accent');
 
   .header {
     background-color: mat.get-color-from-palette($primary);
+
+    &__title-text {
+      color: $header-title-font-color;
+
+      .suffix {
+        color: mat.get-color-from-palette($accent);
+      }
+    }
   }
 }
 
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
-  @if $color-config != null {
+
+  @if $color-config !=null {
     @include color($theme);
   }
 

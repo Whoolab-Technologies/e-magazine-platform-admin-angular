@@ -21,7 +21,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
-
+import { PipesModule } from './pipes/pipes.module';
 
 
 @NgModule({
@@ -47,7 +47,7 @@ import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy
     SidebarComponent,
     FooterComponent,
     LayoutComponent, MatCardModule, MatProgressBarModule, MatToolbarModule,
-    MatGridListModule, MatInputModule, MatTableModule
+    MatGridListModule, MatInputModule, MatTableModule, PipesModule
   ]
 })
 export class SharedModule { }
