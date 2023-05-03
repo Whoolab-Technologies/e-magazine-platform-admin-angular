@@ -17,9 +17,10 @@ export class LayoutComponent implements OnDestroy {
     this.mobileQuery = media.matchMedia('(max-width: 1024px)');
     this.mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this.mobileQueryListener);
-
+    console.log("this.mobileQuery ", this.mobileQuery)
     this.isShowSidebar = !this.mobileQuery.matches;
     console.log(this.isShowSidebar)
+    // changeDetectorRef.detectChanges();
   }
 
   public ngOnDestroy(): void {

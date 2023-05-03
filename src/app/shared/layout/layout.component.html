@@ -1,14 +1,8 @@
-<app-header (isShowSidebar)="sidenav.toggle($event)" [isMenuOpened]="isShowSidebar"></app-header>
+<app-header (toggleSideMenu)="sidenav.toggle($event)" [isMenuOpened]="isShowSidebar"></app-header>
 
 <mat-sidenav-container class="layout">
-  <mat-sidenav
-    #sidenav
-    mode="side"
-    [(opened)]="isShowSidebar"
-    class="layout-sidebar"
-    [mode]="mobileQuery.matches ? 'over' : 'side'"
-    [fixedInViewport]="mobileQuery.matches"
-  >
+  <mat-sidenav #sidenav mode="side" [(opened)]="isShowSidebar" class="layout-sidebar"
+    [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches">
     <app-sidebar></app-sidebar>
   </mat-sidenav>
   <mat-sidenav-content class="layout-content">

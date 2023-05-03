@@ -13,7 +13,7 @@ import { routes } from '../../../../consts';
 })
 export class HeaderComponent {
   @Input() isMenuOpened: boolean;
-  @Output() isShowSidebar = new EventEmitter<boolean>();
+  @Output() toggleSideMenu = new EventEmitter<boolean>();
   public user$: Observable<User>
   public emails$: Observable<Email[]>
   public routers: typeof routes = routes;
@@ -30,7 +30,7 @@ export class HeaderComponent {
   public openMenu(): void {
     this.isMenuOpened = !this.isMenuOpened;
 
-    this.isShowSidebar.emit(this.isMenuOpened);
+    this.toggleSideMenu.emit(this.isMenuOpened);
   }
 
   public signOut(): void {
