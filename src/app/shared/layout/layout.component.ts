@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
 
@@ -7,21 +7,25 @@ import { MatSidenav } from '@angular/material/sidenav';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })
-export class LayoutComponent implements OnDestroy {
+export class LayoutComponent implements OnDestroy, OnInit {
   @ViewChild('sidenav') sidenav: MatSidenav;
   public isShowSidebar: boolean;
   public mobileQuery: MediaQueryList;
   private mobileQueryListener: () => void;
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
-    this.mobileQuery = media.matchMedia('(max-width: 1024px)');
-    this.mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this.mobileQueryListener);
-    console.log("this.mobileQuery ", this.mobileQuery)
-    this.isShowSidebar = !this.mobileQuery.matches;
-    console.log(this.isShowSidebar)
+  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher) {
+
+
     // changeDetectorRef.detectChanges();
   }
+  ngOnInit(): void {
+    this.mobileQuery = this.media.matchMedia('(max-width: 1024px)');
+    this.mobileQueryListener = () => this.changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this.mobileQueryListener);
+    this.isShowSidebar = !this.mobileQuery.matches;
+    console.log(this.isShowSidebar)
+  }
+
 
   public ngOnDestroy(): void {
     this.mobileQuery.removeListener(this.mobileQueryListener);
