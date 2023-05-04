@@ -22,13 +22,15 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 import { PipesModule } from './pipes/pipes.module';
+import { ActionComponent } from './action/action.component';
 
 
 @NgModule({
   declarations: [
     SidebarComponent,
     FooterComponent,
-    LayoutComponent
+    LayoutComponent,
+    ActionComponent
   ],
   imports: [
     HeaderModule,
@@ -43,7 +45,7 @@ import { PipesModule } from './pipes/pipes.module';
     MatSidenavModule
   ],
   exports: [
-    HeaderModule,
+    HeaderModule, ActionComponent,
     SidebarComponent,
     FooterComponent,
     LayoutComponent, MatCardModule, MatProgressBarModule, MatToolbarModule,

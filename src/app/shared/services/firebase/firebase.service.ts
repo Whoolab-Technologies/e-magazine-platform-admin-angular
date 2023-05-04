@@ -3,7 +3,7 @@ import { environment as env, app } from '@env/environment';
 import 'firebase/storage';
 import 'firebase/firestore';
 import 'firebase/auth';
-import { getFirestore, collection, getDocs, Firestore, DocumentData } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, Firestore, DocumentData, query, orderBy } from 'firebase/firestore';
 import { getAuth, Auth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getStorage, TaskState, TaskEvent, FirebaseStorage } from 'firebase/storage';
 import { from } from 'rxjs';
@@ -51,10 +51,10 @@ export class FirebaseService {
     );
   }
 
-  getCollection(collectionName: string, orderBy = null) {
-    return orderBy ?
-      from(getDocs(collection(this.database, collectionName))) :
-      from(getDocs(collection(this.database, collectionName)));
+  getCollection(collectionName: string, orderByField = null) {
+    const ref = collection(this.database, collectionName)
+    const docQuery = orderByField ? query(ref, orderBy(orderByField)) : ref;
+    return from(getDocs(docQuery))
   }
 }
 

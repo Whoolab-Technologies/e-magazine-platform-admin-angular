@@ -1,1 +1,93 @@
-<p>editions-list works!</p>
+<mat-card class="editions-table">
+    <!-- <div class="editions-table__header"> -->
+
+    <div class="header-item">
+        <div class="item">
+            <div class="field-label">Select Class</div>
+            <mat-select [(value)]="class" (selectionChange)="changeClass()">
+                <ng-container *ngFor="let option of classes$|async">
+                    <mat-option [value]="option.id">{{option.name}}</mat-option>
+                </ng-container>
+            </mat-select>
+
+        </div>
+        <div class="item">
+            <div class="field-label">Select Subject</div>
+            <mat-select [(value)]="subject" (selectionChange)="changeSubject()">
+                <ng-container *ngFor="let option of subjects$|async">
+                    <mat-option [value]="option.id">{{option.name}}</mat-option>
+                </ng-container>
+            </mat-select>
+        </div>
+        <div class="item">
+            <div class="add-button">
+                <button class="w-full float-right" mat-raised-button color="primary">Upload</button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- </div> -->
+
+    <mat-card-content class="editions-table__content">
+
+        <table mat-table [dataSource]="dataSource" class="editions-table__table mat-elevation-z8">
+            <ng-container *ngFor="let column of displayedColumns" matColumnDef="{{column}}"
+                class="editions-table__table-row">
+                <th mat-header-cell *matHeaderCellDef class="editions-table__table-row-title">{{column}}</th>
+                <td mat-cell *matCellDef="let element; let i=index" class="editions-table__table-content">
+                    <container-element [ngSwitch]="column">
+                        <!-- the same view can be shown in more than one case -->
+
+                        <span *ngSwitchCase="'description'"> {{element['desc']}}</span>
+                        <span *ngSwitchCase="'image'">
+                            <div class="image">
+                                <img class="img" src="{{element['image']}}" />
+
+                            </div>
+                        </span>
+                        <span *ngSwitchCase="'published'">
+                            <span class="editions-table__content-badge"
+                                [ngClass]="{'published': element[column], 'unpublished':!element[column]}">
+                                <span>
+
+                                </span>
+                            </span>
+                        </span>
+                        <span *ngSwitchCase="'action'">
+                            <app-action (onEdit)="edit($event)" (onView)="view($event)" [data]="element" [index]="i"
+                                (onDelete)="delete($event)"></app-action>
+                        </span>
+
+                        <span *ngSwitchDefault> {{element[column]}}</span>
+
+                    </container-element>
+
+                    <!-- <span *ngIf="column == 'description'">{{element['desc']}}</span>
+                    <span *ngIf="column == 'image'">
+                        <div class="image">
+                            <img class="img" src="{{element['image']}}" />
+
+                        </div>
+                    </span>
+                    <span *ngIf="column !== 'published'">{{element[column]}}</span>
+                    <ng-container *ngIf="column === 'published'">
+                        <span class="editions-table__content-badge"
+                            [ngClass]="{'published': element[column], 'unpublished':!element[column]}">
+                            <span></span>
+                        </span>
+                    </ng-container> -->
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+        <ng-container *ngIf="!dataSource.data || !dataSource.data.length">
+            <div class="editions-table__content__no-content ">
+                No data found
+            </div>
+        </ng-container>
+    </mat-card-content>
+</mat-card>

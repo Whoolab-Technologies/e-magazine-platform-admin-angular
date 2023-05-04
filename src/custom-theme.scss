@@ -33,14 +33,12 @@ $ez-lesson-accent: mat.define-palette(theme.$md-accent);
 $ez-lesson-warn: mat.define-palette(theme.$md-warn);
 
 
-$ez-lesson-theme:mat.define-light-theme((
- color: (
-   primary: $ez-lesson-primary,
-   accent: $ez-lesson-accent,
-   warn:  $ez-lesson-warn,
- ),
- density: 0,
-));
+$ez-lesson-theme: mat.define-light-theme((color: (primary: $ez-lesson-primary,
+        accent: $ez-lesson-accent,
+        warn: $ez-lesson-warn,
+      ),
+      density: 0,
+    ));
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -68,8 +66,7 @@ $ama-yellow: (
   A200: $yellow,
   A400: $yellow,
   A700: $yellow,
-  contrast: (
-    50: rgba(black, 0.87),
+  contrast: (50: rgba(black, 0.87),
     100: rgba(black, 0.87),
     200: rgba(black, 0.87),
     300: rgba(black, 0.87),
@@ -97,8 +94,7 @@ $ama-pink: (
   700: $pink,
   800: $pink,
   900: $pink,
-  contrast: (
-    50: rgba(black, 0.87),
+  contrast: (50: rgba(black, 0.87),
     100: rgba(black, 0.87),
     200: rgba(black, 0.87),
     300: rgba(black, 0.87),
@@ -130,8 +126,7 @@ $ama-blue: (
   A200: $blue,
   A400: $blue,
   A700: $blue,
-  contrast: (
-    50: rgba(black, 0.87),
+  contrast: (50: rgba(black, 0.87),
     100: rgba(black, 0.87),
     200: rgba(black, 0.87),
     300: rgba(black, 0.87),
@@ -159,7 +154,10 @@ button.mat-menu-item {
   font-size: 16px;
 }
 
-button.mat-menu-item:hover:not([disabled]), .mat-menu-item.cdk-program-focused:not([disabled]), .mat-menu-item.cdk-keyboard-focused:not([disabled]), .mat-menu-item-highlighted:not([disabled]) {
+button.mat-menu-item:hover:not([disabled]),
+.mat-menu-item.cdk-program-focused:not([disabled]),
+.mat-menu-item.cdk-keyboard-focused:not([disabled]),
+.mat-menu-item-highlighted:not([disabled]) {
   font-size: 16px;
 }
 
@@ -204,40 +202,61 @@ mat-select.mat-select {
   display: none;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
 
-.mat-h1, .mat-headline, .mat-typography h1{
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-h1,
+.mat-headline,
+.mat-typography h1 {
   font-weight: 400;
   font-size: 48px;
 }
 
-.mat-h2, .mat-headline, .mat-typography h2{
+.mat-h2,
+.mat-headline,
+.mat-typography h2 {
   font-weight: 400;
   font-size: 36px;
 }
 
-.mat-h3, .mat-headline, .mat-typography h3{
+.mat-h3,
+.mat-headline,
+.mat-typography h3 {
   font-weight: 400;
   font-size: 26px;
 }
 
-.mat-h4, .mat-headline, .mat-typography h4{
+.mat-h4,
+.mat-headline,
+.mat-typography h4 {
   font-weight: 400;
   font-size: 24px;
 }
 
-.mat-h5, .mat-headline, .mat-typography h5{
+.mat-h5,
+.mat-headline,
+.mat-typography h5 {
   font-weight: 400;
   font-size: 21px;
 }
 
-.mat-h6, .mat-headline, .mat-typography h6{
+.mat-h6,
+.mat-headline,
+.mat-typography h6 {
   font-weight: 400;
   font-size: 18px;
 }
 
-.mat-body p, .mat-body-1 p, .mat-typography p {
+.mat-body p,
+.mat-body-1 p,
+.mat-typography p {
   margin-bottom: 16px;
   line-height: normal;
 }
@@ -292,7 +311,8 @@ mat-toolbar.page-header {
   }
 }
 
-mat-tab-header .mat-tab-label, .mat-tab-link {
+mat-tab-header .mat-tab-label,
+.mat-tab-link {
   text-transform: uppercase;
   color: $tabs-header-font-color;
   font-weight: $fw-normal;
@@ -378,19 +398,48 @@ div.apexcharts-xaxistooltip-bottom:after {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-::-webkit-scrollbar { width: 6px; height: 3px;}
-::-webkit-scrollbar-button { display: none }
-::-webkit-scrollbar-track {  background-color: $scrollbar-track-color;}
-::-webkit-scrollbar-track-piece { background-color: $scrollbar-track-piece-color;}
-::-webkit-scrollbar-thumb { height: 50px; background-color: $light-grey; border-radius: 36px;}
-::-webkit-scrollbar-corner { background-color: $scrollbar-corner-color;}
-::-webkit-resizer { background-color: $dark-grey;}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 3px;
+}
 
-.w-full{
+::-webkit-scrollbar-button {
+  display: none
+}
+
+::-webkit-scrollbar-track {
+  background-color: $scrollbar-track-color;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: $scrollbar-track-piece-color;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 50px;
+  background-color: $light-grey;
+  border-radius: 36px;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: $scrollbar-corner-color;
+}
+
+::-webkit-resizer {
+  background-color: $dark-grey;
+}
+
+.w-full {
   width: 100% !important;
 }
 
-.h-full{
+.h-full {
   height: 100% !important;
 }
 
+.field-label {
+  color: $dark-grey;
+  padding: 4px 0;
+  font-size: $fs-small;
+  font-weight: $fw-lighter;
+}

@@ -3,6 +3,7 @@
 @use '/src/app/shared/sidebar/sidebar.component.theme' as sidebar;
 @use '/src/app/pages/auth/containers/auth-page/auth-page.component.theme' as auth;
 @use '/src/app/pages/students/students-list/students-list.component.theme' as students;
+@use '/src/app/pages/editions/editions-list/editions-list.component.theme' as editions;
 
 
 @mixin app-component($theme) {
@@ -11,4 +12,5 @@
     @include sidebar.theme($theme);
     @include auth.theme($theme);
     @include students.theme($theme);
+    @include editions.theme($theme);
 }

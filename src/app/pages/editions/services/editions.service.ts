@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Student } from '@app/pages/students/models/student';
 import { FirebaseService, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
-import { BehaviorSubject, Observable, map, mergeMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map, mergeMap, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,16 +9,29 @@ import { BehaviorSubject, Observable, map, mergeMap, tap } from 'rxjs';
 export class EditionsService {
   private _classes: BehaviorSubject<any[] | null> = new BehaviorSubject([]);
   private _subjects: BehaviorSubject<any[] | null> = new BehaviorSubject([]);
+  private _editions: BehaviorSubject<any[] | null> = new BehaviorSubject([]);
+  private _class: BehaviorSubject<any | null> = new BehaviorSubject(null);
+  private _subject: BehaviorSubject<any | null> = new BehaviorSubject(null);
   constructor(
     private _firebaseService: FirebaseService
   ) { }
 
-  get _classes$(): Observable<any[]> {
+  get classes$(): Observable<any[]> {
     return this._classes.asObservable();
   }
 
-  get _subjects$(): Observable<any[]> {
+  get subjects$(): Observable<any[]> {
     return this._subjects.asObservable();
+  }
+  get class$(): Observable<any> {
+    return this._class.asObservable();
+  }
+
+  get subject$(): Observable<any> {
+    return this._subject.asObservable();
+  }
+  get editions$(): Observable<any[]> {
+    return this._editions.asObservable();
   }
 
 
@@ -34,11 +47,13 @@ export class EditionsService {
         mergeMap((response) => {
           const classes = snapshotToArray(response);
           this._classes.next(classes);
-          return this.getSubjects(classes[0].id)
+          if (classes.length)
+            return this.getSubjects(classes[0].id)
+          return of([])
         }),
 
         tap((response: any) => {
-          console.log(" getClasses response ", response)
+          this._editions.next(response);
           return response
 
         })
@@ -46,10 +61,8 @@ export class EditionsService {
   }
 
   getSubjects(classId: string): Observable<any[]> {
-    console.log("classId ", classId)
-
     const path = `classes/${classId}/subjects`;
-    console.log(path)
+    this._class.next(classId)
     return this._firebaseService
       .getCollection(path)
       .pipe(
@@ -58,11 +71,13 @@ export class EditionsService {
         // }),
         mergeMap((response) => {
           const subjects = snapshotToArray(response);
-
-          return this.getEditions(classId, subjects[0].id)
+          this._subjects.next(subjects);
+          if (subjects.length)
+            return this.getEditions(classId, subjects[0].id)
+          return of([])
         }),
         map((editions) => {
-          console.log(" getSubjects response ", editions)
+          this._editions.next(editions);
           return editions;
         }),
       );
@@ -70,18 +85,15 @@ export class EditionsService {
 
 
   getEditions(classId: string, subjectId: string): Observable<any[]> {
-    console.log("classId ", classId, "subjectId ", subjectId)
-
-    const path = `classes/${classId}/subjects/${subjectId}/edition`;
-    console.log(path)
+    const path = `classes/${classId}/subjects/${subjectId}/editions`;
+    this._subject.next(subjectId)
     return this._firebaseService
-      .getCollection(path)
+      .getCollection(path, 'index')
       .pipe(
 
         map((response) => {
-
           const editions = snapshotToArray(response);
-          console.log("getEditions response", editions)
+          this._editions.next(editions);
           return editions
         })
       );
