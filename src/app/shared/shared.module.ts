@@ -23,6 +23,8 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 import { PipesModule } from './pipes/pipes.module';
 import { ActionComponent } from './action/action.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 
 @NgModule({
@@ -46,10 +48,10 @@ import { ActionComponent } from './action/action.component';
   ],
   exports: [
     HeaderModule, ActionComponent,
-    SidebarComponent,
-    FooterComponent,
+    SidebarComponent, FormsModule, MatIconModule,
+    FooterComponent, MatSidenavModule, FlexLayoutModule,
     LayoutComponent, MatCardModule, MatProgressBarModule, MatToolbarModule,
     MatGridListModule, MatInputModule, MatTableModule, PipesModule
-  ]
+  ],
 })
 export class SharedModule { }

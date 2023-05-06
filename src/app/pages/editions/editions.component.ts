@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-editions',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./editions.component.scss']
 })
 export class EditionsComponent {
+  drawerMode = 'side';
+  @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+  onBackdropClicked() {
 
+  }
 }

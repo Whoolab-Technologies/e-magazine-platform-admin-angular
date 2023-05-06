@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { EditionsComponent } from '@app/pages/editions/editions.component';
 import { EditionsListComponent } from '@app/pages/editions/editions-list/editions-list.component';
 import { EditionsResolver } from '@app/pages/editions/resolver/editions.resolver';
+import { EditionDetailsComponent } from './edition-details/edition-details.component';
 
 const routes: Routes = [
   {
@@ -11,10 +12,16 @@ const routes: Routes = [
     resolve: {
       editions: EditionsResolver
     },
-    children: [{
-      path: '',
-      component: EditionsListComponent
-    }]
+    children: [
+      {
+        path: '',
+        component: EditionsListComponent,
+
+      }, {
+        path: 'add',
+        component: EditionDetailsComponent
+      },
+    ]
   }
 ];
 

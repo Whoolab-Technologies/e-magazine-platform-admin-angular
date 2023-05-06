@@ -443,3 +443,13 @@ div.apexcharts-xaxistooltip-bottom:after {
   font-size: $fs-small;
   font-weight: $fw-lighter;
 }
+
+.mat-form-field {
+  width: 100%;
+}
+
+mat-select.mat-select {
+  display: inline-block !important;
+  width: inherit !important;
+
+}

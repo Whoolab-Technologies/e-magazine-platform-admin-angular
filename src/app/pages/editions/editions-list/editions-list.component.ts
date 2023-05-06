@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EditionsService } from '@app/pages/editions/services/editions.service';
 import { BehaviorSubject, Observable, Subject, map, takeUntil } from 'rxjs';
 
@@ -22,7 +23,8 @@ export class EditionsListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   pageSizeOptions = [10, 15, 20, 50, 100];
-  constructor(private _service: EditionsService) {
+  latestIndex: number = 0;
+  constructor(private _service: EditionsService, private _router: Router, private _route: ActivatedRoute) {
 
   }
 
@@ -72,5 +74,9 @@ export class EditionsListComponent implements OnInit, OnDestroy {
   delete(event) {
     console.log("delete ", event)
 
+  }
+  upload() {
+    console.log("upload")
+    this._router.navigate(['./add'], { relativeTo: this._route })
   }
 }

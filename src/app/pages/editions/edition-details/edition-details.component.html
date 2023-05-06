@@ -1,0 +1,126 @@
+<section class="add-editions">
+    <mat-card class="add-editions__card">
+        <!-- <div class="editions-table__header"> -->
+
+        <div class="add-editions__header-item">
+            Add New Edition
+        </div>
+        <mat-card-content>
+            <div class="add-editions__form-section">
+                <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                    <div fxFlex="45">
+                        <mat-form-field appearance='outline'>
+                            <mat-select [(value)]="class" (selectionChange)="changeClass()">
+                                <ng-container *ngFor="let option of classes$|async">
+                                    <mat-option [value]="option.id">{{option.name}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="45">
+                        <mat-form-field appearance='outline'>
+                            <mat-select [(value)]="subject">
+                                <ng-container *ngFor="let option of subjects$|async">
+                                    <mat-option [value]="option.id">{{option.name}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="45">
+                        <mat-form-field appearance='outline'>
+                            <mat-label> Edition</mat-label>
+                            <input matInput placeholder="Edition Name" [(ngModel)]="edition.name" required>
+
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="45">
+                        <mat-form-field appearance='outline'>
+                            <mat-label>Description</mat-label>
+                            <textarea matInput [(ngModel)]="edition.desc" cdkTextareaAutosize
+                                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
+                                required></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="add-editions__header-item">
+                Add topics
+            </div>
+            <div class="add-editions__topics">
+
+                <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="5">
+                    <div fxFlex="20">
+                        <mat-form-field appearance='outline'>
+                            <mat-label> Topic Name</mat-label>
+                            <input matInput placeholder="Topic Name" [(ngModel)]="topic.name" required>
+
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="20">
+                        <mat-form-field appearance='outline'>
+                            <mat-label>Topic Description</mat-label>
+                            <textarea matInput [(ngModel)]="topic.desc" cdkTextareaAutosize
+                                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
+                                required></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="20">
+                        <mat-form-field appearance='outline'>
+                            <mat-label>Topic Description</mat-label>
+                            <input matInput placeholder="Topic Name" [(ngModel)]="topic.name" required>
+
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="20">
+                        <mat-form-field appearance='outline'>
+                            <mat-label>Topic Description</mat-label>
+                            <textarea matInput [(ngModel)]="topic.desc" cdkTextareaAutosize
+                                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
+                                required></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="5">
+                        <div>
+                            <button mat-icon-button color="primary" aria-label="Add Topic" (click)="addTopic()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <ng-container *ngIf="edition.topics && edition.topics.length">
+
+                    <div class="add-editions__header-item">
+                        Topics
+                    </div>
+                    <div class="add-editions__topics">
+                        <ng-container *ngFor="let topic of edition.topics">
+                            <div fxLayout="row" fxLayoutAlign="space-between">
+                                <div fxFlex="45">
+                                    <mat-form-field appearance='outline'>
+                                        <mat-label> Topic</mat-label>
+                                        <input matInput placeholder="Edition Name" [(ngModel)]="topic.name" required>
+
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex="45">
+                                    <mat-form-field appearance='outline'>
+                                        <mat-label> Desc</mat-label>
+                                        <input matInput placeholder="Edition Name" [(ngModel)]="topic.desc" required>
+
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button color="warn">Cancel</button>
+            <button mat-raised-button color="primary" (click)="submitEditions()">Submit</button>
+        </mat-card-actions>
+
+    </mat-card>
+</section>

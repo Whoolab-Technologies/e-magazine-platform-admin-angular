@@ -11,16 +11,19 @@ import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/materia
 
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { EditionDetailsComponent } from './edition-details/edition-details.component';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
     EditionsComponent,
-    EditionsListComponent
+    EditionsListComponent,
+    EditionDetailsComponent
   ],
   imports: [
     CommonModule,
     EditionsRoutingModule,
     SharedModule, MatTableModule, MatPaginatorModule, MatSelectModule, MatButtonModule
-  ]
+  ],
 })
 export class EditionsModule { }

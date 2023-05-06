@@ -3,10 +3,10 @@ import { environment as env, app } from '@env/environment';
 import 'firebase/storage';
 import 'firebase/firestore';
 import 'firebase/auth';
-import { getFirestore, collection, getDocs, Firestore, DocumentData, query, orderBy } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, Firestore, DocumentData, query, orderBy, doc, setDoc } from 'firebase/firestore';
 import { getAuth, Auth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getStorage, TaskState, TaskEvent, FirebaseStorage } from 'firebase/storage';
-import { from } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +55,12 @@ export class FirebaseService {
     const ref = collection(this.database, collectionName)
     const docQuery = orderByField ? query(ref, orderBy(orderByField)) : ref;
     return from(getDocs(docQuery))
+  }
+
+  addDoc(collection, data): Observable<any> {
+    console.log("collection ", collection)
+    const docRef = doc(this.db, collection)
+    return from(setDoc(docRef, data));
   }
 }
 

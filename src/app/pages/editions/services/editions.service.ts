@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Student } from '@app/pages/students/models/student';
 import { FirebaseService, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
-import { BehaviorSubject, Observable, map, mergeMap, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map, mergeMap, of, switchMap, take, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -97,5 +97,29 @@ export class EditionsService {
           return editions
         })
       );
+  }
+
+  addEditions(className, subject, edition): Observable<any[]> {
+    const collection = `classes/${className}/subjects/${subject}/editions/${edition.name}`;
+    console.log("collection ", collection)
+    return this.editions$.pipe(
+      take(1),
+      switchMap((editions: any) =>
+        this._firebaseService
+          .addDoc(collection, edition)
+
+          .pipe(
+            map((doc: any) => {
+              console.log("doc id", doc)
+              edition.id = edition.name;
+              this._editions.next(edition);
+
+              // Return new booking from observable
+              return editions;
+            })
+          )
+      )
+    );
+
   }
 }
