@@ -30,8 +30,6 @@ export class StudentsListComponent implements OnInit, OnDestroy {
       .subscribe((students: Student[]) => {
         this.dataSource.data = students;
         this.students = [...students];
-        console.log(this.students)
-
         // Mark for check
         this._changeDetectorRef.markForCheck();
       });

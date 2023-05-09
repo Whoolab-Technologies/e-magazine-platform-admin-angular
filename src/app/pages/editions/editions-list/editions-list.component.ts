@@ -68,7 +68,7 @@ export class EditionsListComponent implements OnInit, OnDestroy {
   }
 
   edit(event) {
-    console.log("edit ", event)
+    this._router.navigate(['./', event], { relativeTo: this._route })
   }
 
   view(event) {
@@ -86,7 +86,6 @@ export class EditionsListComponent implements OnInit, OnDestroy {
 
   }
   upload() {
-    console.log("upload")
-    this._router.navigate(['./add'], { relativeTo: this._route })
+    this._router.navigate(['./', 'new'], { relativeTo: this._route })
   }
 }

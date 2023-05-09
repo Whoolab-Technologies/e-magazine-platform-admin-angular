@@ -23,7 +23,6 @@ export class LayoutComponent implements OnDestroy, OnInit {
     this.mobileQueryListener = () => this.changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this.mobileQueryListener);
     this.isShowSidebar = !this.mobileQuery.matches;
-    console.log(this.isShowSidebar)
   }
 
 

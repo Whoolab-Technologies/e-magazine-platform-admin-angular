@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Student } from '@app/pages/students/models/student';
 import { FirebaseService, snapshot, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
 import * as moment from 'moment';
-import { BehaviorSubject, Observable, map, mergeMap, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map, mergeMap, of, switchMap, take, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,8 @@ export class EditionsService {
   private _editions: BehaviorSubject<any[] | null> = new BehaviorSubject([]);
   private _class: BehaviorSubject<any | null> = new BehaviorSubject(null);
   private _subject: BehaviorSubject<any | null> = new BehaviorSubject(null);
+
+  private _edition: BehaviorSubject<any | null> = new BehaviorSubject(null);
   constructor(
     private _firebaseService: FirebaseService
   ) { }
@@ -31,10 +33,14 @@ export class EditionsService {
   get subject$(): Observable<any> {
     return this._subject.asObservable();
   }
+
   get editions$(): Observable<any[]> {
     return this._editions.asObservable();
   }
 
+  get edition$(): Observable<any> {
+    return this._edition.asObservable();
+  }
 
   getClasses(): Observable<any[]> {
     const path = `classes`;
@@ -103,7 +109,6 @@ export class EditionsService {
   addEditions(className: string, subject: string, publishDate: moment.Moment, edition: any): Observable<any[]> {
     const editionData = JSON.parse(JSON.stringify(edition))
     const collection = `classes/${className}/subjects/${subject}/editions/${editionData.name}`;
-    console.log("collection ", collection)
     const data = {
       date: publishDate.toDate(), path: collection, published: false,
     }
@@ -117,12 +122,12 @@ export class EditionsService {
             mergeMap((doc) => {
               editionData.docId = doc.id
               editionData.id = editionData.name;
+              editionData.date = publishDate.toDate();
+
               return this._firebaseService
                 .setDoc(collection, editionData).pipe(map(el => { return editionData }))
             }),
             map((doc: any) => {
-              console.log("doc id", doc)
-
               this._editions.next([...editions, editionData]);
 
               // Return new booking from observable
@@ -134,8 +139,29 @@ export class EditionsService {
 
   }
 
-  removeEditon(id) {
+  editEditions(className: string, subject: string, publishDate: moment.Moment, edition: any): Observable<any[]> {
+    const editionData = JSON.parse(JSON.stringify(edition))
+    const collection = `classes/${className}/subjects/${subject}/editions/${editionData.id}`;
     return this.editions$.pipe(
+      take(1),
+      switchMap((editions: any) => {
+        editionData.date = publishDate.toDate();
+        return this._firebaseService
+          .setDoc(collection, editionData).pipe(map((doc: any) => {
+            this._editions.next([...editions, editionData]);
+
+            return editionData;
+          }),)
+      }),
+
+    );
+  }
+
+
+
+
+  removeEditon(id) {
+    return this._editions.pipe(
       take(1),
       switchMap((editions) =>
         this._firebaseService.getDocument('editions', id).pipe(
@@ -144,9 +170,6 @@ export class EditionsService {
             const pathItems = (edition.path).split('/');
             const docId = pathItems.pop();
             const collection = pathItems.join('/');
-            console.log('pathItems ', pathItems);
-            console.log('collection ', collection);
-            console.log('docId ', docId);
             return this._firebaseService.removeDocument(collection, docId)
           }), map((resp) => {
             // Find the index of the updated tag
@@ -164,4 +187,29 @@ export class EditionsService {
       )
     );
   }
+
+  getEdition(id) {
+    return this.editions$.pipe(
+      take(1),
+      map((editions) => {
+        // Find the task
+        const edition = editions.find((item) => item.docId === id) || null;
+
+        // Update the task
+        this._edition.next(edition);
+
+        // Return the task
+        return edition;
+      }),
+      switchMap((edition) => {
+        if (!edition && id != 'new') {
+          return throwError(
+            'Could not found task with id of ' + id + '!'
+          );
+        }
+        return of(edition);
+      })
+    );
+  }
+
 }

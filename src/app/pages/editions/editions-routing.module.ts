@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EditionsComponent } from '@app/pages/editions/editions.component';
 import { EditionsListComponent } from '@app/pages/editions/editions-list/editions-list.component';
-import { EditionsResolver } from '@app/pages/editions/resolver/editions.resolver';
+import { EditionResolver, EditionsResolver } from '@app/pages/editions/resolver/editions.resolver';
 import { EditionDetailsComponent } from './edition-details/edition-details.component';
 
 const routes: Routes = [
@@ -18,7 +18,10 @@ const routes: Routes = [
         component: EditionsListComponent,
 
       }, {
-        path: 'add',
+        path: ':id',
+        resolve: {
+          editions: EditionResolver
+        },
         component: EditionDetailsComponent
       },
     ]

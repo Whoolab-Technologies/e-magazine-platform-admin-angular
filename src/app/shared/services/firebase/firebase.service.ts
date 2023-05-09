@@ -39,8 +39,6 @@ export class FirebaseService {
     return from(
       new Promise((resolve, reject) => {
         const unsubscribe = this.auth.onAuthStateChanged((user) => {
-          console.log("user ");
-          console.log(user);
           if (user) {
             resolve(user);
           } else {

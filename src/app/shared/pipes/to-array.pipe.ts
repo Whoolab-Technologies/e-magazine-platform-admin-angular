@@ -6,12 +6,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ToArrayPipe implements PipeTransform {
 
   transform(object: unknown, ...args: unknown[]): unknown {
-    console.log('Object ', object)
     var array = Object.keys(object).map((key) => {
       let ob = { key: key, value: object[key] };
       return ob;
     });
-    console.log('array ', array)
     return array;
   }
 

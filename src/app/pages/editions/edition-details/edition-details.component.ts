@@ -11,6 +11,8 @@ import * as moment from 'moment';
   styleUrls: ['./edition-details.component.scss']
 })
 export class EditionDetailsComponent implements OnInit, OnDestroy {
+  title: string = "Add New";
+  edit: boolean = false;
   edition: any = {
     name: "",
     index: 0,
@@ -37,16 +39,11 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.publishDate = moment().add(1, 'M').startOf('month');
-    console.log('publishDate ', this.publishDate)
-    console.log("EditionDetailsComponent")
     this.classes$ = this._service.classes$.pipe(takeUntil(this._unsubscribeAll));
     this.subjects$ = this._service.subjects$.pipe(takeUntil(this._unsubscribeAll));
 
     this._service.editions$.pipe(takeUntil(this._unsubscribeAll), map((resp) => {
-      console.log("resp ", resp)
       const editions = JSON.parse(JSON.stringify(resp));
-      console.log("reseditionsp ", editions)
-
       const last = editions.sort((a, b) => a.index - b.index).reverse()[0];
       return last ? last.index : -1;
     }), tap((el: any) => {
@@ -64,6 +61,19 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     this.progress$ = this._appService.progress$.pipe(
       takeUntil(this._unsubscribeAll)
     );
+
+    this._service.edition$.pipe(takeUntil(this._unsubscribeAll), filter((resp) =>
+
+      resp
+    ), map(el => {
+      this.edition = el;
+      this.edition.index = el.index
+      if (el.date)
+        this.publishDate = el.date.toDate();
+      this.title = "Edit"
+      this.edit = true
+    })).subscribe();
+
   }
 
 
@@ -99,7 +109,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.edition.topics = this.edition.topics || [];
-    console.log(this.edition.topics)
     const topic = JSON.parse(JSON.stringify(this.topic))
     this.edition.topics.push(topic)
     this.resetTopic()
@@ -107,8 +116,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
 
 
   editionFileChangeEvent(event) {
-    console.log("event.target");
-    console.log(event.target.files);
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0]
       if (!allowedImageTypes().includes(file.type)) {
@@ -120,15 +127,12 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       )).subscribe((url) => {
         this.edition.image = url;
         this.editionImage = file.name
-        console.log("url", url)
       });
     }
 
   }
 
   fileChangeEvent(event) {
-    console.log("event.target");
-    console.log(event.target.files);
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0]
       if (!allowedImageTypes().includes(file.type)) {
@@ -140,7 +144,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       )).subscribe((url) => {
         this.topic.image = url;
         this.topicFile = file.name
-        console.log("url", url)
       });
     }
 
@@ -148,8 +151,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
 
   pdfFileChangeEvent(event) {
     if (event.target.files && event.target.files.length) {
-      console.log("event.target.file", event.target);
-      console.log("event.target.file[0] ", event.target.files[0]);
       const file = event.target.files[0];
       if (file.type == 'application/pdf') {
         this.uploadFile("editions/topics/pdf", file).pipe(map(url => {
@@ -188,5 +189,11 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     this.edition['topicCount'] = 0;
     this.edition['topics'] = [];
     this.editionImage = null;
+  }
+
+  editEdition() {
+    this._service.editEditions(this.class, this.subject, this.publishDate, this.edition)
+      .pipe()
+      .subscribe()
   }
 }
