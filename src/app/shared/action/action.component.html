@@ -1,21 +1,21 @@
 <div class="flex-container">
     <ng-container *ngIf="edit">
         <div>
-            <button mat-icon-button color="primary" aria-label="Edit button" (click)="onEdit.emit(index)">
+            <button mat-icon-button color="primary" aria-label="Edit button" (click)="onEdit.emit(id)">
                 <mat-icon>edit</mat-icon>
             </button>
         </div>
     </ng-container>
     <ng-container *ngIf="view">
         <div>
-            <button mat-icon-button color="accent" aria-label="View Button" (click)="onView.emit(index)">
+            <button mat-icon-button color="accent" aria-label="View Button" (click)="onView.emit(id)">
                 <mat-icon>visibility</mat-icon>
             </button>
         </div>
     </ng-container>
     <ng-container *ngIf="delete">
         <div>
-            <button mat-icon-button color="warn" aria-label="Delete Button" (click)="onDelete.emit(index)">
+            <button mat-icon-button color="warn" aria-label="Delete Button" (click)="onDelete.emit(id)">
                 <mat-icon>delete</mat-icon>
             </button>
         </div>

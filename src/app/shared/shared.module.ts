@@ -21,10 +21,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { PipesModule } from './pipes/pipes.module';
 import { ActionComponent } from './action/action.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
 
 
 @NgModule({
@@ -32,7 +34,8 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
     SidebarComponent,
     FooterComponent,
     LayoutComponent,
-    ActionComponent
+    ActionComponent,
+    ConfirmationComponent
   ],
   imports: [
     HeaderModule,
@@ -44,11 +47,12 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
     MatMenuModule,
     MatSelectModule,
     FormsModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatDialogModule, FlexLayoutModule
   ],
   exports: [
     HeaderModule, ActionComponent,
-    SidebarComponent, FormsModule, MatIconModule,
+    SidebarComponent, FormsModule, MatIconModule, MatDialogModule,
     FooterComponent, MatSidenavModule, FlexLayoutModule,
     LayoutComponent, MatCardModule, MatProgressBarModule, MatToolbarModule,
     MatGridListModule, MatInputModule, MatTableModule, PipesModule

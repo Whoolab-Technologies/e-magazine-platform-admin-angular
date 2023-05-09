@@ -4,7 +4,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EditionsService } from '@app/pages/editions/services/editions.service';
-import { BehaviorSubject, Observable, Subject, map, takeUntil } from 'rxjs';
+import { ConfirmationService } from '@app/shared/services/confirmation/confirmation.service';
+import { BehaviorSubject, Observable, Subject, filter, map, switchMap, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-editions-list',
@@ -24,7 +25,10 @@ export class EditionsListComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   pageSizeOptions = [10, 15, 20, 50, 100];
   latestIndex: number = 0;
-  constructor(private _service: EditionsService, private _router: Router, private _route: ActivatedRoute) {
+  constructor(private _service: EditionsService,
+    private _router: Router,
+    private _confirmationService: ConfirmationService,
+    private _route: ActivatedRoute) {
 
   }
 
@@ -69,10 +73,16 @@ export class EditionsListComponent implements OnInit, OnDestroy {
 
   view(event) {
     console.log("view ", event)
-
   }
+
   delete(event) {
-    console.log("delete ", event)
+    this._confirmationService.open().afterClosed().pipe(take(1),
+      filter((result) => result),
+      switchMap((response) => {
+        return this._service.removeEditon(event);
+      })
+    )
+      .subscribe();
 
   }
   upload() {

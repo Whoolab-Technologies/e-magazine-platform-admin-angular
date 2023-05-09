@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Student } from '@app/pages/students/models/student';
-import { FirebaseService, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
+import { FirebaseService, snapshot, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, map, mergeMap, of, switchMap, take, tap } from 'rxjs';
 
@@ -105,7 +105,7 @@ export class EditionsService {
     const collection = `classes/${className}/subjects/${subject}/editions/${editionData.name}`;
     console.log("collection ", collection)
     const data = {
-      date: publishDate.toDate(), path: collection
+      date: publishDate.toDate(), path: collection, published: false,
     }
     return this.editions$.pipe(
       take(1),
@@ -132,5 +132,36 @@ export class EditionsService {
       )
     );
 
+  }
+
+  removeEditon(id) {
+    return this.editions$.pipe(
+      take(1),
+      switchMap((editions) =>
+        this._firebaseService.getDocument('editions', id).pipe(
+          map(el => snapshot(el)),
+          switchMap(edition => {
+            const pathItems = (edition.path).split('/');
+            const docId = pathItems.pop();
+            const collection = pathItems.join('/');
+            console.log('pathItems ', pathItems);
+            console.log('collection ', collection);
+            console.log('docId ', docId);
+            return this._firebaseService.removeDocument(collection, docId)
+          }), map((resp) => {
+            // Find the index of the updated tag
+            editions = editions.filter(
+              (item) => item.docId != id
+            );
+
+            // Update the vacancy list
+            this._editions.next(editions);
+
+            // Return the updated tag
+            return editions;
+          }),
+        )
+      )
+    );
   }
 }

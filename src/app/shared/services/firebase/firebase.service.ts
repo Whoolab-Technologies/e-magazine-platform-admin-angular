@@ -3,7 +3,7 @@ import { environment as env, app } from '@env/environment';
 import 'firebase/storage';
 import 'firebase/firestore';
 import 'firebase/auth';
-import { getFirestore, collection, getDocs, Firestore, DocumentData, query, orderBy, doc, setDoc, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, Firestore, DocumentData, query, orderBy, doc, setDoc, addDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { getAuth, Auth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getStorage, TaskState, TaskEvent, FirebaseStorage } from 'firebase/storage';
 import { Observable, from } from 'rxjs';
@@ -66,6 +66,17 @@ export class FirebaseService {
     const colRef = collection(this.database, colltn)
     return from(addDoc(colRef, data));
   }
+
+  getDocument(colltn, docId) {
+    const docRef = doc(this.database, colltn, docId);
+    return from(getDoc(docRef));
+  }
+
+  removeDocument(colltn, docId) {
+    const docRef = doc(this.database, colltn, docId);
+    return from(deleteDoc(docRef));
+  }
+
 }
 
 export const snapshotToArray = (snapshot) => {

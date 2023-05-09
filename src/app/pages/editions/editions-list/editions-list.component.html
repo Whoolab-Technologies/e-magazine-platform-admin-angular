@@ -40,6 +40,7 @@
                         <!-- the same view can be shown in more than one case -->
 
                         <span *ngSwitchCase="'description'"> {{element['desc']}}</span>
+                        <span *ngSwitchCase="'topics'"> {{element['topics']? element['topics'].length:0}}</span>
                         <span *ngSwitchCase="'image'">
                             <div class="image">
                                 <img class="img" src="{{element['image']}}" />
@@ -55,28 +56,13 @@
                             </span>
                         </span>
                         <span *ngSwitchCase="'action'">
-                            <app-action (onEdit)="edit($event)" (onView)="view($event)" [data]="element" [index]="i"
-                                (onDelete)="delete($event)"></app-action>
+                            <app-action (onEdit)="edit($event)" (onView)="view($event)" [data]="element"
+                                [id]="element.docId" (onDelete)="delete($event)"></app-action>
                         </span>
 
                         <span *ngSwitchDefault> {{element[column]}}</span>
 
                     </container-element>
-
-                    <!-- <span *ngIf="column == 'description'">{{element['desc']}}</span>
-                    <span *ngIf="column == 'image'">
-                        <div class="image">
-                            <img class="img" src="{{element['image']}}" />
-
-                        </div>
-                    </span>
-                    <span *ngIf="column !== 'published'">{{element[column]}}</span>
-                    <ng-container *ngIf="column === 'published'">
-                        <span class="editions-table__content-badge"
-                            [ngClass]="{'published': element[column], 'unpublished':!element[column]}">
-                            <span></span>
-                        </span>
-                    </ng-container> -->
                 </td>
             </ng-container>
 

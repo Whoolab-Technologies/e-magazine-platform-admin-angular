@@ -10,7 +10,7 @@ export class ActionComponent {
   @Input() delete: boolean = true;
   @Input() view: boolean = true;
   @Input() data: any;
-  @Input() index: number;
+  @Input() id: string;
 
   @Output() onEdit: EventEmitter<any> = new EventEmitter();
   @Output() onView: EventEmitter<any> = new EventEmitter();

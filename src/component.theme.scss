@@ -6,6 +6,7 @@
 @use '/src/app/pages/editions/editions-list/editions-list.component.theme' as editions;
 
 @use '/src/app/pages/editions/edition-details/edition-details.component.theme' as editions-details;
+@use '/src/app/shared/confirmation/confirmation.component.theme.scss' as confirmation;
 
 @mixin app-component($theme) {
     @include header.theme($theme);
@@ -15,4 +16,6 @@
     @include students.theme($theme);
     @include editions.theme($theme);
     @include editions-details.theme($theme);
+    @include confirmation.theme($theme);
+
 }

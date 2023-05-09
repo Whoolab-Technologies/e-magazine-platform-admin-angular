@@ -1,0 +1,41 @@
+<div class="confirmation-dialog">
+    <mat-dialog-content class="mat-typography">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+
+            <div *ngIf="data.icon.show" fxFlex="10" class="text-center">
+                <mat-icon class="icon" [color]="data.icon.color" [ngClass]="{'bg-primary': data.icon.color=='primary',
+                     'bg-warn': data.icon.color=='warn',
+                     'bg-accent': data.icon.color=='accent'}">{{data.icon.name}}</mat-icon>
+            </div>
+
+
+
+
+            <div *ngIf="data.actions.confirm.show || data.actions.cancel.show" fxFlex="85">
+
+                <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+
+                    <!-- Title -->
+                    <div *ngIf="data.title" fxFlex="100">
+
+                        <div class="title" [innerHTML]="data.title"></div>
+                    </div>
+
+
+                    <!-- Message -->
+                    <div *ngIf="data.message" fxFlex="100">
+
+                        <div class="" [innerHTML]="data.message"></div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close color="warn">Cancel</button>
+        <button mat-raised-button [mat-dialog-close]="true" cdkFocusInitial color="primary">Confirm</button>
+    </mat-dialog-actions>
+</div>

@@ -1,0 +1,46 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@import '/src/assets/styles/styles';
+
+@mixin color($theme) {
+    $color-config: mat.get-color-config($theme);
+    $primary: map.get($color-config, 'primary');
+    $accent: map.get($color-config, 'accent');
+    $warn: map.get($color-config, 'warn');
+
+    .confirmation-dialog {
+        .icon {
+            padding: 5px;
+            border-radius: 50%;
+        }
+
+        .bg-warn {
+            background-color: mat.get-color-from-palette($warn, 100);
+        }
+
+        .bg-primary {
+            background-color: mat.get-color-from-palette($primary, 100);
+        }
+
+        .bg-accent {
+            background-color: mat.get-color-from-palette($accent, 100);
+        }
+
+        .title {
+            font-size: $fs-medium;
+            font-weight: $fw-normal;
+            line-height: 32px;
+            letter-spacing: normal;
+        }
+    }
+
+}
+
+@mixin theme($theme) {
+    $color-config: mat.get-color-config($theme);
+
+    @if $color-config !=null {
+        @include color($theme);
+    }
+
+}
