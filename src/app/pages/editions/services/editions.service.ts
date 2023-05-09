@@ -148,7 +148,13 @@ export class EditionsService {
         editionData.date = publishDate.toDate();
         return this._firebaseService
           .setDoc(collection, editionData).pipe(map((doc: any) => {
-            this._editions.next([...editions, editionData]);
+            const index = editions.findIndex(
+              (item) => item.docId === edition.docId
+            );
+
+            // Update the booking
+            editions[index] = editionData;
+            this._editions.next(editions);
 
             return editionData;
           }),)

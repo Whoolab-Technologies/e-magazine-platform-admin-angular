@@ -29,5 +29,8 @@ export class SuccessToastComponent extends Toast {
     public toastPackage: ToastPackage,
   ) {
     super(toastrService, toastPackage);
+    console.log(
+      toastPackage.title)
+    console.log(toastPackage.message)
   }
 }

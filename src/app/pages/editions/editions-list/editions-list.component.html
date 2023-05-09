@@ -56,7 +56,7 @@
                             </span>
                         </span>
                         <span *ngSwitchCase="'action'">
-                            <app-action (onEdit)="edit($event)" (onView)="view($event)" [data]="element"
+                            <app-action (onEdit)="edit($event)" [view]="false" (onView)="view($event)" [data]="element"
                                 [id]="element.docId" (onDelete)="delete($event)"></app-action>
                         </span>
 

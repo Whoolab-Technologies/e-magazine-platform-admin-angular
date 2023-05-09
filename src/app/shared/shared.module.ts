@@ -35,7 +35,7 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
     FooterComponent,
     LayoutComponent,
     ActionComponent,
-    ConfirmationComponent
+    ConfirmationComponent,
   ],
   imports: [
     HeaderModule,

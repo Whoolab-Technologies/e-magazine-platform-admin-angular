@@ -34,8 +34,8 @@ export class NotificationPageComponent {
 
   public showSuccess(): void {
     this.toastrService.show(
-      null,
-      null,
+      "test",
+      "null",
       {
         positionClass: this.toastrPosition,
         toastComponent: SuccessToastComponent,

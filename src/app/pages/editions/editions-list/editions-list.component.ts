@@ -5,6 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EditionsService } from '@app/pages/editions/services/editions.service';
 import { ConfirmationService } from '@app/shared/services/confirmation/confirmation.service';
+import { ToastService } from '@app/shared/services/toast/toast.service';
+import { Toast } from 'ngx-toastr';
 import { BehaviorSubject, Observable, Subject, filter, map, switchMap, take, takeUntil } from 'rxjs';
 
 @Component({
@@ -28,6 +30,7 @@ export class EditionsListComponent implements OnInit, OnDestroy {
   constructor(private _service: EditionsService,
     private _router: Router,
     private _confirmationService: ConfirmationService,
+    private _toastService: ToastService,
     private _route: ActivatedRoute) {
 
   }
@@ -67,24 +70,27 @@ export class EditionsListComponent implements OnInit, OnDestroy {
     this._service.getSubjects(this.class).subscribe()
   }
 
-  edit(event) {
+  edit(event: any) {
     this._router.navigate(['./', event], { relativeTo: this._route })
   }
 
-  view(event) {
+  view(event: any) {
     console.log("view ", event)
   }
 
-  delete(event) {
+  delete(event: any) {
     this._confirmationService.open().afterClosed().pipe(take(1),
       filter((result) => result),
       switchMap((response) => {
         return this._service.removeEditon(event);
+      }),
+      map(el => {
+        this._toastService.showSuccess("Removed successfully")
       })
     )
       .subscribe();
-
   }
+
   upload() {
     this._router.navigate(['./', 'new'], { relativeTo: this._route })
   }

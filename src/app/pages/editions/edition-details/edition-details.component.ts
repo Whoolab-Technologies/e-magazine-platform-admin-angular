@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Observable, Subject, filter, map, takeUntil, tap } from 'rxjs';
 import { AppService, allowedImageTypes, isNullish } from '@app/shared/services/app/app.service';
 import * as moment from 'moment';
+import { ToastrService } from 'ngx-toastr';
+import { ToastService } from '@app/shared/services/toast/toast.service';
 
 @Component({
   selector: 'app-edition-details',
@@ -33,6 +35,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   publishDate: any
   constructor(private _service: EditionsService,
     public _appService: AppService,
+    private _toastService: ToastService,
     private _router: Router,) {
 
   }
@@ -47,7 +50,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       const last = editions.sort((a, b) => a.index - b.index).reverse()[0];
       return last ? last.index : -1;
     }), tap((el: any) => {
-      this.latestIndex = el
       this.edition.index = el + 1;
     })).subscribe()
 
@@ -69,7 +71,9 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       this.edition = el;
       this.edition.index = el.index
       if (el.date)
-        this.publishDate = el.date.toDate();
+        this.publishDate = moment(el.date.toDate());
+      if (el.index != null || el.index != undefined)
+        this.latestIndex = el.index
       this.title = "Edit"
       this.edit = true
     })).subscribe();
@@ -97,7 +101,9 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       this.edition.topics = [];
     }
     this.edition['topicCount'] = this.edition.topics.length;
-    this._service.addEditions(this.class, this.subject, this.publishDate, this.edition).pipe()
+    this._service.addEditions(this.class, this.subject, this.publishDate, this.edition).pipe(
+      tap(el => this._toastService.showSuccess("Added successfully"))
+    )
       .subscribe((resp) => {
         this.resetEdition();
       })
@@ -192,8 +198,11 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   }
 
   editEdition() {
+    this.edition.index = this.latestIndex;
     this._service.editEditions(this.class, this.subject, this.publishDate, this.edition)
-      .pipe()
+      .pipe(tap(el => {
+        this._toastService.showSuccess("Updated successfully")
+      }))
       .subscribe()
   }
 }
