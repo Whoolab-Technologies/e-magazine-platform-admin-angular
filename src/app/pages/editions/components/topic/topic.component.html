@@ -1,0 +1,29 @@
+<mat-card>
+    <mat-card-content>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between">
+            <div fxFlex="45">
+                <mat-form-field appearance='outline'>
+                    <mat-label> Topic</mat-label>
+                    <input matInput placeholder="Edition Name" [(ngModel)]="topic.name" required>
+
+                </mat-form-field>
+            </div>
+            <div fxFlex="45">
+                <mat-form-field appearance='outline'>
+                    <mat-label> Desc</mat-label>
+                    <input matInput placeholder="Edition Name" [(ngModel)]="topic.desc" required>
+                </mat-form-field>
+            </div>
+            <div fxFlex="45" class="text-center">
+                <div class="image-wrapper">
+                    <img [src]="topic.image" />
+                </div>
+            </div>
+            <div fxFlex="45" class="text-center">
+                <div class="image-wrapper">
+                    <mat-icon class="image-upload">picture_as_pdf</mat-icon>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

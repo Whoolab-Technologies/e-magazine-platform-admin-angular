@@ -3,7 +3,7 @@ import { environment as env, app } from '@env/environment';
 import 'firebase/storage';
 import 'firebase/firestore';
 import 'firebase/auth';
-import { getFirestore, collection, getDocs, Firestore, DocumentData, query, orderBy, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, Firestore, DocumentData, query, orderBy, doc, setDoc, addDoc } from 'firebase/firestore';
 import { getAuth, Auth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getStorage, TaskState, TaskEvent, FirebaseStorage } from 'firebase/storage';
 import { Observable, from } from 'rxjs';
@@ -15,6 +15,7 @@ export class FirebaseService {
   private db = getFirestore(app);
   private appAuth = getAuth(app);
   private firebaseStorage = getStorage(app);
+
   taskState: TaskState;
 
   constructor() { }
@@ -57,10 +58,13 @@ export class FirebaseService {
     return from(getDocs(docQuery))
   }
 
-  addDoc(collection, data): Observable<any> {
-    console.log("collection ", collection)
-    const docRef = doc(this.db, collection)
+  setDoc(collection, data): Observable<any> {
+    const docRef = doc(this.database, collection)
     return from(setDoc(docRef, data));
+  }
+  addDocument(colltn, data): Observable<any> {
+    const colRef = collection(this.database, colltn)
+    return from(addDoc(colRef, data));
   }
 }
 

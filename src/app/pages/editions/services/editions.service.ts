@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Student } from '@app/pages/students/models/student';
 import { FirebaseService, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
+import * as moment from 'moment';
 import { BehaviorSubject, Observable, map, mergeMap, of, switchMap, take, tap } from 'rxjs';
 
 @Injectable({
@@ -99,23 +100,33 @@ export class EditionsService {
       );
   }
 
-  addEditions(className, subject, edition): Observable<any[]> {
-    const collection = `classes/${className}/subjects/${subject}/editions/${edition.name}`;
+  addEditions(className: string, subject: string, publishDate: moment.Moment, edition: any): Observable<any[]> {
+    const editionData = JSON.parse(JSON.stringify(edition))
+    const collection = `classes/${className}/subjects/${subject}/editions/${editionData.name}`;
     console.log("collection ", collection)
+    const data = {
+      date: publishDate.toDate(), path: collection
+    }
     return this.editions$.pipe(
       take(1),
       switchMap((editions: any) =>
-        this._firebaseService
-          .addDoc(collection, edition)
 
+        this._firebaseService
+          .addDocument(`editions`, data)
           .pipe(
+            mergeMap((doc) => {
+              editionData.docId = doc.id
+              editionData.id = editionData.name;
+              return this._firebaseService
+                .setDoc(collection, editionData).pipe(map(el => { return editionData }))
+            }),
             map((doc: any) => {
               console.log("doc id", doc)
-              edition.id = edition.name;
-              this._editions.next(edition);
+
+              this._editions.next([...editions, editionData]);
 
               // Return new booking from observable
-              return editions;
+              return editionData;
             })
           )
       )

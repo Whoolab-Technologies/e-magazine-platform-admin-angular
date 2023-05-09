@@ -360,20 +360,20 @@ mat-tab-body div.mat-tab-body-content {
 }
 
 .mat-icon {
-  padding: 3px;
+  // padding: 3px;
 }
 
 .material-icons {
-  font-size: 28px;
+  // font-size: 28px;
 }
 
 button.mat-mini-fab .mat-button-wrapper {
-  padding: 0;
+  // padding: 0;
 }
 
 button.mat-mini-fab {
-  height: 36px;
-  width: 36px;
+  // height: 36px;
+  // width: 36px;
 }
 
 div.mat-menu-panel {
@@ -450,6 +450,42 @@ div.apexcharts-xaxistooltip-bottom:after {
 
 mat-select.mat-select {
   display: inline-block !important;
-  width: inherit !important;
+  //width: inherit !important;
 
+}
+
+.image-wrapper {
+  height: 100px;
+  width: 100px;
+
+  div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+.image-upload {
+  font-size: 60px !important;
+  height: 60px !important;
+  width: 60px !important;
+  color: mat.get-color-from-palette($ez-lesson-primary);
+}
+
+.text-center {
+  text-align: -webkit-center;
+}
+
+.mat-form-field-infix {
+  display: flex !important;
+}
+
+.date-picker.mat-form-field-appearance-outline .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+
+  padding: 0 !important;
 }

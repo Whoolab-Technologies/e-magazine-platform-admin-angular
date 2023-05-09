@@ -26,6 +26,21 @@
         &__topics {
             padding: 20px 0;
         }
+
+        .select-section,
+        .selected-file {
+            font-size: $fs-small;
+            font-weight: $fw-lighter;
+
+        }
+
+        .select-section {
+            color: mat.get-color-from-palette($warn);
+        }
+
+        .selected-file {
+            color: mat.get-color-from-palette($primary);
+        }
     }
 
 }
