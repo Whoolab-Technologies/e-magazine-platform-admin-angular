@@ -39,7 +39,12 @@
               "src/custom-theme.scss",
               "src/assets/styles/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "apexcharts",
+              "moment",
+              "@angularclass/hmr"
+            ]
           },
           "defaultConfiguration": "production",
           "configurations": {
