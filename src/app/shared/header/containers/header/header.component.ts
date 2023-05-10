@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, filter, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { Email, User } from '../../../../pages/auth/models';
-import { EmailService, AuthService as UserService } from '../../../../pages/auth/services';
+import { EmailService, } from '../../../../pages/auth/services';
 import { AuthService } from '@app/shared/services/auth/auth.service';
+import { UserService } from '@app/shared/services/user/user.service';
 import { routes } from '../../../../consts';
 
 @Component({
@@ -25,7 +26,7 @@ export class HeaderComponent {
     private emailService: EmailService,
     private router: Router
   ) {
-    this.user$ = this.userService.getUser();
+    this.user$ = this.userService.user$;
     this.emails$ = this.emailService.loadEmails();
   }
 
@@ -36,9 +37,10 @@ export class HeaderComponent {
   }
 
   public signOut(): void {
-    this.userService.signOut();
-    this._authService.signOut();
+    this._authService.signOut().pipe(filter(resp => resp), tap((el) => {
+      this.router.navigate([this.routers.LOGIN]);
 
-    this.router.navigate([this.routers.LOGIN]);
+    }),).subscribe();
+
   }
 }

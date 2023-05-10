@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { routes } from '../../../../consts';
-import { User } from '../../../../pages/auth/models';
+import { User } from '@app/shared/model/user';
 
 @Component({
   selector: 'app-user',

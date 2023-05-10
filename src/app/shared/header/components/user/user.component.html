@@ -2,10 +2,18 @@
   <mat-icon class="user-button__icon">person</mat-icon>
 </button>
 <mat-menu #userMenu="matMenu" xPosition="before">
-  <div class="user-menu-title">
-    <h4 class="user-menu-title__name">{{user.name}} {{user.lastName}}</h4>
-  </div>
-  <div class="sign-button-wrapper">
-    <button class="sign-button" mat-flat-button (click)="signOutEmit()">Sign out</button>
-  </div>
+
+
+  <button mat-menu-item>
+    <mat-icon>person</mat-icon>
+    <span>{{user.name}}</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>email</mat-icon>
+    <span>{{user.email}}</span>
+  </button>
+  <button mat-menu-item (click)="signOutEmit()">
+    <mat-icon>logout</mat-icon>
+    <span>Sign Out</span>
+  </button>
 </mat-menu>
