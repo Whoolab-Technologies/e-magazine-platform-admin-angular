@@ -27,6 +27,24 @@ import {
 } from './components';
 import { SharedModule } from '../../shared/shared.module';
 import { DashboardService } from './services';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: DashboardPageComponent
+  }
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forChild(routes)
+  ],
+  exports: [RouterModule]
+})
+
+export class DashboardRoutingModule {
+}
 
 
 @NgModule({
@@ -56,7 +74,7 @@ import { DashboardService } from './services';
     MatInputModule,
     NgApexchartsModule,
     FormsModule,
-    SharedModule
+    SharedModule, DashboardRoutingModule
   ],
   exports: [
     DailyLineChartComponent
@@ -66,3 +84,4 @@ import { DashboardService } from './services';
   ]
 })
 export class DashboardModule { }
+

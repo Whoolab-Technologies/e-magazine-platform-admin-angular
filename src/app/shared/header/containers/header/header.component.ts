@@ -3,7 +3,8 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { Email, User } from '../../../../pages/auth/models';
-import { AuthService, EmailService } from '../../../../pages/auth/services';
+import { EmailService, AuthService as UserService } from '../../../../pages/auth/services';
+import { AuthService } from '@app/shared/services/auth/auth.service';
 import { routes } from '../../../../consts';
 
 @Component({
@@ -19,7 +20,8 @@ export class HeaderComponent {
   public routers: typeof routes = routes;
 
   constructor(
-    private userService: AuthService,
+    private userService: UserService,
+    private _authService: AuthService,
     private emailService: EmailService,
     private router: Router
   ) {
@@ -35,6 +37,7 @@ export class HeaderComponent {
 
   public signOut(): void {
     this.userService.signOut();
+    this._authService.signOut();
 
     this.router.navigate([this.routers.LOGIN]);
   }

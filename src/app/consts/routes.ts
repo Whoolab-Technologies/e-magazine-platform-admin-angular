@@ -1,6 +1,6 @@
 export enum routes {
   DASHBOARD = '/dashboard',
-  LOGIN = '/'
+  LOGIN = '/login'
 }
 export const menu = [
   {
@@ -23,11 +23,5 @@ export const menu = [
     icon: 'feeds',
     link: '/editions',
   },
-  {
-    id: 'notification',
-    title: 'Notification',
-    type: 'basic',
-    icon: 'notifications_none',
-    link: '/notification',
-  },
+
 ];

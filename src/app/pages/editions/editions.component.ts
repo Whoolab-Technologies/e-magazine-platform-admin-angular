@@ -7,9 +7,5 @@ import { MatDrawer } from '@angular/material/sidenav';
   styleUrls: ['./editions.component.scss']
 })
 export class EditionsComponent {
-  drawerMode = 'side';
-  @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
-  onBackdropClicked() {
 
-  }
 }

@@ -1,28 +1,39 @@
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { ExtraOptions, NoPreloading, PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { DashboardPageComponent } from './pages/dashboard/containers';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { AuthGuard } from './pages/auth/guards';
+import { AuthGuard, NoAuthGuard } from './pages/auth/guards';
+import { InitialDataResolver } from './app.resolver';
 
 const routes: Routes = [
-  {
-    path: 'dashboard',
-    canActivate: [AuthGuard],
-    component: DashboardPageComponent
-  },
 
   {
-    path: 'notification',
-    loadChildren: () => import('./pages/notification/notification.module').then(m => m.NotificationModule)
-  },
-  {
-    path: 'students',
+    path: '',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./pages/students/students.module').then(m => m.StudentsModule)
-  },
-  {
-    path: 'editions',
-    loadChildren: () => import('./pages/editions/editions.module').then(m => m.EditionsModule)
+    resolve: {
+      initialData: InitialDataResolver,
+    },
+    children: [{
+      path: 'dashboard',
+      loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule)
+
+    },
+
+    {
+      path: 'notification',
+
+      loadChildren: () => import('./pages/notification/notification.module').then(m => m.NotificationModule)
+    },
+    {
+      path: 'students',
+
+      loadChildren: () => import('./pages/students/students.module').then(m => m.StudentsModule)
+    },
+    {
+      path: 'editions',
+
+      loadChildren: () => import('./pages/editions/editions.module').then(m => m.EditionsModule)
+    },]
   },
   {
     path: '404',
@@ -30,16 +41,23 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthModule)
-  },
+    canActivate: [NoAuthGuard],
+    children: [{
+      path: '',
+
+      loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthModule)
+    },]
+  }
 
 ];
-
+const routerConfig: ExtraOptions = {
+  useHash: false,
+  preloadingStrategy: NoPreloading,
+  scrollPositionRestoration: 'enabled',
+};
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, {
-      useHash: false
-    })
+    RouterModule.forRoot(routes, routerConfig)
   ],
   exports: [RouterModule]
 })

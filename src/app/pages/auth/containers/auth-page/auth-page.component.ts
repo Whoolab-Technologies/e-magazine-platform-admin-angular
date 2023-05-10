@@ -24,8 +24,9 @@ export class AuthPageComponent {
     this._service.signIn(event).pipe(map(el => {
       return el;
     }), tap((el) => {
+      console.log(el)
       this.router.navigate([this.routers.DASHBOARD]).then();
-    }))
+    })).subscribe()
 
     //  this.router.navigate([this.routers.DASHBOARD]).then();
   }
