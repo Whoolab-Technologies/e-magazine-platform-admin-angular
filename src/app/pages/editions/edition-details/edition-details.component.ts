@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, Subject, filter, map, takeUntil, tap } from 'rxjs';
 import { AppService, allowedImageTypes, isNullish } from '@app/shared/services/app/app.service';
 import * as moment from 'moment';
-import { ToastrService } from 'ngx-toastr';
+import { ToastPositionTypes } from '@app/shared/model/toast'
 import { ToastService } from '@app/shared/services/toast/toast.service';
 
 @Component({
@@ -20,7 +20,8 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     index: 0,
     topicCount: 0,
   };
-  topic: any = {}
+  topic: any = { name: '', banner: '', desc: '', pdf: '' }
+  toastrPositionTypes: typeof ToastPositionTypes = ToastPositionTypes;
 
   classes$: Observable<any>;
   subjects$: Observable<any>;
@@ -70,8 +71,10 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     ), map(el => {
       this.edition = el;
       this.edition.index = el.index
-      if (el.date)
-        this.publishDate = moment(el.date.toDate());
+      if (el.date) {
+        this.publishDate = moment(el.date).isValid() ? moment(el.date) : moment(el.date.toDate());
+
+      }
       if (el.index != null || el.index != undefined)
         this.latestIndex = el.index
       this.title = "Edit"
@@ -92,6 +95,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
 
   submitEditions() {
     if (isNullish(this.edition)) {
+      this._toastService.showInfoToastr("All fields are required", this.toastrPositionTypes.topRight);
       return
     }
     if ((this.topic.name && this.topic.desc && this.topic.image && this.topic.pdf)) {
@@ -111,6 +115,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
 
   addTopic() {
     if (isNullish(this.topic)) {
+      this._toastService.showInfoToastr("All fields are required", this.toastrPositionTypes.topRight);
       return
     }
 
@@ -148,7 +153,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
         return url
       }
       )).subscribe((url) => {
-        this.topic.image = url;
+        this.topic.banner = url;
         this.topicFile = file.name
       });
     }
@@ -156,13 +161,18 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   }
 
   pdfFileChangeEvent(event) {
+    console.log('pdfFileChangeEvent', event.target.files)
+
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0];
+      console.log('pdfFileChangeEvent file', file)
       if (file.type == 'application/pdf') {
         this.uploadFile("editions/topics/pdf", file).pipe(map(url => {
           return url;
         }
         )).subscribe((url: any) => {
+          console.log('pdfFileChangeEvent  url', url)
+
           this.topic.pdf = url;
           this.topicPdfFile = file.name
         });
@@ -180,7 +190,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     this.topic = {
       name: '',
       desc: '',
-      image: '',
+      banner: '',
       pdf: ''
     }
     this.topicFile = null;

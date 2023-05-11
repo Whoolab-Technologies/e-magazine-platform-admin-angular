@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-topic',
@@ -7,4 +7,6 @@ import { Component, Input } from '@angular/core';
 })
 export class TopicComponent {
   @Input() topic: any
+  @Input() index: number = 0;
+  @Output() onDelete: EventEmitter<number> = new EventEmitter<number>();
 }

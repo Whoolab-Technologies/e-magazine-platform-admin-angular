@@ -1,4 +1,11 @@
 <mat-card>
+    <mat-card-title>
+        <div fxFlex="100" class="topic-title-action">
+            <button mat-icon-button color="warn" (click)="onDelete.emit(index)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </mat-card-title>
     <mat-card-content>
         <div fxLayout="row wrap" fxLayoutAlign="space-between">
             <div fxFlex="45">
@@ -16,7 +23,7 @@
             </div>
             <div fxFlex="45" class="text-center">
                 <div class="image-wrapper">
-                    <img [src]="topic.image" />
+                    <img [src]="topic.banner" />
                 </div>
             </div>
             <div fxFlex="45" class="text-center">

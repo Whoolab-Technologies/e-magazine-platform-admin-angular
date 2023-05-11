@@ -1,14 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ErrorToastrComponent, InfoToastrComponent, SuccessToastComponent } from '@app/pages/notification/containers';
 import { ToastrService } from 'ngx-toastr';
-enum ToastPositionTypes {
-  bottomCenter = 'toast-bottom-center',
-  bottomRight = 'toast-bottom-right',
-  bottomLeft = 'toast-bottom-left',
-  topCenter = 'toast-top-center',
-  topRight = 'toast-top-right',
-  topLeft = 'toast-top-left'
-}
+import { ToastPositionTypes } from '@app/shared/model/toast'
 @Injectable({
   providedIn: 'root'
 })
@@ -18,12 +11,12 @@ export class ToastService {
   timeOut = 3000;
   constructor(private toastrService: ToastrService) { }
 
-  public showSuccess(message: string): void {
+  public showSuccess(message: string, toastrPosition = this.toastrPosition): void {
     this.toastrService.show(
       message,
-      "null",
+      null,
       {
-        positionClass: this.toastrPosition,
+        positionClass: toastrPosition,
         toastComponent: SuccessToastComponent,
         timeOut: this.timeOut,
         tapToDismiss: false
@@ -31,12 +24,12 @@ export class ToastService {
     );
   }
 
-  public showErrorToastr(message: string): void {
+  public showErrorToastr(message: string, toastrPosition = this.toastrPosition): void {
     this.toastrService.show(
       message,
       null,
       {
-        positionClass: this.toastrPosition,
+        positionClass: toastrPosition,
         toastComponent: ErrorToastrComponent,
         timeOut: this.timeOut,
         tapToDismiss: false
@@ -44,12 +37,12 @@ export class ToastService {
     );
   }
 
-  public showInfoToastr(message: string): void {
+  public showInfoToastr(message: string, toastrPosition = this.toastrPosition): void {
     this.toastrService.show(
       message,
       null,
       {
-        positionClass: this.toastrPosition,
+        positionClass: toastrPosition,
         toastComponent: InfoToastrComponent,
         timeOut: this.timeOut,
         tapToDismiss: false

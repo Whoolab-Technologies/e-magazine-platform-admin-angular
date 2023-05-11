@@ -3,8 +3,8 @@
         Topics
     </div>
     <div class="add-editions__topics">
-        <ng-container *ngFor="let topic of topics">
-            <app-topic [topic]="topic"></app-topic>
+        <ng-container *ngFor="let topic of topics; let i=index">
+            <app-topic [topic]="topic" [index]="i" (onDelete)="onDelete($event)"></app-topic>
         </ng-container>
     </div>
 </section>

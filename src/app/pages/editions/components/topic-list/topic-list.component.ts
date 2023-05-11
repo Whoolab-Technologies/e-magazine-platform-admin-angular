@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-topic-list',
@@ -7,4 +7,15 @@ import { Component, Input } from '@angular/core';
 })
 export class TopicListComponent {
   @Input() topics: any
+  constructor(private _changeDetectorRef: ChangeDetectorRef,) {
+
+  }
+
+  onDelete(event: number) {
+
+    if (this.topics[event]) {
+      this.topics.splice(event, 1);
+      this._changeDetectorRef.detectChanges()
+    }
+  }
 }
