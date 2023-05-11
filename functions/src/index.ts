@@ -22,8 +22,25 @@ export const adminSignup = functions.https.onRequest((req, res) => {
 // classes/${className}/subjects/${subject}/editions/${editionData.id}
 
 exports.listenEdition = functions.firestore
+    .document('student/{studentId}')
+    .onCreate(async (snapshot, context) => {
+        const data = snapshot.data();
+        database.collection(`classes/${data.class}/subjects`).get().then((snapshot) => {
+            const update: any = {
+                subjects: {}
+            }
+
+            snapshot.forEach((doc) => {
+                update.subject[doc.id] = false;
+            })
+            database.doc(`student/${context.params.studentId}`).update(update);
+        });
+        return true;
+    });
+
+exports.listenEdition = functions.firestore
     .document('classes/{className}/subjects/{subject}/editions/{edition}')
-    .onWrite(async (change, context) => {
+    .onWrite(async (change, _context) => {
         const afterData = change.after.data();
         const beforeData = change.before.data();
         functions.logger.info('afterData', { structuredData: true });
@@ -49,9 +66,15 @@ exports.listenEdition = functions.firestore
                 update['date'] = afterData.date;
             if (beforeData.published != afterData.published)
                 update['published'] = afterData.published;
+            functions.logger.info('update!', { structuredData: true });
+            functions.logger.info(update, { structuredData: true });
+
             await database.doc(`editions/${beforeData.docId}`).update(update);
 
             return true;
         }
+
+        return true;
+
 
     });

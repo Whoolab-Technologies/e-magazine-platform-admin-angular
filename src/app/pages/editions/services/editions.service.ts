@@ -122,7 +122,8 @@ export class EditionsService {
             mergeMap((doc) => {
               editionData.docId = doc.id
               editionData.id = editionData.name;
-              editionData.date = publishDate.toDate();
+              editionData.published = false,
+                editionData.date = publishDate.toDate();
 
               return this._firebaseService
                 .setDoc(collection, editionData).pipe(map(el => { return editionData }))

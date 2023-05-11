@@ -75,6 +75,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
         this.publishDate = moment(el.date).isValid() ? moment(el.date) : moment(el.date.toDate());
 
       }
+      this.edition.published = el.published ? el.published : false
       if (el.index != null || el.index != undefined)
         this.latestIndex = el.index
       this.title = "Edit"
