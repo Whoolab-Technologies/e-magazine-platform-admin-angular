@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '@app/shared/services/auth/auth.service';
 import { routes } from '../../../../consts';
 import { map, tap } from 'rxjs';
+import { ToastService } from '@app/shared/services/toast/toast.service';
 
 @Component({
   selector: 'app-auth-page',
@@ -16,7 +17,8 @@ export class AuthPageComponent {
 
   constructor(
     private _service: AuthService,
-    private router: Router
+    private router: Router,
+    private _toastService: ToastService
   ) { }
 
   public sendLoginForm(event): void {
@@ -24,9 +26,12 @@ export class AuthPageComponent {
     this._service.signIn(event).pipe(map(el => {
       return el;
     }), tap((el) => {
-      console.log(el)
       this.router.navigate([this.routers.DASHBOARD]).then();
-    })).subscribe()
+    })).subscribe(() => {
+
+    }, (error) => {
+      this._toastService.showErrorToastr(error)
+    })
 
     //  this.router.navigate([this.routers.DASHBOARD]).then();
   }

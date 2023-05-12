@@ -4,6 +4,7 @@ import { Observable, ReplaySubject, catchError, map, of, switchMap, throwError }
 import { AppService } from '../app/app.service';
 import { FirebaseService, snapshot } from '../firebase/firebase.service';
 import { UserService } from '../user/user.service';
+import { FirebaseError } from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -101,6 +102,21 @@ export class AuthService {
           return this.getMyDetails();
         }),
         catchError((error) => {
+          if (error instanceof FirebaseError) {
+            var message = ''
+            switch (error.code) {
+              case 'auth/too-many-requests':
+                message = "Too many login attempts"
+                break;
+              case 'auth/wrong-password':
+                message = "Wrong username or password"
+                break;
+              default:
+                message = "Wrong username or password"
+            }
+
+            return throwError(() => message);
+          }
           return throwError(() => error);
         })
       );

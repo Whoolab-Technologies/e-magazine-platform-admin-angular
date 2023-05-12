@@ -21,7 +21,7 @@ export const adminSignup = functions.https.onRequest((req, res) => {
 
 // classes/${className}/subjects/${subject}/editions/${editionData.id}
 
-exports.listenEdition = functions.firestore
+exports.listenStudent = functions.firestore
     .document('student/{studentId}')
     .onCreate(async (snapshot, context) => {
         const data = snapshot.data();
@@ -33,6 +33,10 @@ exports.listenEdition = functions.firestore
             snapshot.forEach((doc) => {
                 update.subject[doc.id] = false;
             })
+            update.subject[Object.keys(update.subject)[0]] = true;
+            functions.logger.info('student update', { structuredData: true });
+            functions.logger.info(update, { structuredData: true });
+
             database.doc(`student/${context.params.studentId}`).update(update);
         });
         return true;
