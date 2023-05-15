@@ -40,6 +40,8 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   editionImage: any = null;
   isEditionImageUploading: boolean = false;
 
+  published: boolean = false;
+
   publishDate: any
   constructor(private _service: EditionsService,
     public _appService: AppService,
@@ -84,6 +86,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
         this.latestIndex = el.index
       this.title = "Edit"
       this.edit = true
+      this.published = this.edition.published
     })).subscribe();
 
   }
@@ -101,6 +104,10 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   submitEditions() {
     if (isNullish(this.edition)) {
       this._toastService.showInfoToastr("All fields are required", this.toastrPositionTypes.topRight);
+      return
+    }
+    if (!this.edition.published && !this.publishDate) {
+      this._toastService.showInfoToastr("Publish date is required if 'Publish Now' is not selected", this.toastrPositionTypes.topRight);
       return
     }
     if ((this.topic.name && this.topic.desc && this.topic.image && this.topic.pdf)) {

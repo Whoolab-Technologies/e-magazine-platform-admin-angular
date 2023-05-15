@@ -1,5 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
 @Component({
   selector: 'app-topic-list',
   templateUrl: './topic-list.component.html',
@@ -19,6 +21,10 @@ export class TopicListComponent {
       this.topics.splice(event, 1);
       this._changeDetectorRef.detectChanges()
     }
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.topics, event.previousIndex, event.currentIndex);
   }
 
 }

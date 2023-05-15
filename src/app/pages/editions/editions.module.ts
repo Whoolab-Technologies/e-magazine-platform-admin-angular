@@ -18,6 +18,8 @@ import { TopicListComponent } from './components/topic-list/topic-list.component
 import { TopicComponent } from './components/topic/topic.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
 @NgModule({
   declarations: [
     EditionsComponent,
@@ -28,7 +30,7 @@ import { MatMomentDateModule } from "@angular/material-moment-adapter";
   ],
   imports: [
     CommonModule, MatNativeDateModule, MatMomentDateModule,
-    EditionsRoutingModule, MatDatepickerModule,
+    EditionsRoutingModule, MatDatepickerModule, DragDropModule, MatSlideToggleModule,
     SharedModule, MatTableModule, MatPaginatorModule, MatSelectModule, MatButtonModule
   ],
 })
