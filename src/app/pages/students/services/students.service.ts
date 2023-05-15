@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService, snapshotToArray } from '@services/firebase/firebase.service';
-import { BehaviorSubject, Observable, catchError, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, switchMap, take, tap } from 'rxjs';
 import { Student } from '@app/pages/students/models/student';
 
 @Injectable({
@@ -33,5 +33,21 @@ export class StudentsService {
           this._students.next(response);
         })
       );
+  }
+
+  updatePurchaseStatus(index, student): Observable<any> {
+    const collection = `student/${student.id}`;
+
+    return this._students.pipe(
+      take(1),
+      switchMap((students: any) => this._firebaseService
+        .setDoc(collection, student).pipe(map((doc: any) => {
+          students[index] = student;
+          return students;
+        }), tap((response: any) => {
+          this._students.next([...response]);
+          return response;
+        }),),
+      ),)
   }
 }

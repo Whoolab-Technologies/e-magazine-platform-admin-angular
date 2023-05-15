@@ -10,6 +10,7 @@ export class ToArrayPipe implements PipeTransform {
       let ob = { key: key, value: object[key] };
       return ob;
     });
+    console.log('arrayarray')
     return array;
   }
 
