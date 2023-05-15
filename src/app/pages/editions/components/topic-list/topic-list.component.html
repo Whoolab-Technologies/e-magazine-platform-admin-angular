@@ -4,7 +4,8 @@
     </div>
     <div class="add-editions__topics">
         <ng-container *ngFor="let topic of topics; let i=index">
-            <app-topic [topic]="topic" [index]="i" (onDelete)="onDelete($event)"></app-topic>
+            <app-topic [topic]="topic" [index]="i" (onDelete)="onDelete($event)"
+                (onClickFile)="onClickFile.emit($event)"></app-topic>
         </ng-container>
     </div>
 </section>

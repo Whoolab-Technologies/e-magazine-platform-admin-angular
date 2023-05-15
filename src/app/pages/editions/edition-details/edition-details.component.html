@@ -45,24 +45,30 @@
                     <div fxFlex="45">
                         <div fxLayout="row wrap" fxLayoutAlign="space-between">
                             <div fxFlex="30" class="text-center">
-                                <div class="image-wrapper" (click)="editionFileInput.click()">
-                                    <ng-container *ngIf="edition.image else imageSelector">
-                                        <img [src]="edition.image" />
-                                    </ng-container>
-                                    <ng-template #imageSelector>
-                                        <mat-icon class="image-upload">photo_library</mat-icon>
+                                <div class="image-wrapper">
+                                    <ng-template #editionImageSelector>
+                                        <ng-container *ngIf="edition.image else imageSelector">
+                                            <img [src]="edition.image" (click)="openFile(edition.image)" />
+                                        </ng-container>
+                                        <ng-template #imageSelector (click)="editionFileInput.click()">
+                                            <mat-icon class="image-upload">photo_library</mat-icon>
+                                        </ng-template>
                                     </ng-template>
+                                    <ng-container *ngIf="isEditionImageUploading else editionImageSelector">
+                                        <app-loader></app-loader>
+                                    </ng-container>
                                 </div>
                             </div>
                             <div fxFlex="70" style="display: flex; align-items: center;">
                                 <input type="file" hidden #editionFileInput (change)="editionFileChangeEvent($event)" />
 
                                 <mat-form-field appearance='outline'>
-                                    <mat-label>Select Image</mat-label>
+                                    <mat-label>{{edition.image? 'update Image':'Select Image'}}</mat-label>
                                     <input matInput placeholder="Select Image" [(ngModel)]="editionImage" readonly
                                         (click)="editionFileInput.click()">
 
                                 </mat-form-field>
+
 
                             </div>
                         </div>
@@ -103,28 +109,43 @@
                     </div>
                     <div fxFlex="5" class="text-center">
                         <input type="file" hidden #imgFileInput (change)="fileChangeEvent($event)" />
-                        <div class="image-wrapper" (click)="imgFileInput.click()">
-                            <mat-icon class="image-upload">photo_library</mat-icon>
-                            <ng-container *ngIf="topicFile else selectImageTemplete">
-                                <div class="selected-file"> {{topicFile}}</div>
+                        <div class="image-wrapper">
+                            <ng-template #topicImageSelector>
+                                <span (click)="imgFileInput.click()">
+                                    <mat-icon class="image-upload">photo_library</mat-icon>
+                                    <ng-container *ngIf="topicFile else selectImageTemplete">
+                                        <div class="selected-file"> {{topicFile}}</div>
 
-                            </ng-container>
-                            <ng-template #selectImageTemplete>
-                                <div class="select-section">Select image</div>
+                                    </ng-container>
+                                    <ng-template #selectImageTemplete>
+                                        <div class="select-section">Select image</div>
+                                    </ng-template>
+                                </span>
                             </ng-template>
+                            <ng-container *ngIf="isTopicFileUploading else topicImageSelector">
+                                <app-loader></app-loader>
+                            </ng-container>
+
                         </div>
                     </div>
                     <div fxFlex="5" class="text-center">
                         <input type="file" hidden #pdfFileInput (change)="pdfFileChangeEvent($event)" />
-                        <div class="image-wrapper" (click)="pdfFileInput.click()">
-                            <mat-icon class="image-upload">picture_as_pdf</mat-icon>
-                            <ng-container *ngIf="topicPdfFile else selectPdfTemplete">
-                                <div class="selected-file"> {{topicPdfFile}}</div>
+                        <div class="image-wrapper">
+                            <ng-template #topicPdfSelector>
+                                <span (click)="pdfFileInput.click()">
+                                    <mat-icon class="image-upload">picture_as_pdf</mat-icon>
+                                    <ng-container *ngIf="topicPdfFile else selectPdfTemplete">
+                                        <div class="selected-file"> {{topicPdfFile}}</div>
 
-                            </ng-container>
-                            <ng-template #selectPdfTemplete>
-                                <div class="select-section"> Select PDF</div>
+                                    </ng-container>
+                                    <ng-template #selectPdfTemplete>
+                                        <div class="select-section"> Select PDF</div>
+                                    </ng-template>
+                                </span>
                             </ng-template>
+                            <ng-container *ngIf="isTopicPdfFileUploading else topicPdfSelector">
+                                <app-loader></app-loader>
+                            </ng-container>
                         </div>
                     </div>
                     <div fxFlex="5">
@@ -135,20 +156,13 @@
                         </div>
 
                     </div>
-                    <ng-container *ngIf="progress$ | async as progress">
-                        <div class="progress" *ngIf="progress > 0" style="margin-top: 10px; width: 100% !important">
-                            <span *ngIf="progress < 100">Uploading...</span>
-                            <span *ngIf="progress == 100">Upload Completed...</span>
-                            <mat-progress-bar *ngIf="progress < 100" mode="determinate"
-                                value="{{ progress }}"></mat-progress-bar>
-                            <mat-progress-bar *ngIf="progress == 100" mode="indeterminate"></mat-progress-bar>
-                        </div>
-                    </ng-container>
+
                 </div>
 
                 <ng-container *ngIf="edition.topics && edition.topics.length">
-                    <app-topic-list [topics]="edition.topics"></app-topic-list>
+                    <app-topic-list [topics]="edition.topics" (onClickFile)="openFile($event)"></app-topic-list>
                 </ng-container>
+
             </div>
 
         </mat-card-content>

@@ -1,0 +1,20 @@
+<ng-container *ngIf="progress$ | async as progress">
+
+    <ng-container *ngIf="type=='loader' else spinner">
+        <div class="progress" *ngIf="progress > 0" style="margin-top: 10px; width: 100% !important">
+            <span *ngIf="progress < 100">Uploading...</span>
+            <span *ngIf="progress == 100">Upload Completed...</span>
+            <mat-progress-bar *ngIf="progress < 100" mode="determinate" value="{{ progress }}"></mat-progress-bar>
+            <mat-progress-bar *ngIf="progress == 100" mode="indeterminate"></mat-progress-bar>
+        </div>
+    </ng-container>
+
+    <ng-template #spinner>
+        <div class="spinner" *ngIf="progress > 0">
+            <mat-progress-spinner [diameter]="60" *ngIf="progress < 100" mode="determinate"
+                value="{{ progress }}"></mat-progress-spinner>
+            <mat-progress-spinner [diameter]="60" *ngIf="progress == 100" mode="indeterminate"></mat-progress-spinner>
+        </div>
+    </ng-template>
+
+</ng-container>

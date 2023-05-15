@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-topic-list',
@@ -7,6 +7,8 @@ import { ChangeDetectorRef, Component, Input } from '@angular/core';
 })
 export class TopicListComponent {
   @Input() topics: any
+  @Output() onClickFile: EventEmitter<string> = new EventEmitter<string>();
+
   constructor(private _changeDetectorRef: ChangeDetectorRef,) {
 
   }
@@ -18,4 +20,5 @@ export class TopicListComponent {
       this._changeDetectorRef.detectChanges()
     }
   }
+
 }

@@ -6,6 +6,7 @@ import { AppService, allowedImageTypes, isNullish } from '@app/shared/services/a
 import * as moment from 'moment';
 import { ToastPositionTypes } from '@app/shared/model/toast'
 import { ToastService } from '@app/shared/services/toast/toast.service';
+import { error } from 'console';
 
 @Component({
   selector: 'app-edition-details',
@@ -29,10 +30,16 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   subject: string;
   latestIndex: number = -1;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
+
   topicFile: any = null;
+  isTopicFileUploading: boolean = false;
+
   topicPdfFile: any = null;
+  isTopicPdfFileUploading: boolean = false;
+
   editionImage: any = null;
-  progress$: Observable<number> = new Observable();
+  isEditionImageUploading: boolean = false;
+
   publishDate: any
   constructor(private _service: EditionsService,
     public _appService: AppService,
@@ -61,9 +68,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     this._service.subject$.pipe(takeUntil(this._unsubscribeAll), map((resp) => {
       this.subject = resp
     })).subscribe();
-    this.progress$ = this._appService.progress$.pipe(
-      takeUntil(this._unsubscribeAll)
-    );
 
     this._service.edition$.pipe(takeUntil(this._unsubscribeAll), filter((resp) =>
 
@@ -107,9 +111,9 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     }
     this.edition['topicCount'] = this.edition.topics.length;
     this._service.addEditions(this.class, this.subject, this.publishDate, this.edition).pipe(
-      tap(el => this._toastService.showSuccess("Added successfully"))
+      tap(_el => this._toastService.showSuccess("Added successfully"))
     )
-      .subscribe((resp) => {
+      .subscribe((_resp) => {
         this.resetEdition();
       })
   }
@@ -131,14 +135,21 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0]
       if (!allowedImageTypes().includes(file.type)) {
+        this._toastService.showInfoToastr("Please a valid image file", this.toastrPositionTypes.bottomRight)
         return
       }
+      this.isEditionImageUploading = true;
       this.uploadFile("editions/images", file).pipe(map(url => {
         return url
       }
       )).subscribe((url) => {
         this.edition.image = url;
-        this.editionImage = file.name
+        this.editionImage = file.name;
+        this.isEditionImageUploading = false;
+
+      }, _error => {
+        this.isEditionImageUploading = false;
+
       });
     }
 
@@ -148,26 +159,33 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0]
       if (!allowedImageTypes().includes(file.type)) {
+        this._toastService.showInfoToastr("Please a valid image file", this.toastrPositionTypes.bottomRight)
         return
       }
+      this.isTopicFileUploading = true;
       this.uploadFile("editions/topics/images", file).pipe(map(url => {
         return url
       }
       )).subscribe((url) => {
         this.topic.banner = url;
-        this.topicFile = file.name
+        this.topicFile = file.name;
+        this.isTopicFileUploading = false;
+
+      }, (_error) => {
+        this.isTopicFileUploading = false;
+
       });
     }
 
   }
 
   pdfFileChangeEvent(event) {
-    console.log('pdfFileChangeEvent', event.target.files)
 
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0];
-      console.log('pdfFileChangeEvent file', file)
       if (file.type == 'application/pdf') {
+        this.isTopicPdfFileUploading = true
+
         this.uploadFile("editions/topics/pdf", file).pipe(map(url => {
           return url;
         }
@@ -175,8 +193,16 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
           console.log('pdfFileChangeEvent  url', url)
 
           this.topic.pdf = url;
-          this.topicPdfFile = file.name
+          this.topicPdfFile = file.name;
+          this.isTopicPdfFileUploading = false
+
+        }, (_error) => {
+          this.isTopicPdfFileUploading = false
+
         });
+      }
+      else {
+        this._toastService.showInfoToastr("Please select PDF file", this.toastrPositionTypes.bottomRight)
       }
     }
   }
@@ -211,9 +237,14 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   editEdition() {
     this.edition.index = this.latestIndex;
     this._service.editEditions(this.class, this.subject, this.publishDate, this.edition)
-      .pipe(tap(el => {
+      .pipe(tap(_el => {
         this._toastService.showSuccess("Updated successfully")
       }))
       .subscribe()
   }
+
+  openFile(event) {
+    window.open(event, '_blank');
+  }
+
 }
