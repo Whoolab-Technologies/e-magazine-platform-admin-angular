@@ -102,6 +102,10 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   }
 
   submitEditions() {
+    if (this.isEditionImageUploading || this.isTopicFileUploading || this.isTopicPdfFileUploading
+    ) {
+      return false
+    }
     if (isNullish(this.edition)) {
       this._toastService.showInfoToastr("All fields are required", this.toastrPositionTypes.topRight);
       return
@@ -126,6 +130,10 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   }
 
   addTopic() {
+    if (this.isTopicFileUploading || this.isTopicPdfFileUploading) {
+      return
+
+    }
     if (isNullish(this.topic)) {
       this._toastService.showInfoToastr("All fields are required", this.toastrPositionTypes.topRight);
       return
@@ -242,6 +250,9 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   }
 
   editEdition() {
+    if (this.isEditionImageUploading || this.isTopicFileUploading || this.isTopicPdfFileUploading) {
+      return false;
+    }
     this.edition.index = this.latestIndex;
     this._service.editEditions(this.class, this.subject, this.publishDate, this.edition)
       .pipe(tap(_el => {
