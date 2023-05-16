@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ErrorToastrComponent, InfoToastrComponent, SuccessToastComponent } from '@app/pages/notification/containers';
+import { ErrorToastrComponent, InfoToastrComponent, SuccessToastComponent } from '@app/pages/notifications/toast/containers';
 import { ToastrService } from 'ngx-toastr';
 import { ToastPositionTypes } from '@app/shared/model/toast'
 @Injectable({
