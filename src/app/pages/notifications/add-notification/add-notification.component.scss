@@ -1,0 +1,36 @@
+.header-item {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.header-item>.item {
+    width: 30%;
+    margin: 10px
+}
+
+mat-select.mat-select {
+    display: inline-block !important;
+    min-width: 90%;
+}
+
+.float-right {
+    float: right;
+}
+
+.add-button {
+    display: flex !important;
+    flex-wrap: wrap;
+    height: 100%;
+    align-items: center;
+    align-content: flex-end;
+}
+
+.image {
+    height: 100px;
+    width: 100px;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}

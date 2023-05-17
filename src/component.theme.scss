@@ -7,6 +7,8 @@
 
 @use '/src/app/pages/editions/edition-details/edition-details.component.theme' as editions-details;
 @use '/src/app/shared/confirmation/confirmation.component.theme.scss' as confirmation;
+@use '/src/app/pages/notifications/notifications-list/notifications-list.theme.scss' as notifications;
+@use '/src/app/pages/notifications/add-notification/add-notification.component.theme.scss' as notification;
 
 @mixin app-component($theme) {
     @include header.theme($theme);
@@ -17,5 +19,7 @@
     @include editions.theme($theme);
     @include editions-details.theme($theme);
     @include confirmation.theme($theme);
+    @include notifications.theme($theme);
+    @include notification.theme($theme);
 
 }

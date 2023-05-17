@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotificationsComponent } from './notifications.component';
-import { NotificationResolver } from './resolver/notification.resolver';
+import { NotificationResolver, NotificationsResolver } from './resolver/notification.resolver';
 import { NotificationsListComponent } from './notifications-list/notifications-list.component';
+import { AddNotificationComponent } from './add-notification/add-notification.component';
 
 
 const routes: Routes = [
@@ -10,11 +11,20 @@ const routes: Routes = [
     path: '',
     component: NotificationsComponent,
     resolve: {
-      staffs: NotificationResolver,
+      students: NotificationsResolver,
     },
     children: [{
       path: '',
-      component: NotificationsListComponent
+      component: NotificationsListComponent,
+
+    }, {
+      path: 'add',
+
+      component: AddNotificationComponent,
+      resolve: {
+        classes: NotificationResolver,
+      },
+
     }]
   }
 ];

@@ -1,0 +1,107 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@import '/src/assets/styles/styles';
+
+@mixin color($theme) {
+    $color-config: mat.get-color-config($theme);
+    $primary: map.get($color-config, 'primary');
+    $accent: map.get($color-config, 'accent');
+    $warn: map.get($color-config, 'warn');
+
+    .notification {
+        .students-table {
+            margin-top: 24px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 3px 11px 0 $shadow-white, 0 3px 3px -2px $shadow-grey, 0 1px 8px 0 $shadow-dark-grey;
+
+            &__header {
+                color: $grey;
+                display: flex;
+                justify-content: space-between;
+                padding: 24px 24px 8px;
+                margin-bottom: 0;
+            }
+
+            &__title {
+                font-size: $fs-medium;
+                font-weight: $fw-lighter;
+                margin: 0;
+                line-height: 40px;
+            }
+
+            &__content {
+
+                overflow-y: hidden;
+                overflow-x: scroll;
+
+                @media (max-width: $small) {
+                    height: auto;
+                }
+
+                &__no-content {
+                    padding: 10px;
+                    font-size: $fs-small;
+                    font-weight: $fw-lighter;
+                    color: mat.get-color-from-palette($warn);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+
+
+            }
+
+            &__btn {
+                text-align: right;
+                width: 100%;
+            }
+
+
+            &__table {
+                width: 100%;
+            }
+
+            &__table-row {
+                height: 64px;
+            }
+
+            &__table-row-title {
+                color: $dark-grey;
+                font-size: $fs-small;
+                font-weight: $fw-lighter;
+                line-height: 24px;
+                text-transform: uppercase;
+                padding: 16px;
+            }
+
+            &__table-content {
+                color: $dark-grey;
+                font-size: $fs-small;
+                padding: 20px;
+            }
+
+        }
+
+        .notification-form {
+            padding: 10px;
+
+            &__submit {
+                text-align: right;
+                padding: 10px;
+            }
+        }
+    }
+}
+
+
+
+@mixin theme($theme) {
+    $color-config: mat.get-color-config($theme);
+
+    @if $color-config !=null {
+        @include color($theme);
+    }
+
+}

@@ -53,7 +53,7 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
   exports: [
     HeaderModule, ActionComponent,
     SidebarComponent, FormsModule, MatIconModule, MatDialogModule,
-    FooterComponent, MatSidenavModule, FlexLayoutModule,
+    FooterComponent, MatSidenavModule, FlexLayoutModule, MatButtonModule,
     LayoutComponent, MatCardModule, MatProgressBarModule, MatToolbarModule,
     MatGridListModule, MatInputModule, MatTableModule, PipesModule
   ],
