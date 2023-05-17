@@ -156,6 +156,7 @@ function getToken(students: any[], notification: any) {
     return new Promise((resolve, rejects) => {
         students.forEach(async (el, index) => {
             promises.push(database.doc(`device/${el}`).get())
+            notification['read'] = false
             database.doc(`student/${el}/notifications/${notification.id}`).set(notification)
         })
 
