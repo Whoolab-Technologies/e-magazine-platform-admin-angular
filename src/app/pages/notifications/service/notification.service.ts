@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
 import { BehaviorSubject, Observable, mergeMap, of, map, tap, take, switchMap } from 'rxjs';
-
+import { HttpClient } from '@angular/common/http';
+import { environment as env } from '@env/environment';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,8 @@ export class NotificationService {
   private _class: BehaviorSubject<any | null> = new BehaviorSubject(null);
 
   constructor(
-    private _firebaseService: FirebaseService
+    private _firebaseService: FirebaseService,
+    private _httpClient: HttpClient
   ) { }
 
   get classes$(): Observable<any[]> {
@@ -115,12 +117,17 @@ export class NotificationService {
 
             this._notifications.next(_notifications);
             return _notifications;
-          }), tap((el) =>
-            el
-          )
-          ),)
+          }), mergeMap((resp) => {
+            return this._httpClient.post(`${env.cloudBaseUrl}/${env.endPoints.notification}`,
+              { notification: data, students: students },)
+          }), tap((el) => {
+            console.log("after api");
+            console.log(el);
+            return el;
+          })
+          ),
+      )
     )
-
   }
 
 }
