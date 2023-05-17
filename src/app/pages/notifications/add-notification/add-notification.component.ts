@@ -31,7 +31,7 @@ export class AddNotificationComponent implements OnInit, OnDestroy {
     title: '',
     message: '',
   }
-
+  disableBtn: boolean = false;
   constructor(private _service: NotificationService, private _toastService: ToastService) {
 
   }
@@ -97,7 +97,9 @@ export class AddNotificationComponent implements OnInit, OnDestroy {
       this._toastService.showInfoToastr("All fields are required", ToastPositionTypes.topRight)
       return;
     }
+    this.disableBtn = true
     this.notification.createdOn = moment().toDate();
+    this.notification.class = this.class;
 
     this._service.createNotification(this.notification, this.selection.selected).pipe(tap(el => {
       this._toastService.showSuccess("Notification has been created successfully")
@@ -112,5 +114,6 @@ export class AddNotificationComponent implements OnInit, OnDestroy {
       title: '',
       message: '',
     }
+    this.disableBtn = false
   }
 }

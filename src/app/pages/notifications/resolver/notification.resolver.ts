@@ -17,7 +17,7 @@ export class NotificationsResolver implements Resolve<boolean> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-    return forkJoin([this._service.getStudents()]);
+    return forkJoin([this._service.getStudents(), this._service.getNotifications()]);
   }
 }
 

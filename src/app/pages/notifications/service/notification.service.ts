@@ -36,7 +36,7 @@ export class NotificationService {
   getNotifications(): Observable<any[]> {
     const path = `notifications`;
     return this._firebaseService
-      .getCollection(path)
+      .getCollection(path, "createdOn", 'desc')
       .pipe(
 
         map((response) => {
@@ -113,7 +113,7 @@ export class NotificationService {
           .addDocument(`notifications`, data)
           .pipe(map(el => {
             data.id = el.id
-            _notifications = [..._notifications, data];
+            _notifications = [data, ..._notifications];
 
             this._notifications.next(_notifications);
             return _notifications;

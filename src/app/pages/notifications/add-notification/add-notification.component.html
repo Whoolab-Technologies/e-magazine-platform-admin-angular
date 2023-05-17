@@ -72,8 +72,8 @@
                     </div>
                     <div fxFlex="100">
                         <div class="notification-form__submit">
-                            <button mat-flat-button color="primary" (click)="createNotification()">Create</button>
-
+                            <button mat-flat-button color="primary" (click)="createNotification()"
+                                [disabled]="disableBtn">Create</button>
                         </div>
                     </div>
 
