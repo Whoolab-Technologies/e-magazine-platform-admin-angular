@@ -20,9 +20,9 @@ const routes: Routes = [
     },
 
     {
-      path: 'notification',
+      path: 'notifications',
 
-      loadChildren: () => import('./pages/notification/notification.module').then(m => m.NotificationModule)
+      loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsModule)
     },
     {
       path: 'students',

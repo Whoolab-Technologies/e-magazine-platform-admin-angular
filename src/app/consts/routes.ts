@@ -24,4 +24,12 @@ export const menu = [
     link: '/editions',
   },
 
+  {
+    id: 'notifications',
+    title: 'Notifications',
+    type: 'basic',
+    icon: 'notifications',
+    link: '/notifications',
+  },
+
 ];

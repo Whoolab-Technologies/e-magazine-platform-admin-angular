@@ -6,8 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EditionsService } from '@app/pages/editions/services/editions.service';
 import { ConfirmationService } from '@app/shared/services/confirmation/confirmation.service';
 import { ToastService } from '@app/shared/services/toast/toast.service';
-import { Toast } from 'ngx-toastr';
-import { BehaviorSubject, Observable, Subject, filter, map, switchMap, take, takeUntil } from 'rxjs';
+import { Observable, Subject, filter, map, switchMap, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-editions-list',

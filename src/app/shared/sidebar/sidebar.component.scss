@@ -19,11 +19,13 @@
 .mat-icon {
   margin-right: 15px;
   padding-bottom: 2px !important;
- // color: $sidebar-icon-color;
+  // color: $sidebar-icon-color;
 }
 
 
 .sidebar-title {
+  padding: 4px 0;
+  display: table-caption;
   font-size: $fs-normal;
   text-transform: uppercase;
 }

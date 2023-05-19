@@ -27,8 +27,7 @@ import { ActionComponent } from './action/action.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
-import { LoaderComponent } from './loader/loader.component';
-import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner'
+
 
 @NgModule({
   declarations: [
@@ -37,7 +36,6 @@ import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@ang
     LayoutComponent,
     ActionComponent,
     ConfirmationComponent,
-    LoaderComponent,
   ],
   imports: [
     HeaderModule,
@@ -49,14 +47,14 @@ import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@ang
     MatMenuModule,
     MatSelectModule,
     FormsModule,
-    MatSidenavModule, MatProgressSpinnerModule,
-    MatDialogModule, FlexLayoutModule, MatProgressBarModule
+    MatSidenavModule,
+    MatDialogModule, FlexLayoutModule
   ],
   exports: [
-    HeaderModule, ActionComponent, LoaderComponent,
+    HeaderModule, ActionComponent,
     SidebarComponent, FormsModule, MatIconModule, MatDialogModule,
-    FooterComponent, MatSidenavModule, FlexLayoutModule,
-    LayoutComponent, MatCardModule, MatToolbarModule,
+    FooterComponent, MatSidenavModule, FlexLayoutModule, MatButtonModule,
+    LayoutComponent, MatCardModule, MatProgressBarModule, MatToolbarModule,
     MatGridListModule, MatInputModule, MatTableModule, PipesModule
   ],
 })
