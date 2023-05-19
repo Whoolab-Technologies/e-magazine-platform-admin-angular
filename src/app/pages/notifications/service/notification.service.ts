@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
 import { BehaviorSubject, Observable, mergeMap, of, map, tap, take, switchMap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { environment as env } from '@env/environment';
 @Injectable({
   providedIn: 'root'
@@ -106,20 +106,20 @@ export class NotificationService {
 
   createNotification(notification, students) {
     const data = JSON.parse(JSON.stringify(notification))
-    const path = `student`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
+    const path = `notifications`;
     return this._notifications.pipe(take(1),
       switchMap((_notifications: any) =>
-        this._firebaseService
-          .addDocument(`notifications`, data)
-          .pipe(map(el => {
-            data.id = el.id
+        this._httpClient.post(`${env.cloudBaseUrl}/${env.endPoints.notification}`,
+          { notification: data, students: students }, { headers: headers })
+          .pipe(map((response: HttpResponse<any>) => {
+            console.log("response");
+            console.log(response);
+            data.id = response.body.id
             _notifications = [data, ..._notifications];
 
             this._notifications.next(_notifications);
             return _notifications;
-          }), mergeMap((resp) => {
-            return this._httpClient.post(`${env.cloudBaseUrl}/${env.endPoints.notification}`,
-              { notification: data, students: students },)
           }), tap((el) => {
             console.log("after api");
             console.log(el);

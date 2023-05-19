@@ -16,7 +16,7 @@
                         <container-element [ngSwitch]="column">
                             <span *ngSwitchCase="'date'">
                                 <ng-container>
-                                    {{element['createdOn'] | date}}
+                                    {{element['createdOn'] | firebaseDate | date}}
                                 </ng-container>
                             </span>
                             <span *ngSwitchDefault> {{element[column]}}</span>

@@ -36,7 +36,8 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
     this._service.notifications$.pipe(takeUntil(this._unsubscribeAll)).subscribe((notifications) => {
       this.dataSource.data = JSON.parse(JSON.stringify(notifications))
       this.notifications = [...notifications];
-
+      console.log('notifications ')
+      console.log(notifications)
       this._changeDetectorRef.detectChanges();
     });
   }

@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import * as moment from 'moment';
 
 const cors = require('cors')({
     origin: true,
@@ -67,26 +68,23 @@ exports.listenStudent = functions.firestore
     .document('student/{studentId}')
     .onCreate(async (snapshot, context) => {
         const data = snapshot.data();
-        return new Promise((resolve, reject) => {
-            database.collection(`classes/${data.class}/subjects`).get().then((snapshot) => {
-                const update: any = {
-                    subjects: {}
-                }
+        return new Promise(async (resolve, reject) => {
 
-                snapshot.forEach((doc) => {
-                    update.subjects[doc.id] = {
-                        status: false,
-                        self: true
-                    };
-                })
-                update.subjects[Object.keys(update.subjects)[0]] = true;
-                database.doc(`student/${context.params.studentId}`).update(update);
-                resolve(true);
-
-            }, error => {
-                reject(false)
-
-            });
+            if (data.referrer) {
+                database.collection(`student`)
+                    .where('referralCode', '==', data.referrer).limit(1).get().then((snapshot) => {
+                        functions.logger.info('snapshot', { structuredData: true });
+                        functions.logger.info(snapshot.docs[0].id, { structuredData: true });
+                        functions.logger.info(snapshot.docs[0].data().point, { structuredData: true });
+                        snapshot.docs[0].ref.update({ points: admin.firestore.FieldValue.increment(1) })
+                        resolve(true)
+                    }, error => {
+                        reject(true)
+                    });
+            }
+            else {
+                resolve(true)
+            }
         })
 
     });
@@ -125,16 +123,19 @@ export const notification = functions.https.onRequest((req, res) => {
         const request = req.body;
         const students = request.students;
         const notification = request.notification;
+        notification['createdOn'] = moment(notification['createdOn']).toDate()
+        var doc = await database.collection('notifications').add(notification);
+        notification['id'] = doc.id;
         const payload = {
             notification: {
                 title: notification.title,
                 body: notification.message
             }
         };
-        const tokens: any = await getToken(students, notification)
+        const tokens: any = await getToken(students, notification);
         if (tokens.length) {
             admin.messaging().sendToDevice([...tokens], payload).then((su) => {
-                res.status(200).send({ message: 'Notifications send successfully' })
+                res.status(200).send({ id: doc.id, message: 'Notifications send successfully' })
 
             }, (error) => {
                 res.status(500).send(error)
@@ -156,6 +157,7 @@ function getToken(students: any[], notification: any) {
     return new Promise((resolve, rejects) => {
         students.forEach(async (el, index) => {
             promises.push(database.doc(`device/${el}`).get())
+
             notification['read'] = false
             database.doc(`student/${el}/notifications/${notification.id}`).set(notification)
         })
