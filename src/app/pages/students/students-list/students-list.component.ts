@@ -14,7 +14,7 @@ import { ConfirmationConfig } from '@app/shared/model/confirmation-config';
   encapsulation: ViewEncapsulation.None,
 })
 export class StudentsListComponent implements OnInit, OnDestroy {
-  public displayedColumns: string[] = ['name', 'email', 'address', 'class', 'subjects'];
+  public displayedColumns: string[] = ['name', 'email', 'address', 'class', 'points', 'subjects'];
   public dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();

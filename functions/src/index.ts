@@ -175,3 +175,39 @@ function getToken(students: any[], notification: any) {
         })
     })
 }
+
+export const createClass = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        let promises: any[] = [];
+        const request = req.body;
+        const classes = request.class;
+        classes.forEach((el: any) => {
+            const clsName = `${(el.name).toUpperCase()}`;
+            const ref = database.doc(`classes/${clsName}`).set({
+                name: clsName, desc: el.desc
+            });
+            promises.push(ref);
+            const subjects = el.subjects;
+            (subjects).forEach((sub: any) => {
+                const subject = `${(sub.name).toUpperCase()}`;
+                const subRef = database.doc(`classes/${clsName}/subjects/${subject}`).
+                    set({
+                        name: subject,
+                        desc: sub.desc,
+                        image: sub.image,
+                        amount: sub.amount,
+                    })
+                promises.push(subRef);
+            });
+        });
+
+        Promise.all(promises).then((result) => {
+            res.status(200).json({ msg: 'Class and subjects have been created!' });
+        }, error => {
+            res.status(500).json(error);
+
+        });
+    });
+
+
+});
