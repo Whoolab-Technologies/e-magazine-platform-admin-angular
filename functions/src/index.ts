@@ -8,7 +8,12 @@ const cors = require('cors')({
 admin.initializeApp();
 const database = admin.firestore()
 const auth = admin.auth()
+const Razorpay = require('razorpay');
 
+const _razorPay = new Razorpay({
+    key_id: 'YOUR_KEY_ID',
+    key_secret: 'YOUR_KEY_SECRET',
+});
 // // Start writing functions
 // // https://firebase.google.com/docs/functions/typescript
 //
@@ -210,4 +215,21 @@ export const createClass = functions.https.onRequest((req, res) => {
     });
 
 
+});
+
+
+export const razorpayOrder = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        const request = req.body;
+        var options = {
+            amount: request.amount * 100,  // amount in the smallest currency unit
+            currency: request.currency
+        };
+        _razorPay.orders.create(options).then((resp: any) => {
+            res.status(201).send(resp)
+        }, (error: any) => {
+            res.status(201).send(error)
+
+        })
+    });
 });
