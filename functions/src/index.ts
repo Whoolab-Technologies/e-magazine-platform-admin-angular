@@ -229,7 +229,8 @@ export const razorpayOrder = functions.https.onRequest((req, res) => {
             currency: request.currency
         };
         _razorPay.orders.create(options).then((resp: any) => {
-            request['createdOn'] = new Date()
+            request['createdOn'] = new Date();
+            request['status'] = "started";
             database.doc(`payments/${resp.id}`).set(request);
             res.status(201).send(resp)
         }, (error: any) => {
