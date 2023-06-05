@@ -11,8 +11,8 @@ const auth = admin.auth()
 const Razorpay = require('razorpay');
 
 const _razorPay = new Razorpay({
-    key_id: 'YOUR_KEY_ID',
-    key_secret: 'YOUR_KEY_SECRET',
+    key_id: 'rzp_test_HpQRLpieZtcYTA',
+    key_secret: 'Wlb6bSK5l5Oa7zrUr37leMCy',
 });
 // // Start writing functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -71,8 +71,8 @@ export const createStudent = functions.https.onRequest((req, res) => {
 
 exports.listenStudent = functions.firestore
     .document('student/{studentId}')
-    .onCreate(async (snapshot, context) => {
-        const data = snapshot.data();
+    .onCreate(async (studentSnapshot, context) => {
+        const data = studentSnapshot.data();
         return new Promise(async (resolve, reject) => {
 
             if (data.referrer) {
@@ -80,8 +80,11 @@ exports.listenStudent = functions.firestore
                     .where('referralCode', '==', data.referrer).limit(1).get().then((snapshot) => {
                         functions.logger.info('snapshot', { structuredData: true });
                         functions.logger.info(snapshot.docs[0].id, { structuredData: true });
-                        functions.logger.info(snapshot.docs[0].data().point, { structuredData: true });
-                        snapshot.docs[0].ref.update({ points: admin.firestore.FieldValue.increment(1) })
+                        if (snapshot.size > 0) {
+                            functions.logger.info(snapshot.docs[0].data().point, { structuredData: true });
+                            snapshot.docs[0].ref.update({ points: admin.firestore.FieldValue.increment(10) })
+                            studentSnapshot.ref.update({ points: admin.firestore.FieldValue.increment(10) })
+                        }
                         resolve(true)
                     }, error => {
                         reject(true)
@@ -226,6 +229,8 @@ export const razorpayOrder = functions.https.onRequest((req, res) => {
             currency: request.currency
         };
         _razorPay.orders.create(options).then((resp: any) => {
+            request['createdOn'] = new Date()
+            database.doc(`payments/${resp.id}`).set(request);
             res.status(201).send(resp)
         }, (error: any) => {
             res.status(201).send(error)
