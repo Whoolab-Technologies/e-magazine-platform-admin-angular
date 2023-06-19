@@ -21,12 +21,18 @@
                     <input matInput placeholder="Edition Name" [(ngModel)]="topic.desc" required>
                 </mat-form-field>
             </div>
-            <div fxFlex="45" class="text-center">
+            <div fxFlex="30">
+                <mat-form-field appearance='outline'>
+                    <mat-label> Pages </mat-label>
+                    <input matInput type="number" placeholder="Pages" [(ngModel)]="topic.pages" required>
+                </mat-form-field>
+            </div>
+            <div fxFlex="30" class="text-center">
                 <div class="image-wrapper" (click)="onClickFile.emit(topic.banner)">
                     <img [src]="topic.banner" />
                 </div>
             </div>
-            <div fxFlex="45" class="text-center">
+            <div fxFlex="30" class="text-center">
                 <div class="image-wrapper" (click)="onClickFile.emit(topic.pdf)">
                     <mat-icon class="image-upload">picture_as_pdf</mat-icon>
                 </div>

@@ -18,10 +18,12 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   edit: boolean = false;
   edition: any = {
     name: "",
+    desc: "",
+    image: null,
     index: 0,
     topicCount: 0,
   };
-  topic: any = { name: '', banner: '', desc: '', pdf: '' }
+  topic: any = { name: '', banner: '', desc: '', pdf: '', pages: 1 }
   toastrPositionTypes: typeof ToastPositionTypes = ToastPositionTypes;
 
   classes$: Observable<any>;
@@ -114,7 +116,8 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       this._toastService.showInfoToastr("Publish date is required if 'Publish Now' is not selected", this.toastrPositionTypes.topRight);
       return
     }
-    if ((this.topic.name && this.topic.desc && this.topic.image && this.topic.pdf)) {
+    if ((this.topic.name && this.topic.desc && this.topic.pdf)) {
+      console.log("add topic on edition submit")
       this.addTopic();
     }
     if (!this.edition.topics) {
@@ -170,29 +173,8 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
 
   }
 
-  fileChangeEvent(event) {
-    if (event.target.files && event.target.files.length) {
-      const file = event.target.files[0]
-      if (!allowedImageTypes().includes(file.type)) {
-        this._toastService.showInfoToastr("Please a valid image file", this.toastrPositionTypes.bottomRight)
-        return
-      }
-      this.isTopicFileUploading = true;
-      this.uploadFile("editions/topics/images", file).pipe(map(url => {
-        return url
-      }
-      )).subscribe((url) => {
-        this.topic.banner = url;
-        this.topicFile = file.name;
-        this.isTopicFileUploading = false;
 
-      }, (_error) => {
-        this.isTopicFileUploading = false;
 
-      });
-    }
-
-  }
 
   pdfFileChangeEvent(event) {
 

@@ -63,7 +63,7 @@
                                 <input type="file" hidden #editionFileInput (change)="editionFileChangeEvent($event)" />
 
                                 <mat-form-field appearance='outline'>
-                                    <mat-label>{{edition.image? 'update Image':'Select Image'}}</mat-label>
+                                    <mat-label>{{edition.image? 'update Poster':'Select Poster'}}</mat-label>
                                     <input matInput placeholder="Select Image" [(ngModel)]="editionImage" readonly
                                         (click)="editionFileInput.click()">
 
@@ -122,27 +122,14 @@
                                 required></textarea>
                         </mat-form-field>
                     </div>
-                    <div fxFlex="5" class="text-center">
-                        <input type="file" hidden #imgFileInput (change)="fileChangeEvent($event)" />
-                        <div class="image-wrapper">
-                            <ng-template #topicImageSelector>
-                                <span (click)="imgFileInput.click()">
-                                    <mat-icon class="image-upload">photo_library</mat-icon>
-                                    <ng-container *ngIf="topicFile else selectImageTemplete">
-                                        <div class="selected-file"> {{topicFile}}</div>
+                    <div fxFlex="20">
+                        <mat-form-field appearance='outline'>
+                            <mat-label>Pages</mat-label>
+                            <input matInput type="number" placeholder="Pages" [(ngModel)]="topic.pages" required>
 
-                                    </ng-container>
-                                    <ng-template #selectImageTemplete>
-                                        <div class="select-section">Select image</div>
-                                    </ng-template>
-                                </span>
-                            </ng-template>
-                            <ng-container *ngIf="isTopicFileUploading else topicImageSelector">
-                                <app-loader></app-loader>
-                            </ng-container>
-
-                        </div>
+                        </mat-form-field>
                     </div>
+
                     <div fxFlex="5" class="text-center">
                         <input type="file" hidden #pdfFileInput (change)="pdfFileChangeEvent($event)" />
                         <div class="image-wrapper">

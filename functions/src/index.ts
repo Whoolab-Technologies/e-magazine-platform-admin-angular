@@ -234,8 +234,42 @@ export const razorpayOrder = functions.https.onRequest((req, res) => {
             database.doc(`payments/${resp.id}`).set(request);
             res.status(201).send(resp)
         }, (error: any) => {
-            res.status(201).send(error)
+            res.status(400).send(error)
 
         })
+    });
+});
+exports.scheduledPublish = functions.pubsub.schedule('05 00 * * *').timeZone('Asia/Kolkata').onRun((context) => {
+    const now = admin.firestore.Timestamp.now();
+    return new Promise((resolve, reject) => {
+        var promises: any = [];
+        const update = { published: true };
+        database.collection('editions').where('published', '==', false).where('date', '<', now).get().then((snapshots) => {
+            snapshots.forEach(doc => {
+                const path = doc.data().path;
+                promises.push(doc.ref.delete())
+                promises.push(database.doc(`${path}`).update(update))
+            })
+            Promise.all(promises).then(() => {
+                resolve(true);
+            }, error => {
+                functions.logger.info('update error', { structuredData: true });
+                functions.logger.info(error, { structuredData: true });
+
+                reject();
+            })
+        }, error => {
+            functions.logger.info(' editions error', { structuredData: true });
+            functions.logger.info(error, { structuredData: true });
+            reject()
+        });
+    });
+});
+export const createUser = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        const request = req.body;
+        functions.logger.info(' createUser request', { structuredData: true });
+        functions.logger.info(request, { structuredData: true });
+        res.status(201).send({ message: 'Request received send' })
     });
 });
