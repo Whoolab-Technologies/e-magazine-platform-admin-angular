@@ -14,7 +14,7 @@ export const menu = [
     id: 'classes',
     title: 'Classes',
     type: 'basic',
-    icon: 'people',
+    icon: 'school',
     link: '/classes',
   },
   {

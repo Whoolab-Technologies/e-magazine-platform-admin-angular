@@ -15,4 +15,15 @@ export class ClassListComponent implements OnInit {
 
   }
 
+  edit(clss: any) {
+    console.log(clss);
+  }
+
+  delete(clss: any) {
+    console.log(clss);
+  }
+
+  add() {
+
+  }
 }

@@ -1,7 +1,9 @@
 <div class="ez-class">
     <mat-card class="ez-class-list">
-        <mat-card-title class="ez-class__header">
-            <!-- <h5 class="students-table__title">Material-UI Table</h5> -->
+        <mat-card-title class="ez-class-list__header">
+            <div class="ez-class-list__btn">
+                <button mat-flat-button color="warn" (click)="add()">Add Class</button>
+            </div>
         </mat-card-title>
 
         <mat-card-content class="ez-class-list__content">
@@ -17,13 +19,13 @@
                                         <mat-icon class=""> more_vert</mat-icon>
                                     </button>
                                     <mat-menu #summaryMenu="matMenu">
-                                        <button mat-menu-item>
+                                        <button mat-menu-item (click)="edit(item)">
                                             <mat-icon>edit</mat-icon>
 
                                             <span class="text-secondary"> Edit</span>
 
                                         </button>
-                                        <button mat-menu-item>
+                                        <button mat-menu-item (click)="edit(item)">
                                             <mat-icon [color]="'warn'">delete</mat-icon>
 
                                             <span class="text-warn"> Remove</span>
