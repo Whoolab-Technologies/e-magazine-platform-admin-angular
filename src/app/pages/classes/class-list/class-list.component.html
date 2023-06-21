@@ -1,0 +1,40 @@
+<div class="ez-class">
+    <mat-card class="ez-class-list">
+        <mat-card-title class="ez-class__header">
+            <!-- <h5 class="students-table__title">Material-UI Table</h5> -->
+        </mat-card-title>
+
+        <mat-card-content class="ez-class-list__content">
+            <div fxLayout="row wrap" fxLayoutAlign="space-between">
+
+                <ng-container *ngFor="let item of( classService.classes$ |async ) ">
+                    <div fxFlex="30">
+                        <mat-card class="ez-class-list__item">
+                            <mat-card-title class=" ez-class-list__item-title">
+                                <span> {{item.name}} </span>
+                                <span class="float-right">
+                                    <button mat-icon-button [matMenuTriggerFor]="summaryMenu">
+                                        <mat-icon class=""> more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu #summaryMenu="matMenu">
+                                        <button mat-menu-item>
+                                            <mat-icon>edit</mat-icon>
+
+                                            <span class="text-secondary"> Edit</span>
+
+                                        </button>
+                                        <button mat-menu-item>
+                                            <mat-icon [color]="'warn'">delete</mat-icon>
+
+                                            <span class="text-warn"> Remove</span>
+                                        </button>
+                                    </mat-menu>
+                                </span>
+                            </mat-card-title>
+                        </mat-card>
+                    </div>
+                </ng-container>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -494,3 +494,11 @@ mat-select.mat-select {
 .mat-dialog-container {
   border-radius: 40px !important;
 }
+
+.text-warn {
+  color: mat.get-color-from-palette($ez-lesson-warn);
+}
+
+.text-secondary {
+  color: mat.get-color-from-palette($ez-lesson-accent);
+}

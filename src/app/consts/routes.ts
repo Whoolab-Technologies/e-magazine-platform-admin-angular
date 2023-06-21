@@ -9,7 +9,15 @@ export const menu = [
     type: 'basic',
     icon: 'home',
     link: '/dashboard',
-  }, {
+  },
+  {
+    id: 'classes',
+    title: 'Classes',
+    type: 'basic',
+    icon: 'people',
+    link: '/classes',
+  },
+  {
     id: 'students',
     title: 'Students',
     type: 'basic',

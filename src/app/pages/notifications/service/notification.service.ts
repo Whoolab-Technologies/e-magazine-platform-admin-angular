@@ -112,10 +112,8 @@ export class NotificationService {
       switchMap((_notifications: any) =>
         this._httpClient.post(`${env.cloudBaseUrl}/${env.endPoints.notification}`,
           { notification: data, students: students }, { headers: headers })
-          .pipe(map((response: HttpResponse<any>) => {
-            console.log("response");
-            console.log(response);
-            data.id = response.body.id
+          .pipe(map((response: any) => {
+            data.id = response.id
             _notifications = [data, ..._notifications];
 
             this._notifications.next(_notifications);

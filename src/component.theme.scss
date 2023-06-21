@@ -9,6 +9,7 @@
 @use '/src/app/shared/confirmation/confirmation.component.theme.scss' as confirmation;
 @use '/src/app/pages/notifications/notifications-list/notifications-list.theme.scss' as notifications;
 @use '/src/app/pages/notifications/add-notification/add-notification.component.theme.scss' as notification;
+@use '/src/app/pages/classes/class-list/class-list.component.theme.scss' as classes;
 
 @mixin app-component($theme) {
     @include header.theme($theme);
@@ -21,5 +22,6 @@
     @include confirmation.theme($theme);
     @include notifications.theme($theme);
     @include notification.theme($theme);
+    @include classes.theme($theme);
 
 }

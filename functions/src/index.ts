@@ -5,7 +5,11 @@ import * as moment from 'moment';
 const cors = require('cors')({
     origin: true,
 });
-admin.initializeApp();
+admin
+    .initializeApp({
+        credential: admin.credential.applicationDefault(),
+    }
+    );
 const database = admin.firestore()
 const auth = admin.auth()
 const Razorpay = require('razorpay');
@@ -270,6 +274,9 @@ export const createUser = functions.https.onRequest((req, res) => {
         const request = req.body;
         functions.logger.info(' createUser request', { structuredData: true });
         functions.logger.info(request, { structuredData: true });
-        res.status(201).send({ message: 'Request received send' })
+        functions.logger.info(admin.credential.applicationDefault(), { structuredData: true });
+        res.status(201).send({
+            message: 'Request received send',
+        })
     });
 });

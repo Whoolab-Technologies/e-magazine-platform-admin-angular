@@ -21,9 +21,9 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     desc: "",
     image: null,
     index: 0,
-    topicCount: 0,
+    topicCount: 1,
   };
-  topic: any = { name: '', banner: '', desc: '', pdf: '', pages: 1 }
+  topic: any = { name: '', desc: '', pdf: '', pages: 1 }
   toastrPositionTypes: typeof ToastPositionTypes = ToastPositionTypes;
 
   classes$: Observable<any>;
@@ -214,7 +214,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     this.topic = {
       name: '',
       desc: '',
-      banner: '',
       pdf: ''
     }
     this.topicFile = null;
