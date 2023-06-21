@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ClassesComponent } from './classes/classes.component';
 import { ClassListComponent } from './class-list/class-list.component';
 import { ClassesResolver } from './resolver/classes.resolver';
+import { AddEditClassComponent } from './add-edit-class/add-edit-class.component';
 
 
 const routes: Routes = [
@@ -15,7 +16,11 @@ const routes: Routes = [
     children: [{
       path: '',
       component: ClassListComponent
-    }]
+    }, {
+      path: ':id',
+      component: AddEditClassComponent
+    },
+    ]
   }
 ];
 

@@ -7,11 +7,13 @@ import { ClassesComponent } from './classes/classes.component';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { AddEditClassComponent } from './add-edit-class/add-edit-class.component';
 
 @NgModule({
   declarations: [
     ClassListComponent,
     ClassesComponent,
+    AddEditClassComponent,
   ],
   imports: [
     CommonModule,
