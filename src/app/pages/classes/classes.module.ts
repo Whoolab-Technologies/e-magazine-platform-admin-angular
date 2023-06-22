@@ -8,7 +8,7 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { AddEditClassComponent } from './add-edit-class/add-edit-class.component';
-
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     ClassListComponent,
@@ -19,6 +19,7 @@ import { AddEditClassComponent } from './add-edit-class/add-edit-class.component
     CommonModule,
     ClassesRoutingModule,
     SharedModule,
+    HttpClientModule,
     MatMenuModule
   ]
 })

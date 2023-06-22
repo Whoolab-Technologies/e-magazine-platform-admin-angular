@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as moment from 'moment';
+const client = require('firebase-tools');
 
 const cors = require('cors')({
     origin: true,
@@ -13,11 +14,11 @@ admin
 const database = admin.firestore()
 const auth = admin.auth()
 const Razorpay = require('razorpay');
-
-const _razorPay = new Razorpay({
+const _rPayOption = {
     key_id: 'rzp_test_HpQRLpieZtcYTA',
     key_secret: 'Wlb6bSK5l5Oa7zrUr37leMCy',
-});
+}
+const _razorPay = new Razorpay(_rPayOption);
 // // Start writing functions
 // // https://firebase.google.com/docs/functions/typescript
 //
@@ -193,37 +194,71 @@ export const createClass = functions.https.onRequest((req, res) => {
         let promises: any[] = [];
         const request = req.body;
         const classes = request.class;
+
         classes.forEach((el: any) => {
             const clsName = `${(el.name).toUpperCase()}`;
-            const ref = database.doc(`classes/${clsName}`).set({
-                name: clsName, desc: el.desc
-            });
-            promises.push(ref);
-            const subjects = el.subjects;
-            (subjects).forEach((sub: any) => {
-                const subject = `${(sub.name).toUpperCase()}`;
-                const subRef = database.doc(`classes/${clsName}/subjects/${subject}`).
-                    set({
-                        name: subject,
-                        desc: sub.desc,
-                        image: sub.image,
-                        amount: sub.amount,
-                    })
-                promises.push(subRef);
-            });
-        });
+            client.firestore
+                .delete(`classes/${clsName}`, {
+                    project: process.env.GCLOUD_PROJECT,
+                    recursive: true,
+                    yes: true,
+                    force: true
+                }).then(() => {
+                    functions.logger.info("DELETED", { structuredData: true });
+                    const ref = database.doc(`classes/${clsName}`).set({
+                        name: clsName, desc: el.desc || ''
+                    });
+                    promises.push(ref);
+                    const subjects = el.subjects;
+                    (subjects).forEach((sub: any) => {
+                        const subject = `${(sub.name).toUpperCase()}`;
+                        const subRef = database.doc(`classes/${clsName}/subjects/${subject}`).
+                            set({
+                                name: subject,
+                                desc: sub.desc || '',
+                                image: sub.image || '',
+                                amount: sub.amount,
+                            })
+                        promises.push(subRef);
+                    });
+                    Promise.all(promises).then((result) => {
+                        res.status(200).json({ msg: 'Class and subjects have been created!' });
+                    }, error => {
 
-        Promise.all(promises).then((result) => {
-            res.status(200).json({ msg: 'Class and subjects have been created!' });
-        }, error => {
-            res.status(500).json(error);
+                        res.status(500).json(error);
+                    });
+                }, (error: any) => {
+                    functions.logger.info("DELETE ERROR", { structuredData: true });
+                    functions.logger.info(error, { structuredData: true });
 
-        });
+                    res.status(500).json(error);
+                });
+
+
+        })
     });
 
 
 });
 
+export const removeClass = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        const request = req.body;
+
+        const clsName = `${(request.classId).toUpperCase()}`;
+        client.firestore
+            .delete(`classes/${clsName}`, {
+                project: process.env.GCLOUD_PROJECT,
+                recursive: true,
+                yes: true,
+                force: true
+            }).then(() => {
+                res.status(200).json({ msg: 'Class and subjects deleted successfully' });
+            }, (error: any) => {
+                res.status(500).json(error);
+            });
+    });
+});
 
 export const razorpayOrder = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
@@ -236,7 +271,9 @@ export const razorpayOrder = functions.https.onRequest((req, res) => {
             request['createdOn'] = new Date();
             request['status'] = "started";
             database.doc(`payments/${resp.id}`).set(request);
-            res.status(201).send(resp)
+            var responseData = { ...resp };
+            responseData.rpayKey = _rPayOption.key_id;
+            res.status(201).send(responseData)
         }, (error: any) => {
             res.status(400).send(error)
 

@@ -1,22 +1,32 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
-import { BehaviorSubject, mergeMap, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, mergeMap, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment as env } from '@env/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class ClassesService {
+
   private _classes: BehaviorSubject<any[] | null> = new BehaviorSubject([]);
+  private _subjects: BehaviorSubject<any[] | null> = new BehaviorSubject([]);
 
   constructor(
-    private _firebaseService: FirebaseService
+    private _firebaseService: FirebaseService,
+    private _httpClient: HttpClient
   ) { }
 
   get classes$(): Observable<any[]> {
     return this._classes.asObservable();
   }
-
+  get subjects$(): Observable<any[]> {
+    return this._subjects.asObservable();
+  }
+  set subjects(subjts: any[]) {
+    this._subjects.next(subjts);
+  }
 
   getClasses(): Observable<any[]> {
     const path = `classes`;
@@ -38,5 +48,86 @@ export class ClassesService {
 
         })
       );
+  }
+
+
+  getSubjects(classId: string): Observable<any[]> {
+    const path = `classes/${classId}/subjects`;
+    return this._firebaseService
+      .getCollection(path)
+      .pipe(
+
+        map((response) => {
+          const subjects = snapshotToArray(response);
+          this._subjects.next(subjects)
+          return subjects;
+        }),
+      );
+  }
+  addOrUpdate(classObj: any, subjects: any[]): Observable<any[]> {
+    console.log(subjects)
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
+    var requestObj = {
+      "class": [
+        {
+          "name": classObj.name,
+          "desc": "",
+          "subjects": subjects
+        }]
+    };
+    return this._classes.pipe(take(1),
+      switchMap((_classes: any) =>
+        this._httpClient.post(`${env.cloudBaseUrl}/${env.endPoints.class}`,
+          requestObj,
+          { headers: headers })
+          .pipe(map((response: any) => {
+            console.log('response  ', response)
+            var clsName = classObj.name.toUpperCase();
+            _classes = [..._classes, {
+              name: clsName,
+              id: clsName,
+              desc: "",
+            }]
+            this._classes.next(_classes);
+            return response;
+          }), catchError((error) => {
+            return throwError(() => error.error ? error.error : error);
+          }), tap((el) => {
+            console.log("after api");
+            console.log(el);
+            return el;
+          })
+          ),
+      )
+    )
+  }
+
+  deleteClass(classId: any) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
+    var clsName = classId.toUpperCase();
+    var requestObj = {
+      classId: clsName
+    };
+    return this._classes.pipe(take(1),
+      switchMap((_classes: any) =>
+        this._httpClient.post(`${env.cloudBaseUrl}/${env.endPoints.removeClass}`,
+          requestObj,
+          { headers: headers })
+          .pipe(map((response: any) => {
+            console.log('response  ', response)
+
+            _classes = _classes.filter(el => el.name.toUpperCase() != clsName)
+            this._classes.next(_classes);
+            return response;
+          }), catchError((error) => {
+            return throwError(() => error.error ? error.error : error);
+          }), tap((el) => {
+            console.log("after api");
+            console.log(el);
+            return el;
+          })
+          ),
+      )
+    )
   }
 }

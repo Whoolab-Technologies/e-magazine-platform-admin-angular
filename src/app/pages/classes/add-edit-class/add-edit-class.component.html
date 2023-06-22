@@ -1,1 +1,39 @@
-<p>add-edit-class works!</p>
+<div class="confirmation-dialog">
+    <mat-dialog-content class="mat-typography">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div fxFlex="100">
+                <mat-form-field style="width: 100%;" appearance='outline'>
+                    <mat-label>Class Name</mat-label>
+                    <input matInput [(ngModel)]="classObj.name" required />
+                </mat-form-field>
+                <ng-container *ngFor="let item of subjects; let i=index">
+
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="5">
+                        <div fxFlex="45">
+                            <mat-form-field style="width: 100%;" appearance='outline'>
+                                <mat-label>Subject Name</mat-label>
+                                <input matInput [(ngModel)]="subjects[i].name" required name="subjectName{{i}}" />
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="45">
+                            <mat-form-field style="width: 100%;" appearance='outline'>
+                                <mat-label>Subject Price</mat-label>
+                                <input matInput type="number" [(ngModel)]="subjects[i].amount"
+                                    name="subjectAmount{{i}}" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                <div fxFlex="45"></div>
+                <div fxFlex="45"></div>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close color="warn">Cancel</button>
+        <button mat-raised-button cdkFocusInitial color="primary" [disabled]="btnDisabled"
+            (click)="submit()">{{btnText}}</button>
+    </mat-dialog-actions>
+</div>

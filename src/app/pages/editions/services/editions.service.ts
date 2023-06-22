@@ -72,9 +72,7 @@ export class EditionsService {
     return this._firebaseService
       .getCollection(path)
       .pipe(
-        // catchError((error) => {
-        //  // return this._appService.handleError(error);
-        // }),
+
         mergeMap((response) => {
           const subjects = snapshotToArray(response);
           this._subjects.next(subjects);
