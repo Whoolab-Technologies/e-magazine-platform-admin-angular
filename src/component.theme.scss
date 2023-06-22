@@ -10,6 +10,7 @@
 @use '/src/app/pages/notifications/notifications-list/notifications-list.theme.scss' as notifications;
 @use '/src/app/pages/notifications/add-notification/add-notification.component.theme.scss' as notification;
 @use '/src/app/pages/classes/class-list/class-list.component.theme.scss' as classes;
+@use '/src/app/pages/classes/add-edit-class/add-edit-class.component.theme.scss' as add-edit-class;
 
 @mixin app-component($theme) {
     @include header.theme($theme);
@@ -23,5 +24,6 @@
     @include notifications.theme($theme);
     @include notification.theme($theme);
     @include classes.theme($theme);
+    @include add-edit-class.theme($theme);
 
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ClassesService } from '../services/classes.service';
-import { Router, ActivatedRoute } from '@angular/router';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { AddEditClassComponent } from '../add-edit-class/add-edit-class.component';
 import { ConfirmationService } from '@app/shared/services/confirmation/confirmation.service';
@@ -15,11 +14,9 @@ import { ToastService } from '@app/shared/services/toast/toast.service';
 export class ClassListComponent implements OnInit {
 
   constructor(public classService: ClassesService,
-    private _router: Router,
     private _confirmationService: ConfirmationService,
     private _matDialog: MatDialog,
-    private _toastService: ToastService,
-    private _route: ActivatedRoute) {
+    private _toastService: ToastService,) {
 
   }
   ngOnInit(): void {
@@ -42,7 +39,6 @@ export class ClassListComponent implements OnInit {
   }
 
   delete(event: any) {
-    console.log(event)
     this._confirmationService.open().afterClosed().pipe(take(1),
       filter((result) => result),
       switchMap((response) => {
