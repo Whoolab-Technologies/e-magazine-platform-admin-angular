@@ -20,7 +20,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     name: "",
     desc: "",
     image: null,
-    index: 0,
+    index: 1,
     topicCount: 1,
   };
   topic: any = { name: '', desc: '', pdf: '', pages: 1 }
@@ -53,6 +53,13 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.edition = {
+      name: "",
+      desc: "",
+      image: null,
+      index: 1,
+      topicCount: 1,
+    };
     this.publishDate = moment().add(1, 'M').startOf('month');
     this.classes$ = this._service.classes$.pipe(takeUntil(this._unsubscribeAll));
     this.subjects$ = this._service.subjects$.pipe(takeUntil(this._unsubscribeAll));
@@ -60,7 +67,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     this._service.editions$.pipe(takeUntil(this._unsubscribeAll), map((resp) => {
       const editions = JSON.parse(JSON.stringify(resp));
       const last = editions.sort((a, b) => a.index - b.index).reverse()[0];
-      return last ? last.index : -1;
+      return last ? last.index : -2;
     }), tap((el: any) => {
       this.edition.index = el + 1;
     })).subscribe()
@@ -108,10 +115,12 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     ) {
       return false
     }
+    this.edition.index = this.edition.index == -1 ? 1 : this.edition.index
     if (isNullish(this.edition)) {
       this._toastService.showInfoToastr("All fields are required", this.toastrPositionTypes.topRight);
       return
     }
+
     if (!this.edition.published && !this.publishDate) {
       this._toastService.showInfoToastr("Publish date is required if 'Publish Now' is not selected", this.toastrPositionTypes.topRight);
       return
@@ -233,6 +242,10 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   editEdition() {
     if (this.isEditionImageUploading || this.isTopicFileUploading || this.isTopicPdfFileUploading) {
       return false;
+    }
+    if ((this.topic.name && this.topic.desc && this.topic.pdf)) {
+      console.log("add topic on edition submit")
+      this.addTopic();
     }
     this.edition.index = this.latestIndex;
     this._service.editEditions(this.class, this.subject, this.publishDate, this.edition)

@@ -117,10 +117,7 @@ export const arraySortDesc = (array: Array<any>, key: string) =>
 export const allowedImageTypes = () => ['image/jpeg', 'image/x-png', 'image/png']
 
 export const isNullish = (obj) => Object.values(obj).some(x => {
-  console.log(obj)
-  console.log(Object.values(obj))
-  if (x == null || x == '') {
-    console.log(x)
+  if (x === null || x === '') {
     return true
   }
   return false
