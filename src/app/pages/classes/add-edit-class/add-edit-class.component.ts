@@ -11,6 +11,7 @@ import { ToastService } from '@app/shared/services/toast/toast.service';
 })
 export class AddEditClassComponent implements OnInit {
   btnDisabled: boolean = false;
+  isEdit: boolean = false;
   btnText: string = "Submit";
   actionText: string = "Submit";
   subjects: any[] = [];
@@ -29,6 +30,7 @@ export class AddEditClassComponent implements OnInit {
     this.classObj = this.data || {};
     if (this.data) {
       this.btnText = "Update";
+      this.isEdit = true
     }
     this.actionText = this.btnText;
     this._classService.subjects$.pipe(map((subjects) => {
@@ -59,27 +61,29 @@ export class AddEditClassComponent implements OnInit {
   }
 
   submit() {
-    this.btnText = "Please wait...";
-    this.btnDisabled = true
+
     const subjects = this.subjects.filter(el => el.name && el.amount && el.amount > 0)
     if (!this.classObj.name || !subjects.length) {
-
+      this._toastService.showInfoToastr("All Fields Are Required");
     }
-    this._classService.addOrUpdate(this.classObj, subjects).pipe(tap((resp: any) => {
-      return resp;
-    })).subscribe((res: any) => {
-      this.btnDisabled = false;
-      this.btnText = this.actionText
-      this._toastService.showSuccess(res.msg)
-      this.dialogRef.close();
-    }, (error) => {
-      console.log('errror=> error ', error);
-      this.btnText = this.actionText
-      this._toastService.showErrorToastr(error ? error.message ?
-        error.message : JSON.stringify(error) :
-        "Something went wrong!",
-      )
-    });
+    this.btnText = "Please wait...";
+    this.btnDisabled = true
+    this._classService.addOrUpdate(this.classObj, subjects, this.isEdit)
+      .pipe(tap((resp: any) => {
+        return resp;
+      })).subscribe((res: any) => {
+        this.btnDisabled = false;
+        this.btnText = this.actionText
+        this._toastService.showSuccess(res.msg)
+        this.dialogRef.close();
+      }, (error) => {
+        console.log('errror=> error ', error);
+        this.btnText = this.actionText
+        this._toastService.showErrorToastr(error ? error.message ?
+          error.message : JSON.stringify(error) :
+          "Something went wrong!",
+        )
+      });
   }
 
 

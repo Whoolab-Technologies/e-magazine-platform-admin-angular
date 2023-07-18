@@ -64,8 +64,8 @@ export class ClassesService {
         }),
       );
   }
-  addOrUpdate(classObj: any, subjects: any[]): Observable<any[]> {
-    console.log(subjects)
+  addOrUpdate(classObj: any, subjects: any[], edit: boolean = false): Observable<any[]> {
+
     const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
     var requestObj = {
       "class": [
@@ -83,11 +83,21 @@ export class ClassesService {
           .pipe(map((response: any) => {
             console.log('response  ', response)
             var clsName = classObj.name.toUpperCase();
-            _classes = [..._classes, {
-              name: clsName,
-              id: clsName,
-              desc: "",
-            }]
+            if (edit) {
+              const clsIndex = _classes.findIndex(el => el.id === clsName);
+              _classes[clsIndex] = {
+                name: clsName,
+                id: clsName,
+                desc: "",
+              }
+            }
+            else {
+              _classes = [..._classes, {
+                name: clsName,
+                id: clsName,
+                desc: "",
+              }]
+            }
             this._classes.next(_classes);
             return response;
           }), catchError((error) => {
