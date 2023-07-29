@@ -103,7 +103,7 @@ export class EditionsService {
       );
   }
 
-  addEditions(className: string, subject: string, publishDate: moment.Moment, edition: any): Observable<any[]> {
+  addEditions(className: string, subject: string, publishDate: moment.Moment, edition: any, isNewSub: boolean = false): Observable<any[]> {
     const editionData = JSON.parse(JSON.stringify(edition))
     const collection = `classes/${className}/subjects/${subject}/editions/${editionData.name}`;
     const data = {
@@ -126,7 +126,9 @@ export class EditionsService {
                 .setDoc(collection, editionData).pipe(map(el => { return editionData }))
             }),
             map((doc: any) => {
-              this._editions.next([...editions, editionData]);
+              isNewSub ?
+                this._editions.next([editionData]) :
+                this._editions.next([...editions, editionData]);
 
               // Return new booking from observable
               return editionData;

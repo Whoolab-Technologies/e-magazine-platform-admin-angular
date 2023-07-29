@@ -1,8 +1,16 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as moment from 'moment';
-const client = require('firebase-tools');
+const Razorpay = require('razorpay');
 
+var crypto = require('crypto');
+const _rPayOption = {
+    key_id: 'rzp_test_HpQRLpieZtcYTA',
+    key_secret: 'Wlb6bSK5l5Oa7zrUr37leMCy',
+}
+
+const _razorPay = new Razorpay(_rPayOption);
+const client = require('firebase-tools');
 const cors = require('cors')({
     origin: true,
 });
@@ -11,17 +19,21 @@ admin
         credential: admin.credential.applicationDefault(),
     }
     );
+const merchantSalt =
+    "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCfbJKVAwFtR27A5tdkOZApXuT99w195vkkITSVTVNvwxAijjJFup3eO4i84iWCK6SeisXboha+4TKpVWKaHOGidN7EERmdxTPreZSl5I6Y7/hEzU1NJDSLnRcIctNurmff0wmcxiO5mfCUcGMoX4bmGkyAfaMdZPUilfF+Mjqz0knF7abCn/pc22RUc83uugEK4QNVmnh/l9ItIDu03Ss3G2KX1VNn3DKpEwkITOYsEtkq/BTkC3T5lgfxC9KGZAAUTOrZamhRNLXNm6zCOpt36X7A0aqqjAGv843Z1XAQqoXzbjRf34DbYvqD/4AQsdvbqWRKFWRn3HqfP4640XdvAgMBAAECggEAdfVUo/LcXGoNNafX2S2KUEIJdywUDIMY9rWm/Y2AXeJbjuXdpqBE7MjqDK/bhuwZ2sDdUvwkjkl8PbSSx2r1PEnzBemNJaJjHykPZoutQtXTwbySJLDUPDUYdMTZUjyzWPYCV8B3cH3Jd1uM0rOT0a/FyRCs3zPy+Qsu6uvpaWDU5RfZQEoF+L6cCAKAqBrCOS3yHIWNpfl1M2JT7TA+yPFlzmcObHAqmJE/6ke90YmfBYVuM+7S+2c/dA0k7DyATDVlAVCThKTNwHvzT5/hQx3Q7bWuJN+iZCtUqoV114H5Kxqi73W3ezZFkRfQQUGzXv5lpnwsQytEp6sdCrjR2QKBgQDQDe/7BUZzmxI7fBYetT1OCoq/zl4l+/6lkSblRHro+Sa1/dVya2AdyA/jg9xcXiC8CZrrwr0ULsY+wXkLPk3maGtksYG1AKp7prXJUhOka95u80tsQVt0KExBtUrYg6Bx5n1BhaCgY66HtRMT8UeaIZh+Ub4cCXQRHuVsObH+BQKBgQDEKbbc14tXPSvU161EUJ5ywI/P7fkhop5+sXE1XzAp0EV8e0Tu8+hvMaDj8KLRcDAUYbzKSPbfp0EQsrQXVdjo90FtXvgmDe3PH2BkHmU+8j4iPEgR5IVxbdbL4zFy1rE5P5DT4iqcGx4Gkyd6+ncbzT3kAb007wr5Y819WXSl4wKBgBRPqAP7idszYl5ISOiKjQeXY+BBx1Mx/LQxLXjobI9d83eE5lebP/DoXRS7BMJHti5lSaiGhGr5/gSWYrjERlqeCw3zflQrUnlr1wdmaeB9X2O5gL16y/DVFky75CirAPjdpZDF+N5vnNRGyywBPBpB+V8rn8Gg8qHRQFiGcWf5AoGAAxLwRaevDE/uFujGU1K8GOpBlq2RAODugOfA8WgrdgxIennoC6KQ2uU5Mzk7I/MRHdCmR7k6/Sg+0ccrIU58FrKBOPiLBPWk62D/frInPgRHyvuM2ZLuMGfbPNizlqwcnNwNJfTeXBHkt4+ox7mTEkF2HdOVJnY0gtH4j2VOeacCgYAK3aPWGCjymXs/UGhsnFY5FXE0ed6d9g4a8SX7yAJveSDJ58zLwrSgposQFz0Q9XQfadx4xF6yQ3yjCtSdxtaGgt1MJlahg2BGEdfydsq9bm8yPldpPM7+nXHODpEAaDRKe4tQ5F5UdK01hr38MwoMUXGB0SrGPA/yP7wyCjhEsg=="; // Add you Salt here.
+const merchantSecretKey = ""; // Add Merchant Secrete Key - Optional
+
 const database = admin.firestore()
-const auth = admin.auth()
-const Razorpay = require('razorpay');
-const _rPayOption = {
-    key_id: 'rzp_test_HpQRLpieZtcYTA',
-    key_secret: 'Wlb6bSK5l5Oa7zrUr37leMCy',
+const auth = admin.auth();
+const PayUHashConstantsKeys = {
+    hashName: "hashName",
+    hashString: "hashString",
+    hashType: "hashType",
+    hashVersionV1: "V1",
+    hashVersionV2: "V2",
+    mcpLookup: "mcpLookup",
+    postSalt: "postSalt",
 }
-const _razorPay = new Razorpay(_rPayOption);
-// // Start writing functions
-// // https://firebase.google.com/docs/functions/typescript
-//
 export const createAdmin = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         const request = req.body;
@@ -83,10 +95,7 @@ exports.listenStudent = functions.firestore
             if (data.referrer) {
                 database.collection(`student`)
                     .where('referralCode', '==', data.referrer).limit(1).get().then((snapshot) => {
-                        functions.logger.info('snapshot', { structuredData: true });
-                        functions.logger.info(snapshot.docs[0].id, { structuredData: true });
                         if (snapshot.size > 0) {
-                            functions.logger.info(snapshot.docs[0].data().point, { structuredData: true });
                             snapshot.docs[0].ref.update({ points: admin.firestore.FieldValue.increment(10) })
                             studentSnapshot.ref.update({ points: admin.firestore.FieldValue.increment(10) })
                         }
@@ -204,7 +213,6 @@ export const createClass = functions.https.onRequest((req, res) => {
                     yes: true,
                     force: true
                 }).then(() => {
-                    functions.logger.info("DELETED", { structuredData: true });
                     const ref = database.doc(`classes/${clsName}`).set({
                         name: clsName, desc: el.desc || ''
                     });
@@ -228,9 +236,6 @@ export const createClass = functions.https.onRequest((req, res) => {
                         res.status(500).json(error);
                     });
                 }, (error: any) => {
-                    functions.logger.info("DELETE ERROR", { structuredData: true });
-                    functions.logger.info(error, { structuredData: true });
-
                     res.status(500).json(error);
                 });
 
@@ -294,26 +299,82 @@ exports.scheduledPublish = functions.pubsub.schedule('05 00 * * *').timeZone('As
             Promise.all(promises).then(() => {
                 resolve(true);
             }, error => {
-                functions.logger.info('update error', { structuredData: true });
-                functions.logger.info(error, { structuredData: true });
-
                 reject();
             })
         }, error => {
-            functions.logger.info(' editions error', { structuredData: true });
-            functions.logger.info(error, { structuredData: true });
             reject()
         });
     });
 });
 export const createUser = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
-        const request = req.body;
-        functions.logger.info(' createUser request', { structuredData: true });
-        functions.logger.info(request, { structuredData: true });
-        functions.logger.info(admin.credential.applicationDefault(), { structuredData: true });
+        //   const request = req.body;
         res.status(201).send({
             message: 'Request received send',
         })
     });
 });
+
+export const phonePePay = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        try {
+            const request = req.body;
+            functions.logger.info("request", { structuredData: true });
+            functions.logger.info(request, { structuredData: true });
+            // const tempRef = database.collection(`paymentsTemp`).doc();
+            var hashName = request[PayUHashConstantsKeys.hashName];
+            var hashStringWithoutSalt = request[PayUHashConstantsKeys.hashString];
+            var hashType = request[PayUHashConstantsKeys.hashType];
+            var postSalt = request[PayUHashConstantsKeys.postSalt];
+
+            var hash = "";
+
+            if (hashType == PayUHashConstantsKeys.hashVersionV2) {
+                hash = getHmacSHA256Hash(hashStringWithoutSalt, merchantSalt);
+            } else if (hashName == PayUHashConstantsKeys.mcpLookup) {
+                hash = getHmacSHA1Hash(hashStringWithoutSalt, merchantSecretKey);
+            } else {
+                var hashDataWithSalt = hashStringWithoutSalt + merchantSalt;
+                if (postSalt != null) {
+                    hashDataWithSalt = hashDataWithSalt + postSalt;
+                }
+                hash = getSHA512Hash(hashDataWithSalt);
+            }
+
+            var finalHash: any = {};
+            finalHash[hashName] = hash;
+
+            functions.logger.info("finalHash", { structuredData: true });
+            functions.logger.info(finalHash, { structuredData: true });
+            functions.logger.info("hashName", { structuredData: true });
+            functions.logger.info(hashName, { structuredData: true });
+
+
+            res.status(201).send(finalHash)
+        } catch (error: any) {
+            functions.logger.info("error", { structuredData: true });
+            functions.logger.info(error, { structuredData: true });
+
+            res.status(error.code || 400).send(error);
+        }
+    });
+});
+function getSHA512Hash(hashData: string) {
+    functions.logger.info("getSHA512Hash", { structuredData: true });
+    var hash = crypto.createHash('sha512');
+    var data = hash.update(hashData, 'utf-8');
+    return data.digest('hex');
+}
+
+function getHmacSHA1Hash(hashData: string, salt: string) {
+    functions.logger.info("getHmacSHA1Hash", { structuredData: true });
+
+    return crypto.createHmac('sha1', salt).update(hashData).digest('hex');
+
+}
+
+function getHmacSHA256Hash(hashData: string, salt: string) {
+    functions.logger.info("getHmacSHA256Hash", { structuredData: true });
+
+    return crypto.createHmac('sha256', salt).update(hashData).digest('base64');
+}

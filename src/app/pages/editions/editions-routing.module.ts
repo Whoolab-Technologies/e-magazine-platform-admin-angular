@@ -9,13 +9,14 @@ const routes: Routes = [
   {
     path: '',
     component: EditionsComponent,
-    resolve: {
-      editions: EditionsResolver
-    },
+
     children: [
       {
         path: '',
         component: EditionsListComponent,
+        resolve: {
+          editions: EditionsResolver
+        },
 
       }, {
         path: ':id',

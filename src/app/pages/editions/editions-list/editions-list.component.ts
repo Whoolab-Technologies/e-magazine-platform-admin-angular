@@ -41,7 +41,7 @@ export class EditionsListComponent implements OnInit, OnDestroy {
     this.subjects$ = this._service.subjects$.pipe(takeUntil(this._unsubscribeAll));
 
     this._service.editions$.pipe(takeUntil(this._unsubscribeAll), map((resp) => {
-      this.dataSource = new MatTableDataSource(resp);
+      this.dataSource.data = resp;
       this.dataSource.paginator = this.paginator;
       this.editions = resp
     })).subscribe();
