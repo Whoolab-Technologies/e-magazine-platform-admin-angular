@@ -77,7 +77,7 @@ export class ClassesService {
     };
     return this._classes.pipe(take(1),
       switchMap((_classes: any) =>
-        this._httpClient.post(`${env.cloudBaseUrl}/${env.endPoints.class}`,
+        this._httpClient.post(`${env.cloudBaseUrl}${env.endPoints.class}`,
           requestObj,
           { headers: headers })
           .pipe(map((response: any) => {
@@ -120,12 +120,10 @@ export class ClassesService {
     };
     return this._classes.pipe(take(1),
       switchMap((_classes: any) =>
-        this._httpClient.post(`${env.cloudBaseUrl}/${env.endPoints.removeClass}`,
+        this._httpClient.post(`${env.cloudBaseUrl}${env.endPoints.removeClass}`,
           requestObj,
           { headers: headers })
           .pipe(map((response: any) => {
-            console.log('response  ', response)
-
             _classes = _classes.filter(el => el.name.toUpperCase() != clsName)
             this._classes.next(_classes);
             return response;
@@ -139,5 +137,51 @@ export class ClassesService {
           ),
       )
     )
+  }
+  editSubject(classId, subject): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
+    return this._subjects.pipe(take(1),
+      switchMap((_subjects: any) =>
+        this._httpClient.post(`${env.cloudBaseUrl}${env.endPoints.editSubject}`,
+          { classId: classId, subject: subject },
+          { headers: headers, })
+          .pipe(map((response: any) => {
+            var index = _subjects.find(el => el.name.toUpperCase() == subject.name)
+            console.log("index ", index);
+
+            _subjects[index] = subject;
+            this._subjects.next(_subjects);
+            return response;
+          }), catchError((error) => {
+            return throwError(() => error.error ? error.error : error);
+          }), tap((el) => {
+            return el;
+          })
+          ),
+      )
+    )
+
+  }
+
+  removeSubject(classId, subject): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
+    return this._subjects.pipe(take(1),
+      switchMap((_subjects: any) =>
+        this._httpClient.post(`${env.cloudBaseUrl}${env.endPoints.removeSubject}`,
+          { classId: classId, subjectId: subject.id },
+          { headers: headers, })
+          .pipe(map((response: any) => {
+            _subjects = _subjects.filter(el => el.name.toUpperCase() != subject.name)
+            this._subjects.next(_subjects);
+            return response;
+          }), catchError((error) => {
+            return throwError(() => error.error ? error.error : error);
+          }), tap((el) => {
+            return el;
+          })
+          ),
+      )
+    )
+
   }
 }

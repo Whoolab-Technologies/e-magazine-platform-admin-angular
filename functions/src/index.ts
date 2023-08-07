@@ -198,6 +198,47 @@ function getToken(students: any[], notification: any) {
     })
 }
 
+export const editSubject = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        const request = req.body;
+        const subject = request.subject;
+        const clsName = `${(request.classId).toUpperCase()}`;
+        database.doc(`classes/${clsName}/subjects/${subject.id}`).
+            set({
+                name: subject.name.toUpperCase(),
+                desc: subject.desc || '',
+                image: subject.image || '',
+                amount: subject.amount,
+            }, { merge: true }).then(() => {
+
+                res.status(200).json({ msg: "Subject has updated successfully", data: req.body });
+            }, (error: any) => {
+                res.status(500).json(error);
+
+            });
+
+    })
+});
+
+export const removeSubject = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        const request = req.body;
+        client.firestore
+            .delete(`classes/${request.classId}/subjects/${request.subjectId}`, {
+                project: process.env.GCLOUD_PROJECT,
+                recursive: true,
+                yes: true,
+                force: true
+            }).then(() => {
+                res.status(200).json({ msg: "Subject has been removed successfully", body: req.body });
+            }, (error: any) => {
+
+                res.status(500).json(error);
+            });
+    })
+});
+
+
 export const createClass = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         let promises: any[] = [];
@@ -206,45 +247,45 @@ export const createClass = functions.https.onRequest((req, res) => {
 
         classes.forEach((el: any) => {
             const clsName = `${(el.name).toUpperCase()}`;
-            client.firestore
-                .delete(`classes/${clsName}`, {
-                    project: process.env.GCLOUD_PROJECT,
-                    recursive: true,
-                    yes: true,
-                    force: true
-                }).then(() => {
-                    const ref = database.doc(`classes/${clsName}`).set({
-                        name: clsName, desc: el.desc || ''
-                    });
-                    promises.push(ref);
-                    const subjects = el.subjects;
-                    (subjects).forEach((sub: any) => {
-                        const subject = `${(sub.name).toUpperCase()}`;
-                        const subRef = database.doc(`classes/${clsName}/subjects/${subject}`).
-                            set({
-                                name: subject,
-                                desc: sub.desc || '',
-                                image: sub.image || '',
-                                amount: sub.amount,
-                            })
-                        promises.push(subRef);
-                    });
-                    Promise.all(promises).then((result) => {
-                        res.status(200).json({ msg: 'Class and subjects have been created!' });
-                    }, error => {
+            // client.firestore
+            //     .delete(`classes/${clsName}`, {
+            //         project: process.env.GCLOUD_PROJECT,
+            //         recursive: true,
+            //         yes: true,
+            //         force: true
+            //     }).then(() => {
+            const ref = database.doc(`classes/${clsName}`).set({
+                name: clsName, desc: el.desc || ''
+            }, { merge: true });
+            promises.push(ref);
+            const subjects = el.subjects;
+            (subjects).forEach((sub: any) => {
+                const subject = `${(sub.name).toUpperCase()}`;
+                const subRef = database.doc(`classes/${clsName}/subjects/${subject}`).
+                    set({
+                        name: subject,
+                        desc: sub.desc || '',
+                        image: sub.image || '',
+                        amount: sub.amount,
+                    }, { merge: true })
+                promises.push(subRef);
+            });
+            Promise.all(promises).then((result) => {
+                res.status(200).json({ msg: 'Class and subjects have been created!' });
+            }, error => {
 
-                        res.status(500).json(error);
-                    });
-                }, (error: any) => {
-                    res.status(500).json(error);
-                });
-
-
-        })
-    });
+                res.status(500).json(error);
+            });
+        }, (error: any) => {
+            res.status(500).json(error);
+        });
 
 
+    })
 });
+
+
+// });
 
 export const removeClass = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {

@@ -13,12 +13,15 @@ import { DashboardModule } from './pages/dashboard/dashboard.module';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AuthModule } from './pages/auth/auth.module';
 import { NgxEchartsModule } from 'ngx-echarts';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpLoaderInterceptor } from './interceptors/http-loader.interceptor';
+import { HttpLoaderComponent } from './shared/http-loader/http-loader.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent,
+    HttpLoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +38,12 @@ import { HttpClientModule } from '@angular/common/http';
       echarts: () => import('echarts')
     }),
     HttpClientModule
+  ], providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpLoaderInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent]
 })

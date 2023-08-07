@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef, MatLegacyDialog as MatDialog, } from '@angular/material/legacy-dialog';
 import { ClassesService } from '../services/classes.service';
-import { catchError, map, tap } from 'rxjs';
+import { catchError, filter, map, of, switchMap, take, tap } from 'rxjs';
 import { ToastService } from '@app/shared/services/toast/toast.service';
+import { ConfirmationService } from '@app/shared/services/confirmation/confirmation.service';
 
 @Component({
   selector: 'app-add-edit-class',
@@ -12,15 +13,19 @@ import { ToastService } from '@app/shared/services/toast/toast.service';
 export class AddEditClassComponent implements OnInit {
   btnDisabled: boolean = false;
   isEdit: boolean = false;
+  showEditSection: boolean = false;
   btnText: string = "Submit";
   actionText: string = "Submit";
   subjects: any[] = [];
   classObj: any = {}
-  subject: any = { id: "", name: "", amount: 99 };
+  subject: any = { id: "", name: "", amount: 99, enabled: true };
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private _matDialog: MatDialog,
     private _classService: ClassesService,
     private _toastService: ToastService,
+    private _confirmationService: ConfirmationService,
     private dialogRef: MatDialogRef<AddEditClassComponent>
   ) {
 
@@ -65,6 +70,7 @@ export class AddEditClassComponent implements OnInit {
     const subjects = this.subjects.filter(el => el.name && el.amount && el.amount > 0)
     if (!this.classObj.name || !subjects.length) {
       this._toastService.showInfoToastr("All Fields Are Required");
+      return;
     }
     this.btnText = "Please wait...";
     this.btnDisabled = true
@@ -73,6 +79,7 @@ export class AddEditClassComponent implements OnInit {
         return resp;
       })).subscribe((res: any) => {
         this.btnDisabled = false;
+        this.showEditSection = false;
         this.btnText = this.actionText
         this._toastService.showSuccess(res.msg)
         this.dialogRef.close();
@@ -86,5 +93,59 @@ export class AddEditClassComponent implements OnInit {
       });
   }
 
+
+  deleteSubject(subject: any) {
+    this._confirmationService.open({
+      message: `<div>Are you sure you want to confirm this action?</div>
+    <div>Added editions will be removed!</div>`
+    }).afterClosed().pipe(take(1),
+      filter((result) => result),
+      switchMap((response) => {
+        return this._classService.removeSubject(this.classObj.id, subject);
+      }),
+      map(el => {
+        this._toastService.showSuccess("Removed successfully")
+      })
+    )
+      .subscribe();
+  }
+  editSubject(subject) {
+    console.log(subject);
+    this._matDialog.open(EditSubjectComponent, {
+      data: subject
+    }).afterClosed().pipe(take(1), filter((result) => result), switchMap((response) => {
+      return this._classService.editSubject(this.classObj.id, response);
+
+    }), map(el => {
+      this._toastService.showSuccess("Updated successfully")
+    })).subscribe()
+  }
+}
+
+
+
+
+@Component({
+  selector: 'app-edit-subject',
+  templateUrl: './edit-subject.component.html',
+  styleUrls: ['./add-edit-class.component.scss']
+})
+export class EditSubjectComponent implements OnInit {
+  subject: any = { id: "", name: "", amount: 99 };
+  ngOnInit(): void {
+    this.subject = JSON.parse(JSON.stringify(this.data));
+  }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef: MatDialogRef<EditSubjectComponent>) {
+
+  }
+  submit() {
+    var returnData = this.subject
+    if (this.subject.name.toUpperCase() == this.data.name.toUpperCase())
+      returnData = null
+    console.log("returnData ", returnData)
+    this.dialogRef.close(returnData)
+  }
 
 }

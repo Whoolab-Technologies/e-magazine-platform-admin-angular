@@ -12,17 +12,30 @@
                 <ng-container *ngFor="let item of subjects; let i=index">
 
                     <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="5">
-                        <div fxFlex="45">
+                        <div fxFlex="35">
+
                             <mat-form-field style="width: 100%;" appearance='outline'>
                                 <mat-label>Subject Name</mat-label>
-                                <input matInput [(ngModel)]="item.name" required name="subjectName{{i}}" />
+                                <input matInput [(ngModel)]="item.name" required name="subjectName{{i}}"
+                                    [disabled]="!item.enabled" />
                             </mat-form-field>
                         </div>
-                        <div fxFlex="45">
+                        <div fxFlex="35">
                             <mat-form-field style="width: 100%;" appearance='outline'>
                                 <mat-label>Subject Price</mat-label>
                                 <input matInput type="number" [(ngModel)]="item.amount" name="subjectAmount{{i}}" />
                             </mat-form-field>
+                        </div>
+                        <div fxFlex="20">
+                            <div *ngIf="!item.enabled">
+
+                                <button mat-icon-button (click)="editSubject(item)" color="warn">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button (click)="deleteSubject(item)" color="warn">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </ng-container>

@@ -110,7 +110,7 @@ export class NotificationService {
     const path = `notifications`;
     return this._notifications.pipe(take(1),
       switchMap((_notifications: any) =>
-        this._httpClient.post(`${env.cloudBaseUrl}/${env.endPoints.notification}`,
+        this._httpClient.post(`${env.cloudBaseUrl}${env.endPoints.notification}`,
           { notification: data, students: students }, { headers: headers })
           .pipe(map((response: any) => {
             data.id = response.id

@@ -7,20 +7,20 @@ import { ClassesComponent } from './classes/classes.component';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
-import { AddEditClassComponent } from './add-edit-class/add-edit-class.component';
+import { AddEditClassComponent, EditSubjectComponent } from './add-edit-class/add-edit-class.component';
 import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     ClassListComponent,
     ClassesComponent,
-    AddEditClassComponent,
+    AddEditClassComponent, EditSubjectComponent
   ],
   imports: [
     CommonModule,
     ClassesRoutingModule,
     SharedModule,
     HttpClientModule,
-    MatMenuModule
-  ]
+    MatMenuModule,
+  ], entryComponents: [EditSubjectComponent]
 })
 export class ClassesModule { }
