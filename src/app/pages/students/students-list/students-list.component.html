@@ -17,7 +17,7 @@
                                     <span class="students-table__content-badge "
                                         (click)="updatePurchaseStatus(subject.key,subject.value.status, i)"
                                         [ngClass]="{'send': subject.value.status, 'pending':!subject.value.status}">
-                                        <span>{{subject.key}}</span>
+                                        <span>{{subject.value.name}}</span>
                                     </span>
                                 </ng-container>
                             </span>

@@ -98,6 +98,15 @@ export const snapshotToArray = (snapshot) => {
 
   return returnArr;
 };
+export const snapshotToObj = (snapshot) => {
+  let returnObj: any = {};
+  snapshot.forEach((childSnapshot) => {
+    returnObj[childSnapshot.id] = childSnapshot.data();
+  });
+
+  return returnObj;
+};
+
 export const snapshot = (doc: DocumentData) => {
   let returnDoc: any = {};
   if (doc.exists) {

@@ -236,13 +236,16 @@ export const removeSubject = functions.https.onRequest((req, res) => {
                 yes: true,
                 force: true
             }).then(() => {
-                var subjects: any = {}
-                subjects[request.subjectId] = admin.firestore.FieldValue.delete()
+                const key = `subjects.${request.subjectId}`;
+                var updates: any = {};
+                updates[key] = admin.firestore.FieldValue.delete(),
+                    database.doc(`classes/${request.classId}`).update(updates).then(() => {
+                        res.status(200).json({ msg: "Subject has been removed successfully", body: updates });
 
-                database.doc(`classes/${request.classId}`).update({
-                    subjects: subjects
-                })
-                res.status(200).json({ msg: "Subject has been removed successfully", body: req.body });
+                    }, (error: any) => {
+
+                        res.status(500).json(error);
+                    });
             }, (error: any) => {
 
                 res.status(500).json(error);
@@ -270,12 +273,14 @@ export const createClass = functions.https.onRequest((req, res) => {
             var clsSubject: any = {};
             const subjects = el.subjects;
             (subjects).forEach((sub: any) => {
+
                 const subject = `${(sub.name).toUpperCase()}`;
-                clsSubject[sub.id || subject] = {
+                const subjectId = sub.id || subject;
+                clsSubject[subjectId] = {
                     name: subject
                 }
 
-                const subRef = database.doc(`classes/${clsName}/subjects/${subject}`).
+                const subRef = database.doc(`classes/${clsName}/subjects/${subjectId}`).
                     set({
                         name: subject,
                         desc: sub.desc || '',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { FirebaseService, snapshotToArray } from '@services/firebase/firebase.service';
-import { BehaviorSubject, Observable, catchError, map, switchMap, take, tap } from 'rxjs';
+import { FirebaseService, snapshotToArray, snapshotToObj } from '@services/firebase/firebase.service';
+import { BehaviorSubject, Observable, catchError, combineLatest, concatMap, map, switchMap, take, tap } from 'rxjs';
 import { Student } from '@app/pages/students/models/student';
 
 @Injectable({
@@ -20,15 +20,35 @@ export class StudentsService {
   getStudents(): Observable<any[]> {
     const path = `student`;
 
-    return this._firebaseService
-      .getCollection(path)
+    return combineLatest([this._firebaseService
+      .getCollection(path), this._firebaseService
+        .getCollection('classes')])
       .pipe(
         //     catchError((error) => {
         //      return this._appService.handleError(error);
         //     }),
 
-        map((response) => {
-          return snapshotToArray(response);
+
+        map(([studentsSnapshot, classesSnapshot]) => {
+          const students = snapshotToArray(studentsSnapshot)
+          const classes = snapshotToObj(classesSnapshot)
+          const defaultSub = {
+            self: true, status: false
+          }
+          students.map((el) => {
+            const subjects = classes[el.class]['subjects'];
+            const keys = Object.keys(subjects);
+            var stdSubjects = {}
+            keys.map((e) => {
+
+              stdSubjects[e] = { ...subjects[e], ...(el.subjects[e] || defaultSub) }
+              return e
+            })
+            el.subjects = stdSubjects
+            return el
+          })
+
+          return students
         }),
         tap((response: any) => {
           this._students.next(response);

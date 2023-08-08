@@ -36,9 +36,6 @@ export class StudentsListComponent implements OnInit, OnDestroy {
       .subscribe((students: Student[]) => {
         this.dataSource.data = JSON.parse(JSON.stringify(students))
         this.students = [...students];
-        // Mark for check
-        console.log("updated, ", this.dataSource.data)
-
         this._changeDetectorRef.detectChanges();
       });
 

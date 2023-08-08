@@ -25,7 +25,7 @@ export class ClassListComponent implements OnInit {
 
   addOrEdit(clss?: any) {
     if (clss) {
-      this.classService.getSubjects(clss.id).subscribe();
+      this.classService.getSubjects(clss.id).pipe(take(1),).subscribe();
     }
     else
       this.classService.subjects = [];

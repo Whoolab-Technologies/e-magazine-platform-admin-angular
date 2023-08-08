@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef, MatLegacyDialog as MatDialog, } from '@angular/material/legacy-dialog';
 import { ClassesService } from '../services/classes.service';
-import { catchError, filter, map, of, switchMap, take, tap } from 'rxjs';
+import { Subject, catchError, filter, map, of, switchMap, take, takeLast, takeUntil, tap } from 'rxjs';
 import { ToastService } from '@app/shared/services/toast/toast.service';
 import { ConfirmationService } from '@app/shared/services/confirmation/confirmation.service';
 
@@ -19,6 +19,7 @@ export class AddEditClassComponent implements OnInit {
   subjects: any[] = [];
   classObj: any = {}
   subject: any = { id: "", name: "", amount: 99, enabled: true };
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -31,6 +32,11 @@ export class AddEditClassComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
+
   ngOnInit(): void {
     this.classObj = this.data || {};
     if (this.data) {
@@ -38,7 +44,7 @@ export class AddEditClassComponent implements OnInit {
       this.isEdit = true
     }
     this.actionText = this.btnText;
-    this._classService.subjects$.pipe(map((subjects) => {
+    this._classService.subjects$.pipe(takeUntil(this._unsubscribeAll), map((subjects) => {
       var subj = []
       if (subjects.length) {
         subj = [...subjects];

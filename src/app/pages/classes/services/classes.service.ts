@@ -142,10 +142,9 @@ export class ClassesService {
           { headers: headers, })
           .pipe(map((response: any) => {
             var index = _subjects.findIndex((el) => {
-              el.name.toUpperCase() == subject.name
+              return el.id.toUpperCase() == subject.id.toUpperCase()
             })
-
-            _subjects[index] = subject;
+            _subjects[index] = { ...subject, name: subject.name.toUpperCase() };
             this._subjects.next(_subjects);
             return response;
           }), catchError((error) => {
@@ -167,7 +166,8 @@ export class ClassesService {
           { classId: classId, subjectId: subject.id },
           { headers: headers, })
           .pipe(map((response: any) => {
-            _subjects = _subjects.filter(el => el.name.toUpperCase() != subject.name)
+            _subjects = _subjects.filter(el => el.id != subject.id)
+
             this._subjects.next(_subjects);
             return response;
           }), catchError((error) => {
