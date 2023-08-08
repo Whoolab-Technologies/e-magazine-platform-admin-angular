@@ -19,12 +19,13 @@ export class StudentsService {
 
   getStudents(): Observable<any[]> {
     const path = `student`;
+
     return this._firebaseService
       .getCollection(path)
       .pipe(
-        // catchError((error) => {
-        //  // return this._appService.handleError(error);
-        // }),
+        //     catchError((error) => {
+        //      return this._appService.handleError(error);
+        //     }),
 
         map((response) => {
           return snapshotToArray(response);

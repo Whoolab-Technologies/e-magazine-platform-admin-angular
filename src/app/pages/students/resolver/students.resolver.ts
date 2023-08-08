@@ -10,6 +10,7 @@ import { StudentsService } from '@app/pages/students/services/students.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class StudentsResolver implements Resolve<boolean> {
   constructor(private _studentsService: StudentsService) {
 

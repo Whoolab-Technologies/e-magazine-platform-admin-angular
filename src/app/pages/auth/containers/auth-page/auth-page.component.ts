@@ -22,7 +22,7 @@ export class AuthPageComponent {
   ) { }
 
   public sendLoginForm(event): void {
-    console.log(event)
+
     this._service.signIn(event).pipe(map(el => {
       return el;
     }), tap((el) => {

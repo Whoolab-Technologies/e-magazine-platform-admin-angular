@@ -42,7 +42,6 @@ export class AddNotificationComponent implements OnInit, OnDestroy {
     this._service.students$.pipe(takeUntil(this._unsubscribeAll), map((resp) => {
       this.dataSource = new MatTableDataSource(resp);
       this.dataSource.paginator = this.paginator;
-      console.log("students ", resp)
       this.students = resp
       if (this.selection)
         this.selection.clear();
@@ -50,7 +49,6 @@ export class AddNotificationComponent implements OnInit, OnDestroy {
 
     this._service.class$.pipe(takeUntil(this._unsubscribeAll), map((resp) => {
 
-      console.log(this.class); this.class = resp;
     })).subscribe();
 
   }

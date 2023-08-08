@@ -81,7 +81,6 @@ export class ClassesService {
           requestObj,
           { headers: headers })
           .pipe(map((response: any) => {
-            console.log('response  ', response)
             var clsName = classObj.name.toUpperCase();
             if (edit) {
               const clsIndex = _classes.findIndex(el => el.id === clsName);
@@ -103,8 +102,6 @@ export class ClassesService {
           }), catchError((error) => {
             return throwError(() => error.error ? error.error : error);
           }), tap((el) => {
-            console.log("after api");
-            console.log(el);
             return el;
           })
           ),
@@ -130,8 +127,6 @@ export class ClassesService {
           }), catchError((error) => {
             return throwError(() => error.error ? error.error : error);
           }), tap((el) => {
-            console.log("after api");
-            console.log(el);
             return el;
           })
           ),
@@ -146,8 +141,9 @@ export class ClassesService {
           { classId: classId, subject: subject },
           { headers: headers, })
           .pipe(map((response: any) => {
-            var index = _subjects.find(el => el.name.toUpperCase() == subject.name)
-            console.log("index ", index);
+            var index = _subjects.findIndex((el) => {
+              el.name.toUpperCase() == subject.name
+            })
 
             _subjects[index] = subject;
             this._subjects.next(_subjects);

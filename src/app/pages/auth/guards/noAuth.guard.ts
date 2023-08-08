@@ -15,7 +15,6 @@ export class NoAuthGuard implements CanActivate {
     constructor(private _authService: AuthService, private _router: Router) { }
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
 
-        console.log('NoAuthGuard')
         return this._check();
     }
 
@@ -33,12 +32,9 @@ export class NoAuthGuard implements CanActivate {
         // "true" or "false" to allow or prevent the access
         return this._authService.check().pipe(
             switchMap((authenticated) => {
-                console.log('authenticated ', authenticated)
                 if (!authenticated) {
                     return of(true);
                 }
-                console.log('redirect')
-
                 return this._router.navigate([this.routers.DASHBOARD]);
             })
         );

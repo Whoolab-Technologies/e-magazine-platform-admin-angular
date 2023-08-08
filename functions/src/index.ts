@@ -24,6 +24,7 @@ const merchantSalt =
 const merchantSecretKey = ""; // Add Merchant Secrete Key - Optional
 
 const database = admin.firestore()
+
 const auth = admin.auth();
 const PayUHashConstantsKeys = {
     hashName: "hashName",
@@ -203,14 +204,19 @@ export const editSubject = functions.https.onRequest((req, res) => {
         const request = req.body;
         const subject = request.subject;
         const clsName = `${(request.classId).toUpperCase()}`;
+        const subjectName = `${(subject.name).toUpperCase()}`;
         database.doc(`classes/${clsName}/subjects/${subject.id}`).
             set({
-                name: subject.name.toUpperCase(),
+                name: subjectName,
                 desc: subject.desc || '',
                 image: subject.image || '',
                 amount: subject.amount,
             }, { merge: true }).then(() => {
-
+                var updates: any = {}
+                updates[subject.id] = { name: subjectName }
+                database.doc(`classes/${clsName}`).set({
+                    subjects: updates,
+                }, { merge: true });
                 res.status(200).json({ msg: "Subject has updated successfully", data: req.body });
             }, (error: any) => {
                 res.status(500).json(error);
@@ -230,6 +236,12 @@ export const removeSubject = functions.https.onRequest((req, res) => {
                 yes: true,
                 force: true
             }).then(() => {
+                var subjects: any = {}
+                subjects[request.subjectId] = admin.firestore.FieldValue.delete()
+
+                database.doc(`classes/${request.classId}`).update({
+                    subjects: subjects
+                })
                 res.status(200).json({ msg: "Subject has been removed successfully", body: req.body });
             }, (error: any) => {
 
@@ -254,13 +266,15 @@ export const createClass = functions.https.onRequest((req, res) => {
             //         yes: true,
             //         force: true
             //     }).then(() => {
-            const ref = database.doc(`classes/${clsName}`).set({
-                name: clsName, desc: el.desc || ''
-            }, { merge: true });
-            promises.push(ref);
+
+            var clsSubject: any = {};
             const subjects = el.subjects;
             (subjects).forEach((sub: any) => {
                 const subject = `${(sub.name).toUpperCase()}`;
+                clsSubject[sub.id || subject] = {
+                    name: subject
+                }
+
                 const subRef = database.doc(`classes/${clsName}/subjects/${subject}`).
                     set({
                         name: subject,
@@ -270,6 +284,10 @@ export const createClass = functions.https.onRequest((req, res) => {
                     }, { merge: true })
                 promises.push(subRef);
             });
+            const ref = database.doc(`classes/${clsName}`).set({
+                name: clsName, desc: el.desc || '', subjects: clsSubject,
+            }, { merge: true });
+            promises.push(ref);
             Promise.all(promises).then((result) => {
                 res.status(200).json({ msg: 'Class and subjects have been created!' });
             }, error => {

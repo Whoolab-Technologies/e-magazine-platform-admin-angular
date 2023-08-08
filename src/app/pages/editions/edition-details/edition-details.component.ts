@@ -126,7 +126,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       return
     }
     if ((this.topic.name && this.topic.desc && this.topic.pdf)) {
-      console.log("add topic on edition submit")
       this.addTopic();
     }
     if (!this.edition.topics) {
@@ -196,7 +195,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
           return url;
         }
         )).subscribe((url: any) => {
-          console.log('pdfFileChangeEvent  url', url)
 
           this.topic.pdf = url;
           this.topicPdfFile = file.name;
@@ -244,7 +242,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       return false;
     }
     if ((this.topic.name && this.topic.desc && this.topic.pdf)) {
-      console.log("add topic on edition submit")
       this.addTopic();
     }
     this.edition.index = this.latestIndex;

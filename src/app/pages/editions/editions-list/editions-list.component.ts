@@ -70,12 +70,10 @@ export class EditionsListComponent implements OnInit, OnDestroy {
   }
 
   edit(event: any) {
-    console.log("on edit event ", event);
     this._router.navigate(['./', event], { relativeTo: this._route })
   }
 
   view(event: any) {
-    console.log("view ", event)
   }
 
   delete(event: any) {

@@ -45,9 +45,7 @@ export class AddEditClassComponent implements OnInit {
         if (subjects.length < 4) {
           var temp = []
           for (let index = 0; index < 4 - subjects.length; index++) {
-            console.log(index);
             // this.subject.id = index;
-            console.log("   this.subject.id  ", this.subject.id)
             subj.push(JSON.parse(JSON.stringify(this.subject)));
           }
         }
@@ -84,7 +82,6 @@ export class AddEditClassComponent implements OnInit {
         this._toastService.showSuccess(res.msg)
         this.dialogRef.close();
       }, (error) => {
-        console.log('errror=> error ', error);
         this.btnText = this.actionText
         this._toastService.showErrorToastr(error ? error.message ?
           error.message : JSON.stringify(error) :
@@ -110,7 +107,6 @@ export class AddEditClassComponent implements OnInit {
       .subscribe();
   }
   editSubject(subject) {
-    console.log(subject);
     this._matDialog.open(EditSubjectComponent, {
       data: subject
     }).afterClosed().pipe(take(1), filter((result) => result), switchMap((response) => {
@@ -144,7 +140,6 @@ export class EditSubjectComponent implements OnInit {
     var returnData = this.subject
     if (this.subject.name.toUpperCase() == this.data.name.toUpperCase())
       returnData = null
-    console.log("returnData ", returnData)
     this.dialogRef.close(returnData)
   }
 

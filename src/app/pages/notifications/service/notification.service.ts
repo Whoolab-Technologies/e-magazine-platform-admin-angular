@@ -67,7 +67,6 @@ export class NotificationService {
         }),
 
         map((response: any) => {
-          console.log(response);
           return response
 
         })
@@ -79,7 +78,6 @@ export class NotificationService {
     return this._allStudents.pipe(map(students =>
       students.filter((el) => el.class == classId)
     ), map(resp => {
-      console.log(resp)
       this._students.next(resp)
       return resp
     }),
@@ -96,8 +94,6 @@ export class NotificationService {
           return snapshotToArray(response);
         }),
         map((response: any) => {
-          console.log('all students');
-          console.log(response);
           this._allStudents.next(response);
           return response
         })
@@ -119,8 +115,6 @@ export class NotificationService {
             this._notifications.next(_notifications);
             return _notifications;
           }), tap((el) => {
-            console.log("after api");
-            console.log(el);
             return el;
           })
           ),

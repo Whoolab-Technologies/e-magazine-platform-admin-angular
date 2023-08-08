@@ -13,7 +13,6 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    console.log('AuthGuard')
     return this._check()
 
   }
@@ -23,7 +22,6 @@ export class AuthGuard implements CanActivate {
     // "true" or "false" to allow or prevent the access
     return this._authService.check().pipe(
       switchMap((authenticated) => {
-        console.log('authenticated ', authenticated)
         if (authenticated) {
           return of(authenticated);
         }
