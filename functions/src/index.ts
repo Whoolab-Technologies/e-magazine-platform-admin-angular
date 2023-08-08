@@ -262,14 +262,7 @@ export const createClass = functions.https.onRequest((req, res) => {
 
         classes.forEach((el: any) => {
             const clsName = `${(el.name).toUpperCase()}`;
-            // client.firestore
-            //     .delete(`classes/${clsName}`, {
-            //         project: process.env.GCLOUD_PROJECT,
-            //         recursive: true,
-            //         yes: true,
-            //         force: true
-            //     }).then(() => {
-
+            const id = el.id || clsName;
             var clsSubject: any = {};
             const subjects = el.subjects;
             (subjects).forEach((sub: any) => {
@@ -280,7 +273,7 @@ export const createClass = functions.https.onRequest((req, res) => {
                     name: subject
                 }
 
-                const subRef = database.doc(`classes/${clsName}/subjects/${subjectId}`).
+                const subRef = database.doc(`classes/${id}/subjects/${subjectId}`).
                     set({
                         name: subject,
                         desc: sub.desc || '',
@@ -289,21 +282,22 @@ export const createClass = functions.https.onRequest((req, res) => {
                     }, { merge: true })
                 promises.push(subRef);
             });
-            const ref = database.doc(`classes/${clsName}`).set({
-                name: clsName, desc: el.desc || '', subjects: clsSubject,
+
+            const ref = database.doc(`classes/${id}`).set({
+                name: clsName,
+                desc: el.desc || '',
+                subjects: clsSubject,
             }, { merge: true });
             promises.push(ref);
-            Promise.all(promises).then((result) => {
-                res.status(200).json({ msg: 'Class and subjects have been created!' });
-            }, error => {
 
-                res.status(500).json(error);
-            });
-        }, (error: any) => {
-            res.status(500).json(error);
         });
 
+        Promise.all(promises).then((result) => {
+            res.status(200).json({ msg: 'Class and subjects have been created!' });
+        }, error => {
 
+            res.status(500).json(error);
+        });
     })
 });
 

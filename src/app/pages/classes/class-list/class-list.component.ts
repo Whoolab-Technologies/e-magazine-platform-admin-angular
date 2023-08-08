@@ -33,8 +33,8 @@ export class ClassListComponent implements OnInit {
     return this._matDialog.open(AddEditClassComponent, {
       autoFocus: false,
       data: clss,
-      height: '400',
-      width: 'auto',
+      height: 'auto',
+      width: '500px',
     });
   }
 

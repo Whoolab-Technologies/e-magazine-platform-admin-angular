@@ -70,6 +70,7 @@ export class ClassesService {
     var requestObj = {
       "class": [
         {
+          "id": classObj.id,
           "name": classObj.name,
           "desc": "",
           "subjects": subjects
