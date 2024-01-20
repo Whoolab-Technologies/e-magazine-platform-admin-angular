@@ -382,8 +382,8 @@ export const razorpayOrder = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         const request = req.body;
         var options = {
-            //   amount: request.amount * 100,  // amount in the smallest currency unit
-            amount: 1 * 100,  // amount in the smallest currency unit
+            amount: request.amount * 100,  // amount in the smallest currency unit
+            // amount: 1 * 100,  // amount in the smallest currency unit
             currency: request.currency
         };
         _razorPay.orders.create(options).then((resp: any) => {
