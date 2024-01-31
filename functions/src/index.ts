@@ -340,6 +340,7 @@ export const createClass = functions.https.onRequest((req, res) => {
 
             const ref = database.doc(`classes/${id}`).set({
                 name: clsName,
+                order: el.order,
                 desc: el.desc || '',
                 subjects: clsSubject,
             }, { merge: true });

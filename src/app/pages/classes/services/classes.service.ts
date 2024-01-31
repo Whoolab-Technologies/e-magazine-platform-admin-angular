@@ -31,7 +31,7 @@ export class ClassesService {
   getClasses(): Observable<any[]> {
     const path = `classes`;
     return this._firebaseService
-      .getCollection(path)
+      .getCollection(path, 'order')
       .pipe(
 
         mergeMap((response) => {
@@ -72,6 +72,7 @@ export class ClassesService {
         {
           "id": classObj.id,
           "name": classObj.name,
+          "order": classObj.order ? classObj.order : 0,
           "desc": "",
           "subjects": subjects
         }]
