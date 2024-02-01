@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AppResolver } from './app.resolver';
+import { InitialDataResolver } from './app.resolver';
 
 describe('AppResolver', () => {
-  let resolver: AppResolver;
+  let resolver: InitialDataResolver;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    resolver = TestBed.inject(AppResolver);
+    resolver = TestBed.inject(InitialDataResolver);
   });
 
   it('should be created', () => {

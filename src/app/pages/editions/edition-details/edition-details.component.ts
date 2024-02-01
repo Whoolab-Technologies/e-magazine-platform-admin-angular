@@ -191,12 +191,12 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       if (file.type == 'application/pdf') {
         this.isTopicPdfFileUploading = true
 
-        this.uploadFile("editions/topics/pdf", file).pipe(map(url => {
+        this.uploadFile("editions/pdf", file).pipe(map(url => {
           return url;
         }
         )).subscribe((url: any) => {
 
-          this.topic.pdf = url;
+          this.edition.pdf = url;
           this.topicPdfFile = file.name;
           this.isTopicPdfFileUploading = false
 

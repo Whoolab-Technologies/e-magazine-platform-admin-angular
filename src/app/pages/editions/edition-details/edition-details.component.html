@@ -94,15 +94,33 @@
                                     <mat-datepicker #picker></mat-datepicker>
                                 </mat-form-field>
                             </div>
-
-
                         </div>
+                    </div>
+                    <div fxFlex="45" class="text-left m-5">
+                        <input type="file" hidden #pdfFileInput (change)="pdfFileChangeEvent($event)" />
+                        <div class="image-wrapper">
+                            <ng-template #topicPdfSelector>
+                                <span (click)="pdfFileInput.click()">
+                                    <mat-icon class="image-upload">picture_as_pdf</mat-icon>
+                                    <ng-container *ngIf="topicPdfFile else selectPdfTemplete">
+                                        <div class="selected-file"> {{topicPdfFile}}</div>
 
+                                    </ng-container>
+                                    <ng-template #selectPdfTemplete>
+                                        <div class="select-section"> Select PDF</div>
+                                    </ng-template>
+                                </span>
+                            </ng-template>
+                            <ng-container *ngIf="isTopicPdfFileUploading else topicPdfSelector">
+                                <app-loader></app-loader>
+                            </ng-container>
+                        </div>
                     </div>
 
                 </div>
             </div>
-            <div class="add-editions__header-item">
+
+            <!-- <div class="add-editions__header-item">
                 Add topics
             </div>
             <div class="add-editions__topics">
@@ -165,7 +183,7 @@
                     <app-topic-list [topics]="edition.topics" (onClickFile)="openFile($event)"></app-topic-list>
                 </ng-container>
 
-            </div>
+            </div> -->
 
         </mat-card-content>
         <mat-card-actions align="end" class="mat-card-actions">

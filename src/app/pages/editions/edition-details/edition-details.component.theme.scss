@@ -41,6 +41,10 @@
         .selected-file {
             color: mat.get-color-from-palette($primary);
         }
+
+        .m-5 {
+            margin: 5px;
+        }
     }
 
 }

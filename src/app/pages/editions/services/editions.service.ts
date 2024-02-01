@@ -44,7 +44,7 @@ export class EditionsService {
   getClasses(): Observable<any[]> {
     const path = `classes`;
     return this._firebaseService
-      .getCollection(path)
+      .getCollection(path, 'order')
       .pipe(
         // catchError((error) => {
         //  // return this._appService.handleError(error);
