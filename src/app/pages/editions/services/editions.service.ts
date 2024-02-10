@@ -146,6 +146,7 @@ export class EditionsService {
       take(1),
       switchMap((editions: any) => {
         editionData.date = publishDate.toDate();
+        console.log("editionData => ", editionData)
         return this._firebaseService
           .setDoc(collection, editionData).pipe(map((doc: any) => {
             const index = editions.findIndex(

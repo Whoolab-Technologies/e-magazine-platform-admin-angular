@@ -4,16 +4,16 @@ import * as moment from 'moment';
 const Razorpay = require('razorpay');
 
 var crypto = require('crypto');
-// const _rPayOption = {
-//     key_id: 'rzp_test_PgXrQp07PbCOhm',
-//     key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
-// }
-const _rPayOptionLive = {
-    key_id: 'rzp_live_qs5T4yjZ2v0LQH',
-    key_secret: '4Sh81NXb7qy0qBG15xIu1s7Z',
+const _rPayOption = {
+    key_id: 'rzp_test_PgXrQp07PbCOhm',
+    key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
 }
+// const _rPayOptionLive = {
+//     key_id: 'rzp_live_qs5T4yjZ2v0LQH',
+//     key_secret: '4Sh81NXb7qy0qBG15xIu1s7Z',
+// }
 
-const _razorPay = new Razorpay(_rPayOptionLive);
+const _razorPay = new Razorpay(_rPayOption);
 const client = require('firebase-tools');
 const cors = require('cors')({
     origin: true,
@@ -392,7 +392,7 @@ export const razorpayOrder = functions.https.onRequest((req, res) => {
             request['status'] = "started";
             database.doc(`payments/${resp.id}`).set(request);
             var responseData = { ...resp };
-            responseData.rpayKey = _rPayOptionLive.key_id;
+            responseData.rpayKey = _rPayOption.key_id;
             res.status(201).send(responseData)
         }, (error: any) => {
             res.status(400).send(error)
@@ -426,6 +426,30 @@ export const createUser = functions.https.onRequest((req, res) => {
         //   const request = req.body;
         res.status(201).send({
             message: 'Request received send',
+        })
+    });
+});
+
+export const sendOtp = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        //   const request = req.body;
+        var val = Math.floor(1000 + Math.random() * 9000);
+        var response = JSON.parse(JSON.stringify({
+            "data": val.toString(),
+
+            "message": `Otp has been send to your number`,
+        }))
+        res.status(201).send(response)
+    });
+});
+
+export const verifyOtp = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        //   const request = req.body;
+
+        res.status(200).send({
+            data: '',
+            message: 'Otp verified successfully',
         })
     });
 });

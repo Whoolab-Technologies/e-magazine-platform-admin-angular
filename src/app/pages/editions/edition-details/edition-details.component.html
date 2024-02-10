@@ -96,24 +96,35 @@
                             </div>
                         </div>
                     </div>
-                    <div fxFlex="45" class="text-left m-5">
-                        <input type="file" hidden #pdfFileInput (change)="pdfFileChangeEvent($event)" />
-                        <div class="image-wrapper">
-                            <ng-template #topicPdfSelector>
-                                <span (click)="pdfFileInput.click()">
-                                    <mat-icon class="image-upload">picture_as_pdf</mat-icon>
-                                    <ng-container *ngIf="topicPdfFile else selectPdfTemplete">
-                                        <div class="selected-file"> {{topicPdfFile}}</div>
+                    <div fxFlex="45" class="m-5">
+                        <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                            <div fxFlex="45" class="text-center">
+                                <input type="file" hidden #pdfFileInput (change)="pdfFileChangeEvent($event)" />
+                                <div class="image-wrapper">
+                                    <ng-template #topicPdfSelector>
+                                        <span (click)="pdfFileInput.click()">
+                                            <mat-icon class="image-upload">picture_as_pdf</mat-icon>
+                                            <ng-container *ngIf="topicPdfFile else selectPdfTemplete">
+                                                <div class="selected-file"> {{topicPdfFile}}</div>
 
-                                    </ng-container>
-                                    <ng-template #selectPdfTemplete>
-                                        <div class="select-section"> Select PDF</div>
+                                            </ng-container>
+                                            <ng-template #selectPdfTemplete>
+                                                <div class="select-section"> Select PDF</div>
+                                            </ng-template>
+                                        </span>
                                     </ng-template>
-                                </span>
-                            </ng-template>
-                            <ng-container *ngIf="isTopicPdfFileUploading else topicPdfSelector">
-                                <app-loader></app-loader>
-                            </ng-container>
+                                    <ng-container *ngIf="isTopicPdfFileUploading else topicPdfSelector">
+                                        <app-loader></app-loader>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <div fxFlex="45" class="text-center">
+                                <mat-form-field appearance='outline'>
+                                    <mat-label> Price</mat-label>
+                                    <input matInput placeholder="Edition Amount" [(ngModel)]="edition.amount" required>
+
+                                </mat-form-field>
+                            </div>
                         </div>
                     </div>
 
@@ -187,7 +198,7 @@
 
         </mat-card-content>
         <mat-card-actions align="end" class="mat-card-actions">
-            <button mat-button color="warn">Cancel</button>
+            <button mat-button color="warn" (click)="cancel()">Cancel</button>
             <ng-container *ngIf="edit  else submit;">
                 <button mat-raised-button color="primary" (click)="editEdition()">Submit</button></ng-container>
             <ng-template #submit>

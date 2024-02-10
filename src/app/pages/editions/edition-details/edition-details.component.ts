@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EditionsService } from '../services/editions.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, filter, map, takeUntil, tap } from 'rxjs';
 import { AppService, allowedImageTypes, isNullish } from '@app/shared/services/app/app.service';
 import * as moment from 'moment';
@@ -22,6 +22,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     image: null,
     index: 1,
     topicCount: 1,
+    amount: 19
   };
   topic: any = { name: '', desc: '', pdf: '', pages: 1 }
   toastrPositionTypes: typeof ToastPositionTypes = ToastPositionTypes;
@@ -48,6 +49,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   constructor(private _service: EditionsService,
     public _appService: AppService,
     private _toastService: ToastService,
+    private _activatedRoute: ActivatedRoute,
     private _router: Router,) {
 
   }
@@ -91,6 +93,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
 
       }
       this.edition.published = el.published ? el.published : false
+      this.topicPdfFile = this.edition.fileName ? this.edition.fileName : null;
       if (el.index != null || el.index != undefined)
         this.latestIndex = el.index
       this.title = "Edit"
@@ -125,9 +128,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       this._toastService.showInfoToastr("Publish date is required if 'Publish Now' is not selected", this.toastrPositionTypes.topRight);
       return
     }
-    if ((this.topic.name && this.topic.desc && this.topic.pdf)) {
-      this.addTopic();
-    }
+
     if (!this.edition.topics) {
       this.edition.topics = [];
     }
@@ -138,22 +139,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       .subscribe((_resp) => {
         this.resetEdition();
       })
-  }
-
-  addTopic() {
-    if (this.isTopicFileUploading || this.isTopicPdfFileUploading) {
-      return
-
-    }
-    if (isNullish(this.topic)) {
-      this._toastService.showInfoToastr("All fields are required", this.toastrPositionTypes.topRight);
-      return
-    }
-
-    this.edition.topics = this.edition.topics || [];
-    const topic = JSON.parse(JSON.stringify(this.topic))
-    this.edition.topics.push(topic)
-    this.resetTopic()
   }
 
 
@@ -197,6 +182,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
         )).subscribe((url: any) => {
 
           this.edition.pdf = url;
+          this.edition.fileName = file.name;
           this.topicPdfFile = file.name;
           this.isTopicPdfFileUploading = false
 
@@ -217,33 +203,25 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     }));
   }
 
-  resetTopic() {
-    this.topic = {
-      name: '',
-      desc: '',
-      pdf: ''
-    }
-    this.topicFile = null;
-    this.topicPdfFile = null;
-  }
+
 
   resetEdition() {
-    this.resetTopic()
     this.edition['name'] = '';
+    this.edition['fileName'] = '';
+    this.edition['pdf'] = '';
     this.edition['desc'] = '';
     this.edition['image'] = '';
     this.edition['topicCount'] = 0;
     this.edition['topics'] = [];
     this.editionImage = null;
+    this.topicPdfFile = null;
   }
 
   editEdition() {
     if (this.isEditionImageUploading || this.isTopicFileUploading || this.isTopicPdfFileUploading) {
       return false;
     }
-    if ((this.topic.name && this.topic.desc && this.topic.pdf)) {
-      this.addTopic();
-    }
+
     this.edition.index = this.latestIndex;
     this._service.editEditions(this.class, this.subject, this.publishDate, this.edition)
       .pipe(tap(_el => {
@@ -255,5 +233,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   openFile(event) {
     window.open(event, '_blank');
   }
-
+  cancel() {
+    this._router.navigate(['../'], { relativeTo: this._activatedRoute });
+  }
 }
