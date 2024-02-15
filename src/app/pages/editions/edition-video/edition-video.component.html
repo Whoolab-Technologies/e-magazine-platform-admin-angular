@@ -1,0 +1,54 @@
+<div class="add-video__header-item">
+    Add video
+</div>
+
+<div class="add-video__form-section">
+    <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="5">
+        <div fxFlex="30">
+            <mat-form-field appearance='outline'>
+                <mat-label> Page Number</mat-label>
+                <input matInput type="number" placeholder="Page Number" [(ngModel)]="video.page" required>
+
+            </mat-form-field>
+        </div>
+        <div fxFlex="30">
+            <mat-form-field appearance='outline'>
+                <mat-label> Topic</mat-label>
+                <input matInput placeholder="Topic" [(ngModel)]="video.topic" required>
+            </mat-form-field>
+        </div>
+        <div fxFlex="20" class="text-center">
+            <input type="file" hidden #videoFileInput (change)="videoFileChangeEvent($event)"
+                (click)="$event.target.value=null" />
+            <div class="image-wrapper">
+                <ng-template #topicPdfSelector>
+                    <span (click)="videoFileInput.click()">
+                        <mat-icon class="video">video</mat-icon>
+                        <ng-container *ngIf="videoFile else SelectVideoTemplate">
+                            <div class="selected-video-file"> {{videoFile}}</div>
+
+                        </ng-container>
+                        <ng-template #SelectVideoTemplate>
+                            <div class="select-section"> Select Video <br>(.mp4, .webm)</div>
+                        </ng-template>
+                    </span>
+                </ng-template>
+                <ng-container *ngIf="isVideFileUploading else topicPdfSelector">
+                    <app-loader></app-loader>
+                </ng-container>
+            </div>
+
+        </div>
+        <div fxFlex="10" class="text-center">
+            <div>
+                <button mat-mini-fab color="primary" aria-label="Upload video" (click)="addVideo()">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <ng-container *ngIf="videos && videos.length">
+        <app-video-list [videos]="videos" (onClickFile)="openFile($event)"></app-video-list>
+    </ng-container>
+</div>

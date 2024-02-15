@@ -6,6 +6,7 @@
 @use '/src/app/pages/editions/editions-list/editions-list.component.theme' as editions;
 
 @use '/src/app/pages/editions/edition-details/edition-details.component.theme' as editions-details;
+@use '/src/app/pages/editions/edition-video/edition-video.component.theme.scss' as edition-video;
 @use '/src/app/shared/confirmation/confirmation.component.theme.scss' as confirmation;
 @use '/src/app/pages/notifications/notifications-list/notifications-list.theme.scss' as notifications;
 @use '/src/app/pages/notifications/add-notification/add-notification.component.theme.scss' as notification;
@@ -25,5 +26,6 @@
     @include notification.theme($theme);
     @include classes.theme($theme);
     @include add-edit-class.theme($theme);
+    @include edition-video.theme($theme);
 
 }

@@ -14,19 +14,23 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { EditionDetailsComponent } from './edition-details/edition-details.component';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { TopicListComponent } from './components/topic-list/topic-list.component';
-import { TopicComponent } from './components/topic/topic.component';
+
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
+import { EditionVideoComponent } from './edition-video/edition-video.component';
+import { VideoListComponent } from './components/video-list/video-list.component';
+
+import { VideoItemComponent } from './components/video-item/video-item.component';
 @NgModule({
   declarations: [
     EditionsComponent,
     EditionsListComponent,
     EditionDetailsComponent,
-    TopicListComponent,
-    TopicComponent
+    EditionVideoComponent,
+    VideoListComponent,
+    VideoItemComponent
   ],
   imports: [
     CommonModule, MatNativeDateModule, MatMomentDateModule,

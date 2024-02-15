@@ -88,6 +88,8 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     ), map(el => {
       this.edition = el;
       this.edition.index = el.index
+      console.log("this.edition")
+      console.log(this.edition)
       if (el.date) {
         this.publishDate = moment(el.date).isValid() ? moment(el.date) : moment(el.date.toDate());
 
@@ -99,6 +101,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       this.title = "Edit"
       this.edit = true
       this.published = this.edition.published
+      this.edition.videos = this.edition.videos ? this.edition.videos : [];
     })).subscribe();
 
   }
@@ -221,7 +224,8 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     if (this.isEditionImageUploading || this.isTopicFileUploading || this.isTopicPdfFileUploading) {
       return false;
     }
-
+    console.log("edition edit ");
+    console.log(this.edition);
     this.edition.index = this.latestIndex;
     this._service.editEditions(this.class, this.subject, this.publishDate, this.edition)
       .pipe(tap(_el => {
@@ -235,5 +239,11 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   }
   cancel() {
     this._router.navigate(['../'], { relativeTo: this._activatedRoute });
+  }
+
+  onUpdateVideoList(event) {
+    console.log("onUpdateVideoList => ", event)
+    this.edition.videos = this.edition.videos ? this.edition.videos : []
+    this.edition.videos = [...event]
   }
 }

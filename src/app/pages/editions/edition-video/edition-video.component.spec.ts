@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TopicListComponent } from './topic-list.component';
+import { EditionVideoComponent } from './edition-video.component';
 
-describe('TopicListComponent', () => {
-  let component: TopicListComponent;
-  let fixture: ComponentFixture<TopicListComponent>;
+describe('EditionVideoComponent', () => {
+  let component: EditionVideoComponent;
+  let fixture: ComponentFixture<EditionVideoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TopicListComponent ]
+      declarations: [ EditionVideoComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TopicListComponent);
+    fixture = TestBed.createComponent(EditionVideoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

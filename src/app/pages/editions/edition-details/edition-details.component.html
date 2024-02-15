@@ -43,35 +43,11 @@
                     </div>
 
                     <div fxFlex="45">
-                        <div fxLayout="row wrap" fxLayoutAlign="space-between">
-                            <div fxFlex="30" class="text-center">
-                                <div class="image-wrapper">
-                                    <ng-template #editionImageSelector>
-                                        <ng-container *ngIf="edition.image else imageSelector">
-                                            <img [src]="edition.image" (click)="openFile(edition.image)" />
-                                        </ng-container>
-                                        <ng-template #imageSelector (click)="editionFileInput.click()">
-                                            <mat-icon class="image-upload">photo_library</mat-icon>
-                                        </ng-template>
-                                    </ng-template>
-                                    <ng-container *ngIf="isEditionImageUploading else editionImageSelector">
-                                        <app-loader></app-loader>
-                                    </ng-container>
-                                </div>
-                            </div>
-                            <div fxFlex="70" style="display: flex; align-items: center;">
-                                <input type="file" hidden #editionFileInput (change)="editionFileChangeEvent($event)" />
+                        <mat-form-field appearance='outline'>
+                            <mat-label> Price</mat-label>
+                            <input matInput placeholder="Edition Amount" [(ngModel)]="edition.amount" required>
 
-                                <mat-form-field appearance='outline'>
-                                    <mat-label>{{edition.image? 'update Poster':'Select Poster'}}</mat-label>
-                                    <input matInput placeholder="Select Image" [(ngModel)]="editionImage" readonly
-                                        (click)="editionFileInput.click()">
-
-                                </mat-form-field>
-
-
-                            </div>
-                        </div>
+                        </mat-form-field>
                     </div>
 
                     <div fxFlex="45">
@@ -96,8 +72,9 @@
                             </div>
                         </div>
                     </div>
-                    <div fxFlex="45" class="m-5">
+                    <div fxFlex="100" class="m-5">
                         <div fxLayout="row wrap" fxLayoutAlign="space-between">
+
                             <div fxFlex="45" class="text-center">
                                 <input type="file" hidden #pdfFileInput (change)="pdfFileChangeEvent($event)" />
                                 <div class="image-wrapper">
@@ -118,83 +95,48 @@
                                     </ng-container>
                                 </div>
                             </div>
-                            <div fxFlex="45" class="text-center">
-                                <mat-form-field appearance='outline'>
-                                    <mat-label> Price</mat-label>
-                                    <input matInput placeholder="Edition Amount" [(ngModel)]="edition.amount" required>
+                            <div fxFlex="45">
+                                <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                                    <div fxFlex="30" class="text-center">
+                                        <div class="image-wrapper">
+                                            <ng-template #editionImageSelector>
+                                                <ng-container *ngIf="edition.image else imageSelector">
+                                                    <img [src]="edition.image" (click)="openFile(edition.image)" />
+                                                </ng-container>
+                                                <ng-template #imageSelector (click)="editionFileInput.click()">
+                                                    <mat-icon class="image-upload">photo_library</mat-icon>
+                                                </ng-template>
+                                            </ng-template>
+                                            <ng-container *ngIf="isEditionImageUploading else editionImageSelector">
+                                                <app-loader></app-loader>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                    <div fxFlex="70" style="display: flex; align-items: center;">
+                                        <input type="file" hidden #editionFileInput
+                                            (change)="editionFileChangeEvent($event)" />
 
-                                </mat-form-field>
+                                        <mat-form-field appearance='outline'>
+                                            <mat-label>{{edition.image? 'update Poster':'Select Poster'}}</mat-label>
+                                            <input matInput placeholder="Select Image" [(ngModel)]="editionImage"
+                                                readonly (click)="editionFileInput.click()">
+
+                                        </mat-form-field>
+
+
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                     </div>
 
                 </div>
             </div>
+            <!-- {{edition.videos.length}} -->
+            <app-edition-video [videos]="edition.videos"
+                (onUpdateVideoList)="onUpdateVideoList($event)"></app-edition-video>
 
-            <!-- <div class="add-editions__header-item">
-                Add topics
-            </div>
-            <div class="add-editions__topics">
-                <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="5">
-                    <div fxFlex="20">
-                        <mat-form-field appearance='outline'>
-                            <mat-label> Topic Name</mat-label>
-                            <input matInput placeholder="Topic Name" [(ngModel)]="topic.name" required>
-
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="20">
-                        <mat-form-field appearance='outline'>
-                            <mat-label>Topic Description</mat-label>
-                            <textarea matInput [(ngModel)]="topic.desc" cdkTextareaAutosize
-                                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
-                                required></textarea>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="20">
-                        <mat-form-field appearance='outline'>
-                            <mat-label>Pages</mat-label>
-                            <input matInput type="number" placeholder="Pages" [(ngModel)]="topic.pages" required>
-
-                        </mat-form-field>
-                    </div>
-
-                    <div fxFlex="5" class="text-center">
-                        <input type="file" hidden #pdfFileInput (change)="pdfFileChangeEvent($event)" />
-                        <div class="image-wrapper">
-                            <ng-template #topicPdfSelector>
-                                <span (click)="pdfFileInput.click()">
-                                    <mat-icon class="image-upload">picture_as_pdf</mat-icon>
-                                    <ng-container *ngIf="topicPdfFile else selectPdfTemplete">
-                                        <div class="selected-file"> {{topicPdfFile}}</div>
-
-                                    </ng-container>
-                                    <ng-template #selectPdfTemplete>
-                                        <div class="select-section"> Select PDF</div>
-                                    </ng-template>
-                                </span>
-                            </ng-template>
-                            <ng-container *ngIf="isTopicPdfFileUploading else topicPdfSelector">
-                                <app-loader></app-loader>
-                            </ng-container>
-                        </div>
-                    </div>
-                    <div fxFlex="5">
-                        <div>
-                            <button mat-mini-fab color="primary" aria-label="Add Topic" (click)="addTopic()">
-                                <mat-icon>add</mat-icon>
-                            </button>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <ng-container *ngIf="edition.topics && edition.topics.length">
-                    <app-topic-list [topics]="edition.topics" (onClickFile)="openFile($event)"></app-topic-list>
-                </ng-container>
-
-            </div> -->
 
         </mat-card-content>
         <mat-card-actions align="end" class="mat-card-actions">

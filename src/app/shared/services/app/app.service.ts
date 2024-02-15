@@ -114,7 +114,8 @@ export const arrayDateSortAsc = (array: Array<any>, key: string) =>
 export const arraySortDesc = (array: Array<any>, key: string) =>
   array.sort((a: any, b: any) => (a[key].toString().toLocaleUpperCase() > b[key].toString().toLocaleUpperCase() ? -1 : 1));
 
-export const allowedImageTypes = () => ['image/jpeg', 'image/x-png', 'image/png']
+export const allowedImageTypes = () => ['image/jpeg', 'image/x-png', 'image/png'];
+export const allowedVideoTypes = () => ["video/mp4", "video/webm", "video/3gpp"];
 
 export const isNullish = (obj) => Object.values(obj).some(x => {
   if (x === null || x === '') {

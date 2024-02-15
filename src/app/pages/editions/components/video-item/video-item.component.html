@@ -1,0 +1,33 @@
+<mat-card>
+    <mat-card-title>
+        <div fxFlex="100" class="video-title-action">
+            <button mat-icon-button color="warn" (click)="onDelete.emit(index)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </mat-card-title>
+    <mat-card-content>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between">
+            <div fxFlex="45">
+                <mat-form-field appearance='outline'>
+                    <mat-label> Page Number</mat-label>
+                    <input matInput type="number" placeholder="Page Number" [(ngModel)]="video.page" required>
+
+                </mat-form-field>
+            </div>
+            <div fxFlex="45">
+                <mat-form-field appearance='outline'>
+                    <mat-label> Topic</mat-label>
+                    <input matInput placeholder="Topic" [(ngModel)]="video.topic" required>
+                </mat-form-field>
+            </div>
+
+
+            <div fxFlex="30" class="text-center">
+                <div class="image-wrapper" (click)="onClickFile.emit(video.link)">
+                    <mat-icon class="image-upload">picture_as_pdf</mat-icon>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
