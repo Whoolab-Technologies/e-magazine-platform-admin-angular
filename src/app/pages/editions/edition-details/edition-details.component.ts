@@ -6,7 +6,7 @@ import { AppService, allowedImageTypes, isNullish } from '@app/shared/services/a
 import * as moment from 'moment';
 import { ToastPositionTypes } from '@app/shared/model/toast'
 import { ToastService } from '@app/shared/services/toast/toast.service';
-import { error } from 'console';
+
 
 @Component({
   selector: 'app-edition-details',
@@ -237,6 +237,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   openFile(event) {
     window.open(event, '_blank');
   }
+
   cancel() {
     this._router.navigate(['../'], { relativeTo: this._activatedRoute });
   }

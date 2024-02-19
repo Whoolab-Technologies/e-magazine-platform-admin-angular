@@ -5,7 +5,7 @@
     <div class="add-video__list" cdkDropList (cdkDropListDropped)="drop($event)">
         <ng-container *ngFor="let video of videos; let i=index">
             <app-video-item cdkDrag [video]="video" [index]="i" (onDelete)="onDelete($event)"
-                (onClickFile)="onClickFile.emit($event)"></app-video-item>
+                (onClickFile)="onClickFileEvent($event)"></app-video-item>
         </ng-container>
     </div>
 </section>

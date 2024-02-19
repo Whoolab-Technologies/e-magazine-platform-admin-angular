@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Video } from '../../models/video';
 
 @Component({
   selector: 'app-video-list',
@@ -7,8 +8,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angu
   styleUrls: ['./video-list.component.scss']
 })
 export class VideoListComponent {
-  @Input() videos: any
-  @Output() onClickFile: EventEmitter<string> = new EventEmitter<string>();
+  @Input() videos: Video[];
 
   constructor(private _changeDetectorRef: ChangeDetectorRef,) {
 
@@ -26,4 +26,9 @@ export class VideoListComponent {
     moveItemInArray(this.videos, event.previousIndex, event.currentIndex);
   }
 
+
+  onClickFileEvent(event) {
+    console.log('clicked => ', event)
+    window.open(event, "_blank");
+  }
 }
