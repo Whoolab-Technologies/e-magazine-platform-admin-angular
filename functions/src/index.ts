@@ -5,9 +5,15 @@ const Razorpay = require('razorpay');
 
 var crypto = require('crypto');
 const _rPayOption = {
-    key_id: 'rzp_test_PgXrQp07PbCOhm',
-    key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
+
+    key_id: 'rzp_live_qs5T4yjZ2v0LQH',
+    key_secret: '4Sh81NXb7qy0qBG15xIu1s7Z',
+
 }
+// const _rPayOptionTest = {
+//     key_id: 'rzp_test_PgXrQp07PbCOhm',
+//     key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
+// }
 // const _rPayOptionLive = {
 //     key_id: 'rzp_live_qs5T4yjZ2v0LQH',
 //     key_secret: '4Sh81NXb7qy0qBG15xIu1s7Z',
@@ -445,12 +451,69 @@ export const sendOtp = functions.https.onRequest((req, res) => {
 
 export const verifyOtp = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
-        //   const request = req.body;
+        const request = req.body;
+        database.collection('otp').doc(request.mobile).get().then((doc: any) => {
 
-        res.status(200).send({
-            data: '',
-            message: 'Otp verified successfully',
-        })
+
+            if (!doc.exists) {
+                res.status(404).send({
+                    success: 0,
+                    data: [],
+                    text: 'Invalid mobile number ',
+                })
+            }
+            else {
+                let data = doc.data()
+                functions.logger.info("data.date ", { structuredData: true });
+                functions.logger.info((data.date).toDate(), { structuredData: true });
+                const givenTime = moment(data.date.toDate());
+
+                // Get the current time
+                const currentTime = moment();
+                functions.logger.info("givenTime ", { structuredData: true });
+                functions.logger.info(givenTime, { structuredData: true });
+                functions.logger.info("currentTime ", { structuredData: true });
+                functions.logger.info(currentTime, { structuredData: true });
+                const timeDifferenceInMillis = givenTime.diff(currentTime);
+                functions.logger.info("timeDifferenceInMillis ", { structuredData: true });
+                functions.logger.info(timeDifferenceInMillis, { structuredData: true });
+                // Convert milliseconds to minutes
+                const timeDifferenceInMinutes = Math.abs(moment.duration(timeDifferenceInMillis).asMinutes());
+                functions.logger.info("timeDifferenceInMinutes ", { structuredData: true });
+                functions.logger.info(timeDifferenceInMinutes, { structuredData: true });
+                if (timeDifferenceInMinutes > 10) {
+                    res.status(400).send({
+                        success: 0,
+                        data: [],
+                        text: 'Otp Expired',
+                    });
+                }
+                else if (data.otp == request.code) {
+                    doc.ref.delete();
+                    res.status(201).send({
+                        success: 0,
+                        data: [],
+                        text: 'Otp verification successful',
+                    });
+                }
+                else {
+                    res.status(404).send({
+                        success: 0,
+                        data: [],
+                        text: 'Incorrect otp',
+                    });
+                }
+            }
+
+        }, (error: any) => {
+
+            res.status(404).send({
+                success: 0,
+                data: [],
+                text: error.toString(),
+            });
+        });
+
     });
 });
 
@@ -458,8 +521,6 @@ export const phonePePay = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         try {
             const request = req.body;
-            functions.logger.info("request", { structuredData: true });
-            functions.logger.info(request, { structuredData: true });
             // const tempRef = database.collection(`paymentsTemp`).doc();
             var hashName = request[PayUHashConstantsKeys.hashName];
             var hashStringWithoutSalt = request[PayUHashConstantsKeys.hashString];
@@ -483,37 +544,26 @@ export const phonePePay = functions.https.onRequest((req, res) => {
             var finalHash: any = {};
             finalHash[hashName] = hash;
 
-            functions.logger.info("finalHash", { structuredData: true });
-            functions.logger.info(finalHash, { structuredData: true });
-            functions.logger.info("hashName", { structuredData: true });
-            functions.logger.info(hashName, { structuredData: true });
-
 
             res.status(201).send(finalHash)
         } catch (error: any) {
-            functions.logger.info("error", { structuredData: true });
-            functions.logger.info(error, { structuredData: true });
-
             res.status(error.code || 400).send(error);
         }
     });
 });
 function getSHA512Hash(hashData: string) {
-    functions.logger.info("getSHA512Hash", { structuredData: true });
+
     var hash = crypto.createHash('sha512');
     var data = hash.update(hashData, 'utf-8');
     return data.digest('hex');
 }
 
 function getHmacSHA1Hash(hashData: string, salt: string) {
-    functions.logger.info("getHmacSHA1Hash", { structuredData: true });
-
     return crypto.createHmac('sha1', salt).update(hashData).digest('hex');
 
 }
 
 function getHmacSHA256Hash(hashData: string, salt: string) {
-    functions.logger.info("getHmacSHA256Hash", { structuredData: true });
 
     return crypto.createHmac('sha256', salt).update(hashData).digest('base64');
 }

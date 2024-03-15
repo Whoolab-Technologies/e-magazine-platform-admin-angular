@@ -247,4 +247,29 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     this.edition.videos = this.edition.videos ? this.edition.videos : []
     this.edition.videos = [...event]
   }
+
+  selectedItem: string;
+  items: string[] = ['Item 1', 'Item 2', 'Item 3']; // Sample list of items
+  newItem: string;
+  newItemMode = false;
+
+  onSelectOpened() {
+    if (this.selectedItem === 'addNewItem') {
+      this.newItemMode = true;
+    }
+  }
+
+  addItem() {
+    if (this.newItem && !this.items.includes(this.newItem)) {
+      this.items.push(this.newItem);
+      this.selectedItem = this.newItem;
+      this.newItem = '';
+    }
+    this.newItemMode = false;
+  }
+
+  cancelNew() {
+    this.newItemMode = false;
+    this.newItem = '';
+  }
 }

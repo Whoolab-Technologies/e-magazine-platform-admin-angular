@@ -161,8 +161,17 @@ button.mat-menu-item:hover:not([disabled]),
   font-size: 16px;
 }
 
+mat-form-field {
+  mat-select.mat-select {
+    width: 90%;
+    //background-color: red;
+    border: 0px solid $light-grey;
+    padding: 0 !important;
+  }
+}
+
 mat-select.mat-select {
-  width: auto;
+  width: 90%;
   display: inline;
   font-size: 16px;
   font-weight: 300;
@@ -172,7 +181,7 @@ mat-select.mat-select {
   padding: 8px 10px;
 
   & .mat-select-value {
-    width: auto;
+    width: 100%;
     display: inline;
   }
 

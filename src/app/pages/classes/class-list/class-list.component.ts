@@ -19,6 +19,8 @@ export class ClassListComponent implements OnInit {
     private _toastService: ToastService,) {
 
   }
+
+
   ngOnInit(): void {
 
   }
