@@ -36,7 +36,7 @@ export class NotificationService {
   getNotifications(): Observable<any[]> {
     const path = `notifications`;
     return this._firebaseService
-      .getCollection(path, "createdOn", 'desc')
+      .getCollection(path, [], "createdOn", 'desc')
       .pipe(
 
         map((response) => {

@@ -1,0 +1,81 @@
+<app-layout>
+    <mat-toolbar class="page-header" role="heading">
+        <h1>Settings</h1>
+    </mat-toolbar>
+    <div class="page_content">
+        <ng-container *ngTemplateOutlet="settingsPageContent "></ng-container>
+        <button mat-raised-button class="float" color="primary" (click)="onUpdateClick()">Update</button>
+
+    </div>
+</app-layout>
+<ng-template #settingsPageContent>
+    <div class="settings">
+
+        <mat-card class="settings-page">
+            <mat-card-content class="settings-page__content">
+                <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+                    <!-- Feature Tag section  starts-->
+
+                    <div fxFlex="45">
+                        <mat-form-field appearance='outline'>
+                            <input matInput placeholder="Feature Tag" [(ngModel)]="newFeatureTag" #featureTag>
+                        </mat-form-field>
+                        <div class="settings-page__action-button">
+                            <button mat-raised-button color="primary" (click)="addFeatureTag()">Add</button>
+                            <button mat-raised-button (click)="featureTag.value=''"> Clear</button>
+
+                        </div>
+                        <div class="settings-page__header">
+                            Feature Tags
+                        </div>
+                        <app-no-content *ngIf="!selectedFeatureTags.length" type="info">No tags added
+                            yet.</app-no-content>
+                        <mat-selection-list [(ngModel)]="selectedFeatureTags">
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                                <div fxFlex="45" *ngFor="let tag of featureTags">
+                                    <mat-list-option [value]="tag">
+                                        {{tag | titlecase}}
+                                    </mat-list-option>
+                                </div>
+                            </div>
+
+                        </mat-selection-list>
+
+
+                    </div>
+
+                    <!-- Special Tag section  starts-->
+                    <div fxFlex="45">
+                        <mat-form-field appearance='outline'>
+                            <input matInput placeholder="Sepcial Tag" [(ngModel)]="newSpecialTag" #specialTag>
+                        </mat-form-field>
+                        <div class="settings-page__action-button">
+                            <button mat-raised-button color="primary" (click)="addSpecialTag()">Add</button>
+                            <button mat-raised-button (click)="specialTag.value=''">Clear</button>
+
+                        </div>
+                        <div class="settings-page__header">
+                            Special Tags
+                        </div>
+                        <app-no-content *ngIf="!selectedFeatureTags.length" type="info">
+                            No tags added yet.</app-no-content>
+
+                        <mat-selection-list [(ngModel)]="selectedSpecialTags">
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                                <div fxFlex="45" *ngFor="let tag of specialTags">
+                                    <mat-list-option [value]="tag">
+                                        {{tag | titlecase}}
+                                    </mat-list-option>
+                                </div>
+                            </div>
+
+                        </mat-selection-list>
+
+
+                    </div>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</ng-template>

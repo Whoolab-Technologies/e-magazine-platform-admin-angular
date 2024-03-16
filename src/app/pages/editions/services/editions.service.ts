@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FirebaseService, snapshot, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
+import { FirebaseService, Where, snapshot, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, map, mergeMap, of, switchMap, take, tap, throwError } from 'rxjs';
 
@@ -44,7 +44,7 @@ export class EditionsService {
   getClasses(): Observable<any[]> {
     const path = `classes`;
     return this._firebaseService
-      .getCollection(path, 'order')
+      .getCollection(path, [], 'order')
       .pipe(
         // catchError((error) => {
         //  // return this._appService.handleError(error);
@@ -89,10 +89,15 @@ export class EditionsService {
 
 
   getEditions(classId: string, subjectId: string): Observable<any[]> {
-    const path = `classes/${classId}/subjects/${subjectId}/editions`;
+    const path = `editions`;
     this._subject.next(subjectId)
+    const condition: Where[] = [
+      { key: "class", op: "==", val: classId },
+      { key: "subject", op: "==", val: subjectId },
+    ];
+
     return this._firebaseService
-      .getCollection(path, 'index')
+      .getCollection(path, condition, 'index')
       .pipe(
 
         map((response) => {
@@ -105,9 +110,11 @@ export class EditionsService {
 
   addEditions(className: string, subject: string, publishDate: moment.Moment, edition: any, isNewSub: boolean = false): Observable<any[]> {
     const editionData = JSON.parse(JSON.stringify(edition))
-    const collection = `classes/${className}/subjects/${subject}/editions/${editionData.name}`;
+    const collection = `classes/${className}/subjects/${subject}/editions`;
     const data = {
-      date: publishDate.toDate(), path: collection, published: false,
+      ...editionData,
+      date: publishDate.toDate(), published: false,
+      class: className, subject: subject,
     }
     return this.editions$.pipe(
       take(1),
@@ -123,7 +130,7 @@ export class EditionsService {
                 editionData.date = publishDate.toDate();
 
               return this._firebaseService
-                .setDoc(collection, editionData).pipe(map(el => { return editionData }))
+                .setDoc(`${collection}/${doc.id}`, editionData).pipe(map(el => { return editionData }))
             }),
             map((doc: any) => {
               isNewSub ?
@@ -146,7 +153,6 @@ export class EditionsService {
       take(1),
       switchMap((editions: any) => {
         editionData.date = publishDate.toDate();
-        console.log("editionData => ", editionData)
         return this._firebaseService
           .setDoc(collection, editionData).pipe(map((doc: any) => {
             const index = editions.findIndex(
@@ -200,7 +206,7 @@ export class EditionsService {
       take(1),
       map((editions) => {
         // Find the task
-        const edition = editions.find((item) => item.docId === id) || null;
+        const edition = editions.find((item) => item.id === id) || null;
 
         // Update the task
         this._edition.next(edition);

@@ -38,7 +38,13 @@ const routes: Routes = [
       path: 'editions',
 
       loadChildren: () => import('./pages/editions/editions.module').then(m => m.EditionsModule)
-    },]
+    },
+    {
+      path: 'settings',
+
+      loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule)
+    },
+    ]
   },
   {
     path: '404',

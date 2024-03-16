@@ -57,7 +57,7 @@ import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@ang
     SidebarComponent, FormsModule, MatIconModule, MatDialogModule,
     FooterComponent, MatSidenavModule, FlexLayoutModule, MatButtonModule,
     LayoutComponent, MatCardModule, MatProgressBarModule, MatToolbarModule,
-    MatGridListModule, MatInputModule, MatTableModule, PipesModule, MatSelectModule
+    MatGridListModule, MatInputModule, MatTableModule, PipesModule
   ],
 
 })

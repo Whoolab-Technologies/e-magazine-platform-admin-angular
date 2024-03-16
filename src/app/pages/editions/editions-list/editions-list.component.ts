@@ -43,7 +43,7 @@ export class EditionsListComponent implements OnInit, OnDestroy {
     this._service.editions$.pipe(takeUntil(this._unsubscribeAll), map((resp) => {
       this.dataSource.data = resp;
       this.dataSource.paginator = this.paginator;
-      this.editions = resp
+      this.editions = resp;
     })).subscribe();
 
     this._service.class$.pipe(takeUntil(this._unsubscribeAll), map((resp) => {

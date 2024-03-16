@@ -28,7 +28,6 @@ export class VideoListComponent {
 
 
   onClickFileEvent(event) {
-    console.log('clicked => ', event)
     window.open(event, "_blank");
   }
 }

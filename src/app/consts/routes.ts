@@ -40,4 +40,11 @@ export const menu = [
     link: '/notifications',
   },
 
+  {
+    id: 'settings',
+    title: 'Settings',
+    type: 'basic',
+    icon: 'settings',
+    link: '/settings',
+  },
 ];

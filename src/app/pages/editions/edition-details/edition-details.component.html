@@ -7,29 +7,6 @@
         </div>
         <mat-card-content>
             <div class="add-editions__form-section">
-                <div fxLayout="row wrap" fxLayoutAlign="space-between">
-                    <div fxFlex="45">
-                        <mat-form-field appearance='outline' class="custom-select">
-                            <mat-select [(value)]="selectedItem" (openedChange)="onSelectOpened()">
-                                <mat-option *ngFor="let item of items" [value]="item">{{ item }}</mat-option>
-                                <mat-option *ngIf="!newItemMode" [value]="'addNewItem'">Add new item...</mat-option>
-
-
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-
-                    <div fxFlex="45">
-                        <div *ngIf="newItemMode">
-                            <mat-form-field appearance='outline'>
-                                <input matInput placeholder="New Item" [(ngModel)]="newItem">
-                            </mat-form-field>
-                            <button mat-raised-button color="primary" (click)="addItem()">Add</button>
-                            <button mat-raised-button (click)="cancelNew()">Cancel</button>
-                        </div>
-                    </div>
-                </div>
 
                 <div fxLayout="row wrap" fxLayoutAlign="space-between">
                     <div fxFlex="45">
@@ -153,6 +130,34 @@
                             </div>
 
                         </div>
+                    </div>
+                    <div fxFlex="45">
+                        <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                            <div fxFlex="{{!newItemMode?100:45}}">
+                                <mat-form-field appearance='outline' class="custom-select">
+                                    <mat-label>Feature Tags</mat-label>
+                                    <mat-select [(value)]="selectedItem" (openedChange)="onSelectOpened()">
+                                        <mat-option *ngFor="let item of items" [value]="item">{{ item }}</mat-option>
+                                        <mat-option *ngIf="!newItemMode" [value]="'addNewItem'">Add new
+                                            item...</mat-option>
+
+
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div fxFlex="45">
+                                <div *ngIf="newItemMode">
+                                    <mat-form-field appearance='outline'>
+                                        <input matInput placeholder="New Item" [(ngModel)]="newItem">
+                                    </mat-form-field>
+                                    <button mat-raised-button color="primary" (click)="addItem()">Add</button>
+                                    <button mat-raised-button (click)="cancelNew()">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>

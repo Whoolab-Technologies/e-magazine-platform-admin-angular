@@ -102,6 +102,13 @@
                 text-transform: uppercase;
             }
         }
+
+        &__date {
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            padding: 5px 10px;
+            max-width: 4rem;
+            text-align: center;
+        }
     }
 
     .published {

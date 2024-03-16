@@ -54,10 +54,14 @@
 
                                 </span>
                             </span>
+                            <div class="editions-table__date">
+                                {{element['date'] |firebaseDate|date:"MM/dd/yy"}}
+                            </div>
+
                         </span>
                         <span *ngSwitchCase="'action'">
                             <app-action (onEdit)="edit($event)" [view]="false" (onView)="view($event)" [data]="element"
-                                [id]="element.docId" (onDelete)="delete($event)"></app-action>
+                                [id]="element.id" (onDelete)="delete($event)"></app-action>
                         </span>
 
                         <span *ngSwitchDefault> {{element[column]}}</span>

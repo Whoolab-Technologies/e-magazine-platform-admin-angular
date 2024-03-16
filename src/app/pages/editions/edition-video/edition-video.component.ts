@@ -22,12 +22,11 @@ export class EditionVideoComponent {
     private _toastService: ToastService,
     private _appService: AppService,
   ) {
-    console.log("videos ", this.videos)
+
   }
 
   addVideo() {
     if (this.video.page && this.video.link) {
-      console.log("video => ", this.video);
 
       this.videos.push(this.video);
       this.onUpdateVideoList.emit(this.videos);
@@ -35,7 +34,6 @@ export class EditionVideoComponent {
       this.video = { page: this.video.page, link: "", topic: "" };
     }
     else {
-      console.log("Add Video");
       this._toastService.showInfoToastr("Enter a valid page number and select a video file", this.toastrPositionTypes.topRight);
     }
   }
