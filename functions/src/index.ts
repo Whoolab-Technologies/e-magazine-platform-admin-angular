@@ -173,32 +173,32 @@ exports.listenStudent = functions.firestore
 
     });
 
-exports.listenEdition = functions.firestore
-    .document('classes/{className}/subjects/{subject}/editions/{edition}')
-    .onWrite(async (change, _context) => {
-        const afterData = change.after.data();
-        const beforeData = change.before.data();
-        if (!beforeData) {
-            return true;
+// exports.listenEdition = functions.firestore
+//     .document('classes/{className}/subjects/{subject}/editions/{edition}')
+//     .onWrite(async (change, _context) => {
+//         const afterData = change.after.data();
+//         const beforeData = change.before.data();
+//         if (!beforeData) {
+//             return true;
 
-        }
-        if (!afterData) {
-            await database.doc(`editions/${beforeData.docId}`).delete();
-            return true;
-        }
-        if (beforeData && afterData) {
-            const update: any = {}
-            if (beforeData.date != afterData.date)
-                update['date'] = afterData.date;
-            if (beforeData.published != afterData.published)
-                update['published'] = afterData.published;
-            await database.doc(`editions/${beforeData.docId}`).update(update);
-            return true;
-        }
-        return true;
+//         }
+//         if (!afterData) {
+//             await database.doc(`editions/${beforeData.docId}`).delete();
+//             return true;
+//         }
+//         if (beforeData && afterData) {
+//             const update: any = {}
+//             if (beforeData.date != afterData.date)
+//                 update['date'] = afterData.date;
+//             if (beforeData.published != afterData.published)
+//                 update['published'] = afterData.published;
+//             await database.doc(`editions/${beforeData.docId}`).update(update);
+//             return true;
+//         }
+//         return true;
 
 
-    });
+//     });
 
 
 

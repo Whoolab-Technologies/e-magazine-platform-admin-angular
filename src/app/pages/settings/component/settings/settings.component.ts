@@ -87,6 +87,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         take(1),
         map((response) => response))
       .subscribe((response) => {
+        this._toastService.showErrorToastr("Successfully updated settings!");
       })
   }
 
