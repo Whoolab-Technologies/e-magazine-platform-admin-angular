@@ -70,9 +70,9 @@ export class FirebaseService {
     return from(getDocs(docQuery))
   }
 
-  setDoc(collection, data): Observable<any> {
+  setDoc(collection, data, options: any = {}): Observable<any> {
     const docRef = doc(this.database, collection)
-    return from(setDoc(docRef, data));
+    return from(setDoc(docRef, data, options,));
   }
   addDocument(colltn, data): Observable<any> {
     const colRef = collection(this.database, colltn)

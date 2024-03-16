@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService, Where, snapshot, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
 import * as moment from 'moment';
-import { BehaviorSubject, Observable, map, mergeMap, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, forkJoin, map, mergeMap, of, switchMap, take, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -147,24 +147,39 @@ export class EditionsService {
   }
 
   editEditions(className: string, subject: string, publishDate: moment.Moment, edition: any): Observable<any[]> {
+    // const editionData = JSON.parse(JSON.stringify(edition))
+    // const collection = `classes/${className}/subjects/${subject}/editions/${editionData.id}`;
+
+
     const editionData = JSON.parse(JSON.stringify(edition))
-    const collection = `classes/${className}/subjects/${subject}/editions/${editionData.id}`;
+    const collection = `classes/${className}/subjects/${subject}/editions`;
+    const data = {
+      ...editionData,
+      date: publishDate.toDate(), published: false,
+      class: className, subject: subject,
+    }
+
+
+
     return this.editions$.pipe(
       take(1),
       switchMap((editions: any) => {
         editionData.date = publishDate.toDate();
-        return this._firebaseService
-          .setDoc(collection, editionData).pipe(map((doc: any) => {
-            const index = editions.findIndex(
-              (item) => item.docId === edition.docId
-            );
+        return forkJoin([this._firebaseService
+          .setDoc(`${collection}/${editionData.id}`, editionData, { merge: true },), this._firebaseService
+            .setDoc(`editions/${editionData.id}`, editionData, { merge: true },),]).pipe(map(() => {
+              console.log("after update")
+              const index = editions.findIndex(
+                (item) => item.id === edition.id
+              );
 
-            // Update the booking
-            editions[index] = editionData;
-            this._editions.next(editions);
+              // Update the booking
+              editions[index] = editionData;
+              console.log(" editions[index] ", editions[index])
+              this._editions.next(editions);
 
-            return editionData;
-          }),)
+              return editionData;
+            }))
       }),
 
     );

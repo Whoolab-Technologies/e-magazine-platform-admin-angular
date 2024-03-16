@@ -6,6 +6,7 @@ import { AppService, allowedImageTypes, isNullish } from '@app/shared/services/a
 import * as moment from 'moment';
 import { ToastPositionTypes } from '@app/shared/model/toast'
 import { ToastService } from '@app/shared/services/toast/toast.service';
+import { SettingsService } from '@app/pages/settings/service/settings.service';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   class: string;
   subject: string;
   latestIndex: number = -1;
+  settings: any = {};
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   topicFile: any = null;
@@ -50,7 +52,9 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     public _appService: AppService,
     private _toastService: ToastService,
     private _activatedRoute: ActivatedRoute,
-    private _router: Router,) {
+    private _settingsService: SettingsService,
+    private _router: Router,
+  ) {
 
   }
 
@@ -101,7 +105,10 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       this.published = this.edition.published
       this.edition.videos = this.edition.videos ? this.edition.videos : [];
     })).subscribe();
-
+    this._settingsService.settings$.subscribe(data => {
+      console.log("settings ", data)
+      this.settings = data
+    })
   }
 
 
@@ -241,30 +248,5 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   onUpdateVideoList(event) {
     this.edition.videos = this.edition.videos ? this.edition.videos : []
     this.edition.videos = [...event]
-  }
-
-  selectedItem: string;
-  items: string[] = ['Item 1', 'Item 2', 'Item 3']; // Sample list of items
-  newItem: string;
-  newItemMode = false;
-
-  onSelectOpened() {
-    if (this.selectedItem === 'addNewItem') {
-      this.newItemMode = true;
-    }
-  }
-
-  addItem() {
-    if (this.newItem && !this.items.includes(this.newItem)) {
-      this.items.push(this.newItem);
-      this.selectedItem = this.newItem;
-      this.newItem = '';
-    }
-    this.newItemMode = false;
-  }
-
-  cancelNew() {
-    this.newItemMode = false;
-    this.newItem = '';
   }
 }
