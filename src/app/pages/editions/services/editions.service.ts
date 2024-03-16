@@ -191,28 +191,29 @@ export class EditionsService {
   removeEditon(id) {
     return this._editions.pipe(
       take(1),
-      switchMap((editions) =>
-        this._firebaseService.getDocument('editions', id).pipe(
-          map(el => snapshot(el)),
-          switchMap(edition => {
-            const pathItems = (edition.path).split('/');
-            const docId = pathItems.pop();
-            const collection = pathItems.join('/');
-            return this._firebaseService.removeDocument(collection, docId)
-          }), map((resp) => {
-            // Find the index of the updated tag
-            editions = editions.filter(
-              (item) => item.docId != id
-            );
+      switchMap((editions) => {
+        const edition = editions.find(
+          (item) => item.id == id
+        );
+        const collection = `classes/${edition.class}/subjects/${edition.subject}/editions`;
+        return forkJoin([
+          this._firebaseService.removeDocument(collection, id),
+          this._firebaseService.removeDocument('editions', id)
+        ]).pipe(map((resp) => {
+          // Find the index of the updated tag
+          editions = editions.filter(
+            (item) => item.id != id
+          );
 
-            // Update the vacancy list
-            this._editions.next(editions);
+          // Update the vacancy list
+          this._editions.next(editions);
 
-            // Return the updated tag
-            return editions;
-          }),
-        )
-      )
+          // Return the updated tag
+          return editions;
+        }),
+        );
+
+      }),
     );
   }
 
