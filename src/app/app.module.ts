@@ -16,6 +16,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpLoaderInterceptor } from './interceptors/http-loader.interceptor';
 import { HttpLoaderComponent } from './shared/http-loader/http-loader.component';
+
 @NgModule({
   declarations: [
     AppComponent,

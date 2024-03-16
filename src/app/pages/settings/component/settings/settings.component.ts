@@ -15,6 +15,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
 
   featureTags: string[] = [];
+  banners: string[] = [];
   selectedFeatureTags: string[] = []
 
   specialTags: string[] = [];
@@ -37,6 +38,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
       map(settings => {
         this.featureTags = settings.featureTags;
         this.specialTags = settings.specialTags;
+        this.banners = settings.banners || [];
+        console.log("settings ", settings)
         return settings;
       }),
     )
@@ -81,6 +84,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     const data = {
       featureTags: this.selectedFeatureTags,
       specialTags: this.selectedSpecialTags,
+      banners: this.banners,
     }
     this._service.updateSettings(data)
       .pipe(
@@ -90,5 +94,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this._toastService.showErrorToastr("Successfully updated settings!");
       })
   }
-
+  handleImageSelected(event) {
+    this.banners = event
+  }
 }

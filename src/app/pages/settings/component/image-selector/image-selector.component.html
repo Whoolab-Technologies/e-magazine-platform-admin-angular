@@ -1,0 +1,56 @@
+<mat-card>
+    <mat-card-title>
+        Banners
+    </mat-card-title>
+    <mat-card-content>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+
+            <div fxFlex="30" style="display: flex; align-items: center;">
+                <input type="file" hidden #fileInput (change)="onFileSelected($event)" />
+
+                <mat-form-field appearance='outline' (click)="fileInput.click()">
+                    <mat-label>{{selectedFileName? 'Update':"Select"}} Image</mat-label>
+                    <input matInput placeholder="Select Image" [(ngModel)]="selectedFileName" readonly>
+
+                </mat-form-field>
+
+
+            </div>
+            <div fxFlex="30" class="text-center">
+                <div class="image-wrapper">
+                    <ng-template #bannerImageSelector>
+
+                        <ng-container *ngIf="selectedFileName else imageSelector">
+
+                            <img [src]="previewUrl" alt="Selected Image" (click)="openFile(previewUrl)">
+                        </ng-container>
+                        <ng-template #imageSelector (click)="fileInput.click()">
+
+                            <mat-icon class="image-upload">photo_library</mat-icon>
+                        </ng-template>
+                    </ng-template>
+                    <ng-container *ngIf="isImageUploading else bannerImageSelector">
+
+                        <app-loader></app-loader>
+                    </ng-container>
+                </div>
+            </div>
+            <div fxFlex="30" class="text-center">
+                <button mat-raised-button color="primary" (click)="uploadImage()">Upload</button>
+            </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutAlign="start" *ngIf="uploadedImages.length">
+            <div fxFlex="30%" *ngFor="let image of uploadedImages">
+                <mat-card style="height: 200px;">
+
+                    <img mat-card-image class="resizable-image" [src]="image" alt="Uploaded Image">
+                    <button class="delete-image" mat-mini-fab color="warn" (click)="deleteImage(image)">
+                        <mat-icon>delete</mat-icon></button>
+
+
+                </mat-card>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

@@ -5489,6 +5489,13 @@ ngx-echarts@^6.0.1:
   dependencies:
     tslib "^2.0.0"
 
+ngx-image-compress@^15.1.6:
+  version "15.1.6"
+  resolved "https://registry.npmjs.org/ngx-image-compress/-/ngx-image-compress-15.1.6.tgz"
+  integrity sha512-kMoK06er6vLV7/3Ly3S8Eef4mADZHU2A+JeBAt56nOV7iAzz6GolT2cNq40XR5hFpthcnzHs7aIcl4Sr84xK6w==
+  dependencies:
+    tslib "^2.5.0"
+
 ngx-toastr@^16.1.1:
   version "16.1.1"
   resolved "https://registry.npmjs.org/ngx-toastr/-/ngx-toastr-16.1.1.tgz"
@@ -6970,7 +6977,7 @@ tslib@^1.8.1:
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.0, tslib@2.5.0:
+tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.5.0, tslib@2.5.0:
   version "2.5.0"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz"
   integrity sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==

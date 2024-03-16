@@ -551,6 +551,67 @@ export const phonePePay = functions.https.onRequest((req, res) => {
         }
     });
 });
+
+export const home = functions.https.onRequest(async (req, res) => {
+    return cors(req, res, async () => {
+        const request = req.body;
+        const id = request.id;
+        const className = request.class;
+        const responseData: any = {
+            status: 1,
+            message: ""
+        }
+        let settings: any;
+        let editions: any[] = [];
+        let featuredEditions: any[] = [];
+        let lastReadEditons: any[] = [];
+        try {
+            const settingsQuerySnapshot = await database.collection(`settings`).limit(1).get();
+            const editonsQuerySnapshot = await database.collection('editions')
+                .where('class', '==', className)
+                .get();
+            const lastReadQuerySnapshot = await database.collection(`students/${id}/lastread`).get();
+            settings = snapshotToArray(settingsQuerySnapshot)[0];
+            editions = snapshotToArray(editonsQuerySnapshot);
+            lastReadEditons = snapshotToArray(lastReadQuerySnapshot);
+            featuredEditions = groupByField(editions, 'featureTag');
+            if (lastReadEditons.length) {
+                featuredEditions = [...featuredEditions, { key: "last read", value: lastReadEditons },];
+            }
+            responseData['data'] = { settings: settings, featuredEditions: featuredEditions }
+            res.status(201).send(responseData)
+        } catch (error: any) {
+            res.status(error.code || 400).send(error);
+        }
+    })
+});
+
+function snapshotToArray(snapshot: any) {
+    let returnArr: any = [];
+    snapshot.forEach((childSnapshot: any) => {
+        let item = childSnapshot.data();
+        item.id = childSnapshot.id;
+        returnArr.push(item);
+    });
+
+    return returnArr;
+};
+function groupByField(arr: any[], field: string) {
+    return arr.reduce(function (acc, obj) {
+        var fieldValue = obj[field];
+        if (fieldValue) { // Check if fieldValue is not null or undefined
+            var found = acc.find((item: any) => item.key === fieldValue);
+            if (!found) {
+                acc.push({ key: fieldValue, values: [obj] });
+            } else {
+                found.values.push(obj);
+            }
+        }
+        return acc;
+    }, []);
+}
+
+
 function getSHA512Hash(hashData: string) {
 
     var hash = crypto.createHash('sha512');
@@ -567,3 +628,5 @@ function getHmacSHA256Hash(hashData: string, salt: string) {
 
     return crypto.createHmac('sha256', salt).update(hashData).digest('base64');
 }
+
+

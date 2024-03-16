@@ -9,10 +9,12 @@ import { MatLegacySelectModule as MatSelectModule } from '@angular/material/lega
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
 import { NoContentComponent } from './component/no-content/no-content.component';
+import { ImageSelectorComponent } from './component/image-selector/image-selector.component';
 @NgModule({
   declarations: [
     SettingsComponent,
-    NoContentComponent
+    NoContentComponent,
+    ImageSelectorComponent
   ],
   imports: [
     CommonModule,
