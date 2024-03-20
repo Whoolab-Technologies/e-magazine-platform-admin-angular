@@ -570,18 +570,23 @@ export const home = functions.https.onRequest(async (req, res) => {
             const editonsQuerySnapshot = await database.collection('editions')
                 .where('class', '==', className)
                 .get();
-            const lastReadQuerySnapshot = await database.collection(`students/${id}/lastread`).get();
+            console.log("students/${id}/lastread ", `student/${id}/lastread`);
+
+            const lastReadQuerySnapshot = await database.collection(`student/${id}/lastread`).orderBy('readAt', 'desc').get();
             settings = snapshotToArray(settingsQuerySnapshot)[0];
             editions = snapshotToArray(editonsQuerySnapshot);
             lastReadEditons = snapshotToArray(lastReadQuerySnapshot);
+            console.log("last read ", lastReadEditons.length);
             featuredEditions = groupByField(editions, 'featureTag');
             if (lastReadEditons.length) {
-                featuredEditions = [...featuredEditions, { key: "last read", value: lastReadEditons },];
+                featuredEditions = [...featuredEditions, { key: "last read", items: lastReadEditons },];
             }
             responseData['data'] = { settings: settings, featuredEditions: featuredEditions.sort((a, b) => a.key.localeCompare(b.key)) }
             res.status(200).send(responseData)
         } catch (error: any) {
-            res.status(error.code || 400).send(error);
+            responseData['status'] = 0;
+            responseData['message'] = error.toString();
+            res.status(error.code || 400).send(responseData);
         }
     })
 });
@@ -602,9 +607,9 @@ function groupByField(arr: any[], field: string) {
         if (fieldValue) { // Check if fieldValue is not null or undefined
             var found = acc.find((item: any) => item.key === fieldValue);
             if (!found) {
-                acc.push({ key: fieldValue, values: [obj] });
+                acc.push({ key: fieldValue, items: [obj] });
             } else {
-                found.values.push(obj);
+                found.items.push(obj);
             }
         }
         return acc;
