@@ -124,8 +124,7 @@ export class EditionsService {
           .addDocument(`editions`, data)
           .pipe(
             mergeMap((doc) => {
-              editionData.docId = doc.id
-              editionData.id = editionData.name;
+              editionData.id = doc.id;
               editionData.published = false,
                 editionData.date = publishDate.toDate();
 

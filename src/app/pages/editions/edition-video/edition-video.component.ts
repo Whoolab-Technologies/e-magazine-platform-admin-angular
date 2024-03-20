@@ -26,6 +26,9 @@ export class EditionVideoComponent {
   }
 
   addVideo() {
+    if (!this.videos) {
+      this.videos = [];
+    }
     if (this.video.page && this.video.link) {
 
       this.videos.push(this.video);

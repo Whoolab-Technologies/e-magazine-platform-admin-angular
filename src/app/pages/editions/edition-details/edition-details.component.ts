@@ -246,6 +246,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   }
 
   onUpdateVideoList(event) {
+    console.log("event => ", event)
     this.edition.videos = this.edition.videos ? this.edition.videos : []
     this.edition.videos = [...event]
   }

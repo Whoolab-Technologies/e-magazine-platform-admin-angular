@@ -578,8 +578,8 @@ export const home = functions.https.onRequest(async (req, res) => {
             if (lastReadEditons.length) {
                 featuredEditions = [...featuredEditions, { key: "last read", value: lastReadEditons },];
             }
-            responseData['data'] = { settings: settings, featuredEditions: featuredEditions }
-            res.status(201).send(responseData)
+            responseData['data'] = { settings: settings, featuredEditions: featuredEditions.sort((a, b) => a.key.localeCompare(b.key)) }
+            res.status(200).send(responseData)
         } catch (error: any) {
             res.status(error.code || 400).send(error);
         }
