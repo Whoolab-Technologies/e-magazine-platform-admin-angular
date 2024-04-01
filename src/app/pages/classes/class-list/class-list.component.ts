@@ -36,7 +36,7 @@ export class ClassListComponent implements OnInit {
       autoFocus: false,
       data: clss,
       height: 'auto',
-      width: '500px',
+      width: '700px',
     });
   }
 

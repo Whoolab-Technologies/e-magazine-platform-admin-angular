@@ -340,6 +340,7 @@ export const createClass = functions.https.onRequest((req, res) => {
                         desc: sub.desc || '',
                         image: sub.image || '',
                         amount: sub.amount,
+                        offer_price: sub.offer_price ? sub.offer_price : 0,
                     }, { merge: true })
                 promises.push(subRef);
             });

@@ -12,10 +12,16 @@
                     <input matInput [(ngModel)]="subject.name" required name="subjectName" />
                 </mat-form-field>
             </div>
-            <div fxFlex="45">
+            <div fxFlex="25">
                 <mat-form-field style="width: 100%;" appearance='outline'>
                     <mat-label>Subject Price</mat-label>
                     <input matInput type="number" [(ngModel)]="subject.amount" name="subjectAmount" />
+                </mat-form-field>
+            </div>
+            <div fxFlex="25">
+                <mat-form-field style="width: 100%;" appearance='outline'>
+                    <mat-label>Offer Price</mat-label>
+                    <input matInput type="number" [(ngModel)]="subject.offer_price" name="subjectOfferAmount" />
                 </mat-form-field>
             </div>
         </div>

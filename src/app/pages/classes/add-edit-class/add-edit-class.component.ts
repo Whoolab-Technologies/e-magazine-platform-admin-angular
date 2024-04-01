@@ -18,7 +18,13 @@ export class AddEditClassComponent implements OnInit {
   actionText: string = "Submit";
   subjects: any[] = [];
   classObj: any = {}
-  subject: any = { id: "", name: "", amount: 99, enabled: true };
+  subject: any = {
+    id: "",
+    name: "",
+    amount: 99,
+    offer_price: 0,
+    enabled: true
+  };
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   constructor(
@@ -45,6 +51,8 @@ export class AddEditClassComponent implements OnInit {
     }
     this.actionText = this.btnText;
     this._classService.subjects$.pipe(takeUntil(this._unsubscribeAll), map((subjects) => {
+      console.log("subjects ", subjects)
+      subjects = subjects.map(el => { return { ...el, offer_price: 0, } });
       var subj = []
       if (subjects.length) {
         subj = [...subjects];
@@ -70,8 +78,10 @@ export class AddEditClassComponent implements OnInit {
   }
 
   submit() {
-
-    const subjects = this.subjects.filter(el => el.name && el.amount && el.amount > 0)
+    console.log("submit");
+    const subjects = this.subjects.filter(el => el.name && el.amount && el.amount > 0);
+    console.log("subjects ");
+    console.log(subjects);
     if (!this.classObj.name || !subjects.length) {
       this._toastService.showInfoToastr("All Fields Are Required");
       return;
@@ -133,9 +143,11 @@ export class AddEditClassComponent implements OnInit {
   styleUrls: ['./add-edit-class.component.scss']
 })
 export class EditSubjectComponent implements OnInit {
-  subject: any = { id: "", name: "", amount: 99 };
+  subject: any = { id: "", name: "", amount: 99, offer_price: 0 };
   ngOnInit(): void {
+    this.data.offer_price = this.data.offer_price ? this.data.offer_price : 0;
     this.subject = JSON.parse(JSON.stringify(this.data));
+
   }
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
