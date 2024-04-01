@@ -73,6 +73,8 @@ export class ClassesService {
           "id": classObj.id,
           "name": classObj.name,
           "order": classObj.order ? classObj.order : 0,
+          "amount": classObj.amount ?? 0,
+          "offer_price": classObj.offer_price ?? 0,
           "desc": "",
           "subjects": subjects
         }]

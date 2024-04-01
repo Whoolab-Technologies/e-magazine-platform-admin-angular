@@ -9,10 +9,26 @@
                     <mat-label>Class Name</mat-label>
                     <input matInput [(ngModel)]="classObj.name" required />
                 </mat-form-field>
+            </div>
+            <div fxFlex="100">
                 <mat-form-field style="width: 100%;" appearance='outline'>
                     <mat-label>Display Order</mat-label>
-                    <input matInput type="number" [(ngModel)]="classObj.order" required />
+                    <input matInput type="number" [(ngModel)]="classObj.order" />
                 </mat-form-field>
+            </div>
+            <div fxFlex="45">
+                <mat-form-field style="width: 100%;" appearance='outline'>
+                    <mat-label>Price</mat-label>
+                    <input matInput type="number" [(ngModel)]="classObj.amount" required />
+                </mat-form-field>
+            </div>
+            <div fxFlex="45">
+                <mat-form-field style="width: 100%;" appearance='outline'>
+                    <mat-label>Offer Price</mat-label>
+                    <input matInput type="number" [(ngModel)]="classObj.offer_price" />
+                </mat-form-field>
+            </div>
+            <div fxFlex="100">
                 <ng-container *ngFor="let item of subjects; let i=index">
 
                     <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="5">

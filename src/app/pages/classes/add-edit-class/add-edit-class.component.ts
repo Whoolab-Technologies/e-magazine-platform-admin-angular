@@ -17,7 +17,11 @@ export class AddEditClassComponent implements OnInit {
   btnText: string = "Submit";
   actionText: string = "Submit";
   subjects: any[] = [];
-  classObj: any = {}
+  classObj: any = {
+    order: 0,
+    amount: 0,
+    offer_price: 0
+  }
   subject: any = {
     id: "",
     name: "",
@@ -44,7 +48,7 @@ export class AddEditClassComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.classObj = this.data || {};
+    this.classObj = { ...this.classObj, ...this.data } || { ...this.classObj };
     if (this.data) {
       this.btnText = "Update";
       this.isEdit = true
@@ -52,7 +56,7 @@ export class AddEditClassComponent implements OnInit {
     this.actionText = this.btnText;
     this._classService.subjects$.pipe(takeUntil(this._unsubscribeAll), map((subjects) => {
       console.log("subjects ", subjects)
-      subjects = subjects.map(el => { return { ...el, offer_price: 0, } });
+      subjects = subjects.map(el => { return { ...el, offer_price: el.offer_price ?? 0, } });
       var subj = []
       if (subjects.length) {
         subj = [...subjects];
@@ -78,16 +82,16 @@ export class AddEditClassComponent implements OnInit {
   }
 
   submit() {
-    console.log("submit");
     const subjects = this.subjects.filter(el => el.name && el.amount && el.amount > 0);
-    console.log("subjects ");
-    console.log(subjects);
-    if (!this.classObj.name || !subjects.length) {
+
+    if (!this.classObj.name || !this.classObj.amount || !subjects.length) {
       this._toastService.showInfoToastr("All Fields Are Required");
       return;
     }
     this.btnText = "Please wait...";
     this.btnDisabled = true
+    console.log(".classObj ");
+    console.log(this.classObj);
     this._classService.addOrUpdate(this.classObj, subjects, this.isEdit)
       .pipe(tap((resp: any) => {
         return resp;
