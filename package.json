@@ -8,7 +8,7 @@
     "build:prod": "ng build --configuration production",
     "lint": "ng lint",
     "hmr": "ng serve --configuration hmr",
-    "build:deploy": "ng build --configuration production && firebase deploy",
+    "build:deploy": "npm run build:prod && firebase deploy",
     "watch": "ng build --watch --configuration development"
   },
   "private": true,

@@ -33,9 +33,12 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
     this._service.notifications$.pipe(takeUntil(this._unsubscribeAll)).subscribe((notifications) => {
       this.dataSource.data = JSON.parse(JSON.stringify(notifications))
       this.notifications = [...notifications];
+      this.dataSource.paginator = this.paginator;
       this._changeDetectorRef.detectChanges();
     });
   }
