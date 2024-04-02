@@ -48,7 +48,7 @@ export class AddNotificationComponent implements OnInit, OnDestroy {
     })).subscribe();
 
     this._service.class$.pipe(takeUntil(this._unsubscribeAll), map((resp) => {
-
+      this.class = resp;
     })).subscribe();
 
   }

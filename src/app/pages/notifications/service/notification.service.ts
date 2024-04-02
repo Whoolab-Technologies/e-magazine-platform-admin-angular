@@ -61,8 +61,9 @@ export class NotificationService {
         mergeMap((response) => {
           const classes = snapshotToArray(response);
           this._classes.next(classes);
-          if (classes.length)
+          if (classes.length) {
             return this.getFilteredStudents(classes[0].id)
+          }
           return of([])
         }),
 
