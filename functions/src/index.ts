@@ -349,8 +349,6 @@ export const createClass = functions.https.onRequest((req, res) => {
 });
 
 
-// });
-
 export const removeClass = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         const request = req.body;

@@ -64,7 +64,8 @@ export class ClassesService {
         }),
       );
   }
-  addOrUpdate(classObj: any, subjects: any[], edit: boolean = false): Observable<any[]> {
+
+  addOrUpdate(classObj: any, subjects: any[], edit: boolean = false): Observable<any> {
     const clsName = `${(classObj.name).toUpperCase()}`;
     const id = classObj.id || clsName;
     var el = {
@@ -97,7 +98,6 @@ export class ClassesService {
         }, { merge: true });
         return observable$;
       });
-      console.log("observable ", observables$)
       var observ$ = this._firebaseService.setDoc(`classes/${id}`, {
         name: clsName,
         order: el.order,
@@ -109,26 +109,31 @@ export class ClassesService {
 
       return forkJoin([...observables$, observ$])
         .pipe(map((response: any) => {
-
-          console.log("response ", response);
           var clsName = classObj.name.toUpperCase();
           if (edit) {
             const clsIndex = _classes.findIndex(el => el.id === clsName);
             _classes[clsIndex] = {
               name: clsName,
               id: clsName,
-              desc: "",
+              desc: el.desc || '',
+              order: el.order,
+              amount: el.amount,
+              offer_price: el.offer_price ?? 0,
+
             }
           }
           else {
             _classes = [..._classes, {
               name: clsName,
               id: clsName,
-              desc: "",
+              desc: el.desc || '',
+              order: el.order,
+              amount: el.amount,
+              offer_price: el.offer_price ?? 0,
             }]
           }
           this._classes.next(_classes);
-          return response;
+          return { msg: "Class and subjects have been updated successfully" };
         }), catchError((error) => {
           return throwError(() => error.error ? error.error : error);
         }), tap((el) => {
@@ -162,6 +167,7 @@ export class ClassesService {
       )
     )
   }
+
   editSubject(classId, subject): Observable<any> {
     console.log("editSubject ", subject);
     const clsName = `${(classId).toUpperCase()}`;
@@ -187,7 +193,7 @@ export class ClassesService {
 
     return this._subjects.pipe(take(1),
       switchMap((_subjects: any) =>
-        forkJoin([,
+        forkJoin([
           subjectObservable$, classObservable$
         ])
           .pipe(map((response: any) => {
@@ -196,7 +202,7 @@ export class ClassesService {
             })
             _subjects[index] = { ...subject, name: subject.name.toUpperCase() };
             this._subjects.next(_subjects);
-            return response;
+            return { msg: "Subject have been updated successfully" };
           }), catchError((error) => {
             return throwError(() => error.error ? error.error : error);
           }), tap((el) => {
@@ -212,7 +218,6 @@ export class ClassesService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
     return this._subjects.pipe(take(1),
       switchMap((_subjects: any) =>
-        // of()
         this._httpClient.post(`${env.cloudBaseUrl}${env.endPoints.removeSubject}`,
           { classId: classId, subjectId: subject.id },
           { headers: headers, })

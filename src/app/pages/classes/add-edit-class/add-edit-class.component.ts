@@ -96,6 +96,7 @@ export class AddEditClassComponent implements OnInit {
       .pipe(tap((resp: any) => {
         return resp;
       })).subscribe((res: any) => {
+        console.log("res ", res);
         this.btnDisabled = false;
         this.showEditSection = false;
         this.btnText = this.actionText
