@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
-import { BehaviorSubject, catchError, map, mergeMap, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Observable } from 'rxjs/internal/Observable';
+import { BehaviorSubject, catchError, forkJoin, map, mergeMap, of, switchMap, take, tap, throwError, Observable } from 'rxjs';
+
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment as env } from '@env/environment';
@@ -65,52 +65,77 @@ export class ClassesService {
       );
   }
   addOrUpdate(classObj: any, subjects: any[], edit: boolean = false): Observable<any[]> {
+    const clsName = `${(classObj.name).toUpperCase()}`;
+    const id = classObj.id || clsName;
+    var el = {
+      "id": id,
+      "name": classObj.name,
+      "order": classObj.order ? classObj.order : 0,
+      "amount": classObj.amount ?? 0,
+      "offer_price": classObj.offer_price ?? 0,
+      "desc": "",
+      "subjects": subjects
 
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
-    var requestObj = {
-      "class": [
-        {
-          "id": classObj.id,
-          "name": classObj.name,
-          "order": classObj.order ? classObj.order : 0,
-          "amount": classObj.amount ?? 0,
-          "offer_price": classObj.offer_price ?? 0,
-          "desc": "",
-          "subjects": subjects
-        }]
     };
-    return this._classes.pipe(take(1),
-      switchMap((_classes: any) =>
-        this._httpClient.post(`${env.cloudBaseUrl}${env.endPoints.class}`,
-          requestObj,
-          { headers: headers })
-          .pipe(map((response: any) => {
-            var clsName = classObj.name.toUpperCase();
-            if (edit) {
-              const clsIndex = _classes.findIndex(el => el.id === clsName);
-              _classes[clsIndex] = {
-                name: clsName,
-                id: clsName,
-                desc: "",
-              }
+    let observables$: any[] = [];
+
+    return this._classes.pipe(take(1), switchMap((_classes) => {
+      var clsSubject: any = {};
+
+      observables$ = subjects.map((sub) => {
+        const subject = `${(sub.name).toUpperCase()}`;
+        const subjectId = sub.id || subject;
+        clsSubject[subjectId] = {
+          name: subject
+        }
+        var observable$ = this._firebaseService.setDoc(`classes/${id}/subjects/${subjectId}`, {
+          name: subject,
+          desc: sub.desc || '',
+          image: sub.image || '',
+          amount: sub.amount,
+          offer_price: sub.offer_price ? sub.offer_price : 0,
+        }, { merge: true });
+        return observable$;
+      });
+      console.log("observable ", observables$)
+      var observ$ = this._firebaseService.setDoc(`classes/${id}`, {
+        name: clsName,
+        order: el.order,
+        amount: el.amount,
+        offer_price: el.offer_price ?? 0,
+        desc: el.desc || '',
+        subjects: clsSubject,
+      }, { merge: true });
+
+      return forkJoin([...observables$, observ$])
+        .pipe(map((response: any) => {
+
+          console.log("response ", response);
+          var clsName = classObj.name.toUpperCase();
+          if (edit) {
+            const clsIndex = _classes.findIndex(el => el.id === clsName);
+            _classes[clsIndex] = {
+              name: clsName,
+              id: clsName,
+              desc: "",
             }
-            else {
-              _classes = [..._classes, {
-                name: clsName,
-                id: clsName,
-                desc: "",
-              }]
-            }
-            this._classes.next(_classes);
-            return response;
-          }), catchError((error) => {
-            return throwError(() => error.error ? error.error : error);
-          }), tap((el) => {
-            return el;
-          })
-          ),
-      )
-    )
+          }
+          else {
+            _classes = [..._classes, {
+              name: clsName,
+              id: clsName,
+              desc: "",
+            }]
+          }
+          this._classes.next(_classes);
+          return response;
+        }), catchError((error) => {
+          return throwError(() => error.error ? error.error : error);
+        }), tap((el) => {
+          return el;
+        })
+        )
+    }));
   }
 
   deleteClass(classId: any) {
@@ -138,12 +163,33 @@ export class ClassesService {
     )
   }
   editSubject(classId, subject): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
+    console.log("editSubject ", subject);
+    const clsName = `${(classId).toUpperCase()}`;
+    const subjectName = `${(subject.name).toUpperCase()}`;
+
+    const collection = `classes/${clsName}/subjects/${subject.id}`;
+    const classCollection = `classes/${clsName}`;
+    const subjectObj = {
+      name: subjectName,
+      desc: subject.desc || '',
+      image: subject.image || '',
+      amount: subject.amount,
+      offer_price: subject.offer_price ?? 0,
+    }
+    var updates: any = {}
+    updates[subject.id] = { name: subjectName }
+    const subjectObservable$ = this._firebaseService
+      .setDoc(collection, subjectObj, { merge: true });
+    const classObservable$ = this._firebaseService
+      .setDoc(classCollection, {
+        subjects: updates,
+      }, { merge: true });
+
     return this._subjects.pipe(take(1),
       switchMap((_subjects: any) =>
-        this._httpClient.post(`${env.cloudBaseUrl}${env.endPoints.editSubject}`,
-          { classId: classId, subject: subject },
-          { headers: headers, })
+        forkJoin([,
+          subjectObservable$, classObservable$
+        ])
           .pipe(map((response: any) => {
             var index = _subjects.findIndex((el) => {
               return el.id.toUpperCase() == subject.id.toUpperCase()
@@ -166,6 +212,7 @@ export class ClassesService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
     return this._subjects.pipe(take(1),
       switchMap((_subjects: any) =>
+        // of()
         this._httpClient.post(`${env.cloudBaseUrl}${env.endPoints.removeSubject}`,
           { classId: classId, subjectId: subject.id },
           { headers: headers, })

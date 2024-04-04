@@ -260,32 +260,6 @@ function getToken(students: any[], notification: any) {
     })
 }
 
-export const editSubject = functions.https.onRequest((req, res) => {
-    return cors(req, res, async () => {
-        const request = req.body;
-        const subject = request.subject;
-        const clsName = `${(request.classId).toUpperCase()}`;
-        const subjectName = `${(subject.name).toUpperCase()}`;
-        database.doc(`classes/${clsName}/subjects/${subject.id}`).
-            set({
-                name: subjectName,
-                desc: subject.desc || '',
-                image: subject.image || '',
-                amount: subject.amount,
-            }, { merge: true }).then(() => {
-                var updates: any = {}
-                updates[subject.id] = { name: subjectName }
-                database.doc(`classes/${clsName}`).set({
-                    subjects: updates,
-                }, { merge: true });
-                res.status(200).json({ msg: "Subject has updated successfully", data: req.body });
-            }, (error: any) => {
-                res.status(500).json(error);
-
-            });
-
-    })
-});
 
 export const removeSubject = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
@@ -300,13 +274,21 @@ export const removeSubject = functions.https.onRequest((req, res) => {
                 const key = `subjects.${request.subjectId}`;
                 var updates: any = {};
                 updates[key] = admin.firestore.FieldValue.delete(),
-                    database.doc(`classes/${request.classId}`).update(updates).then(() => {
-                        res.status(200).json({ msg: "Subject has been removed successfully", body: updates });
+                    database.collection(`editions`)
+                        .where("class", "==", request.classId)
+                        .where("subject", "==", request.subjectId)
+                        .get().then((querySnapshot) => {
+                            querySnapshot.forEach((document) => {
+                                document.ref.delete()
+                            });
+                        });
+                database.doc(`classes/${request.classId}`).update(updates).then(() => {
+                    res.status(200).json({ msg: "Subject has been removed successfully", body: updates });
 
-                    }, (error: any) => {
+                }, (error: any) => {
 
-                        res.status(500).json(error);
-                    });
+                    res.status(500).json(error);
+                });
             }, (error: any) => {
 
                 res.status(500).json(error);
@@ -381,6 +363,13 @@ export const removeClass = functions.https.onRequest((req, res) => {
                 yes: true,
                 force: true
             }).then(() => {
+                database.collection(`editions`)
+                    .where("class", "==", request.classId)
+                    .get().then((querySnapshot) => {
+                        querySnapshot.forEach((document) => {
+                            document.ref.delete()
+                        });
+                    });
                 res.status(200).json({ msg: 'Class and subjects deleted successfully' });
             }, (error: any) => {
                 res.status(500).json(error);
@@ -417,7 +406,7 @@ exports.scheduledPublish = functions.pubsub.schedule('05 00 * * *').timeZone('As
         database.collection('editions').where('published', '==', false).where('date', '<', now).get().then((snapshots) => {
             snapshots.forEach(doc => {
                 const path = doc.data().path;
-                promises.push(doc.ref.delete())
+                //promises.push(doc.ref.delete())
                 promises.push(database.doc(`${path}`).update(update))
             })
             Promise.all(promises).then(() => {
@@ -579,8 +568,11 @@ export const home = functions.https.onRequest(async (req, res) => {
             settings = snapshotToArray(settingsQuerySnapshot)[0];
             editions = snapshotToArray(editonsQuerySnapshot);
             lastReadEditons = snapshotToArray(lastReadQuerySnapshot);
-            console.log("last read ", lastReadEditons.length);
+            console.log("Editions ", editions);
+
             featuredEditions = groupByField(editions, 'featureTag');
+            console.log("featuredEditions ", featuredEditions);
+
             if (lastReadEditons.length) {
                 featuredEditions = [...featuredEditions, { key: "last read", items: lastReadEditons },];
             }

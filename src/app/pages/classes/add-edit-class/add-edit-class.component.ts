@@ -114,7 +114,7 @@ export class AddEditClassComponent implements OnInit {
   deleteSubject(subject: any) {
     this._confirmationService.open({
       message: `<div>Are you sure you want to confirm this action?</div>
-    <div>Added editions will be removed!</div>`
+    <div>Added subject will be removed!</div>`
     }).afterClosed().pipe(take(1),
       filter((result) => result),
       switchMap((response) => {
@@ -126,6 +126,7 @@ export class AddEditClassComponent implements OnInit {
     )
       .subscribe();
   }
+
   editSubject(subject) {
     this._matDialog.open(EditSubjectComponent, {
       data: subject
@@ -160,8 +161,9 @@ export class EditSubjectComponent implements OnInit {
   }
   submit() {
     var returnData = this.subject
-    if (this.subject.name.toUpperCase() == this.data.name.toUpperCase())
-      returnData = null
+    // if (this.subject.name.toUpperCase() == this.data.name.toUpperCase())
+    //   returnData = null
+    console.log(" submit => ", returnData)
     this.dialogRef.close(returnData)
   }
 
