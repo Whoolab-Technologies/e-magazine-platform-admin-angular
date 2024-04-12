@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FirebaseService, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
+import { FirebaseService, Where, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
 import { BehaviorSubject, catchError, forkJoin, map, mergeMap, of, switchMap, take, tap, throwError, Observable } from 'rxjs';
 
 
@@ -75,7 +75,8 @@ export class ClassesService {
       "amount": classObj.amount ?? 0,
       "offer_price": classObj.offer_price ?? 0,
       "desc": "",
-      "subjects": subjects
+      "subjects": subjects,
+      "expiry_date": classObj.expiry_date,
 
     };
     let observables$: any[] = [];
@@ -105,6 +106,7 @@ export class ClassesService {
         offer_price: el.offer_price ?? 0,
         desc: el.desc || '',
         subjects: clsSubject,
+        "expiry_date": el.expiry_date,
       }, { merge: true });
 
       return forkJoin([...observables$, observ$])

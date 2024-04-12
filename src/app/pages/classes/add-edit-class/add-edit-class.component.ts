@@ -4,6 +4,7 @@ import { ClassesService } from '../services/classes.service';
 import { Subject, catchError, filter, map, of, switchMap, take, takeLast, takeUntil, tap } from 'rxjs';
 import { ToastService } from '@app/shared/services/toast/toast.service';
 import { ConfirmationService } from '@app/shared/services/confirmation/confirmation.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-edit-class',
@@ -30,7 +31,7 @@ export class AddEditClassComponent implements OnInit {
     enabled: true
   };
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-
+  expiryDate;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _matDialog: MatDialog,
@@ -39,7 +40,15 @@ export class AddEditClassComponent implements OnInit {
     private _confirmationService: ConfirmationService,
     private dialogRef: MatDialogRef<AddEditClassComponent>
   ) {
+    this.expiryDate = moment().endOf("day")
+      .set({ month: 2, date: 31 });
 
+    // Check if March 31st has already passed this year
+    if (moment().isAfter(this.expiryDate, 'day')) {
+      // If it has passed, set the date to March 31st of the next year
+      this.expiryDate = this.expiryDate.add(1, 'year');
+    }
+    console.log(" this.expiryDate => ", this.expiryDate.toDate())
   }
 
   ngOnDestroy(): void {
@@ -53,9 +62,13 @@ export class AddEditClassComponent implements OnInit {
       this.btnText = "Update";
       this.isEdit = true
     }
+
+    this.classObj.expiry_date = (this.classObj.expiry_date) ? (moment(this.classObj.expiry_date?.toDate()).isValid ?
+      moment(this.classObj.expiry_date.toDate()).toDate() : this.classObj.expiry_date.toDate()) : this.expiryDate.toDate();
+
+    console.log("classObj => ", this.classObj);
     this.actionText = this.btnText;
     this._classService.subjects$.pipe(takeUntil(this._unsubscribeAll), map((subjects) => {
-      console.log("subjects ", subjects)
       subjects = subjects.map(el => { return { ...el, offer_price: el.offer_price ?? 0, } });
       var subj = []
       if (subjects.length) {
@@ -88,10 +101,10 @@ export class AddEditClassComponent implements OnInit {
       this._toastService.showInfoToastr("All Fields Are Required");
       return;
     }
-    this.btnText = "Please wait...";
-    this.btnDisabled = true
+    this.classObj.expiry_date = moment(this.classObj.expiry_date).endOf("day").toDate();
     console.log(".classObj ");
     console.log(this.classObj);
+
     this._classService.addOrUpdate(this.classObj, subjects, this.isEdit)
       .pipe(tap((resp: any) => {
         return resp;

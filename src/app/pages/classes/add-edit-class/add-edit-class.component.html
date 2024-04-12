@@ -10,10 +10,20 @@
                     <input matInput [(ngModel)]="classObj.name" required />
                 </mat-form-field>
             </div>
-            <div fxFlex="100">
+            <div fxFlex="45">
                 <mat-form-field style="width: 100%;" appearance='outline'>
                     <mat-label>Display Order</mat-label>
                     <input matInput type="number" [(ngModel)]="classObj.order" />
+                </mat-form-field>
+            </div>
+            <div fxFlex="45">
+                <mat-form-field appearance='outline' class="date-picker">
+                    <mat-label>Expiry Date</mat-label>
+                    <input matInput placeholder="MM/DD/YYYY" (click)="picker.open()" [(ngModel)]="classObj.expiry_date"
+                        [matDatepicker]="picker">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
             </div>
             <div fxFlex="45">

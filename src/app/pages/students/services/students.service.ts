@@ -36,6 +36,8 @@ export class StudentsService {
             self: true, status: false
           }
           students.map((el) => {
+            console.log("el] ", el.class);
+            console.log("classes[el.class] ", classes[el.class]);
             const subjects = classes[el.class]['subjects'];
             const keys = Object.keys(subjects);
             var stdSubjects = {}

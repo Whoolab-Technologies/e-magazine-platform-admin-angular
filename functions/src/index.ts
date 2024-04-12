@@ -8,11 +8,12 @@ const _rPayOption = {
 
     key_id: 'rzp_live_qs5T4yjZ2v0LQH',
     key_secret: '4Sh81NXb7qy0qBG15xIu1s7Z',
-
+    // key_id: 'rzp_test_PgXrQp07PbCOhm',
+    // key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
 }
 // const _rPayOptionTest = {
-//     key_id: 'rzp_test_PgXrQp07PbCOhm',
-//     key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
+// key_id: 'rzp_test_PgXrQp07PbCOhm',
+// key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
 // }
 // const _rPayOptionLive = {
 //     key_id: 'rzp_live_qs5T4yjZ2v0LQH',
@@ -296,59 +297,6 @@ export const removeSubject = functions.https.onRequest((req, res) => {
     })
 });
 
-
-export const createClass = functions.https.onRequest((req, res) => {
-    return cors(req, res, async () => {
-        let promises: any[] = [];
-        const request = req.body;
-        const classes = request.class;
-
-        classes.forEach((el: any) => {
-            const clsName = `${(el.name).toUpperCase()}`;
-            const id = el.id || clsName;
-            var clsSubject: any = {};
-            const subjects = el.subjects;
-            (subjects).forEach((sub: any) => {
-
-                const subject = `${(sub.name).toUpperCase()}`;
-                const subjectId = sub.id || subject;
-                clsSubject[subjectId] = {
-                    name: subject
-                }
-
-                const subRef = database.doc(`classes/${id}/subjects/${subjectId}`).
-                    set({
-                        name: subject,
-                        desc: sub.desc || '',
-                        image: sub.image || '',
-                        amount: sub.amount,
-                        offer_price: sub.offer_price ? sub.offer_price : 0,
-                    }, { merge: true })
-                promises.push(subRef);
-            });
-
-            const ref = database.doc(`classes/${id}`).set({
-                name: clsName,
-                order: el.order,
-                amount: el.amount,
-                offer_price: el.offer_price ?? 0,
-                desc: el.desc || '',
-                subjects: clsSubject,
-            }, { merge: true });
-            promises.push(ref);
-
-        });
-
-        Promise.all(promises).then((result) => {
-            res.status(200).json({ msg: 'Class and subjects have been created!' });
-        }, error => {
-
-            res.status(500).json(error);
-        });
-    })
-});
-
-
 export const removeClass = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         const request = req.body;
@@ -396,11 +344,13 @@ export const razorpayOrder = functions.https.onRequest((req, res) => {
         })
     });
 });
+
 exports.scheduledPublish = functions.pubsub.schedule('05 00 * * *').timeZone('Asia/Kolkata').onRun((context) => {
     const now = admin.firestore.Timestamp.now();
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         var promises: any = [];
         const update = { published: true };
+        updateExpiryStatus()
         database.collection('editions').where('published', '==', false).where('date', '<', now).get().then((snapshots) => {
             snapshots.forEach(doc => {
                 const path = doc.data().path;
@@ -417,6 +367,7 @@ exports.scheduledPublish = functions.pubsub.schedule('05 00 * * *').timeZone('As
         });
     });
 });
+
 export const createUser = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         //   const request = req.body;
@@ -542,73 +493,48 @@ export const phonePePay = functions.https.onRequest((req, res) => {
     });
 });
 
-export const home = functions.https.onRequest(async (req, res) => {
-    return cors(req, res, async () => {
-        const request = req.body;
-        const id = request.id;
-        const className = request.class;
-        const responseData: any = {
-            status: 1,
-            message: ""
+function updateExpiryStatus() {
+    return new Promise(async (resolve, reject) => {
+        //   try {
+
+        const now = admin.firestore.Timestamp.now();
+        const classesColltn = await database.collection('classes').where('expiry_date', '<', now).get();
+        let classIds: any[] = []
+        classesColltn.forEach(async (doc) => {
+            doc.ref.update({ expiry_date: null });
+            classIds.push(doc.id)
+
+        });
+
+        // const classIds = classesColltn.docs.map(async (doc) => {
+        //     // doc.ref.update({ expiry_date: null });
+        //     return doc.id;
+        // });
+        let students: any[] = []
+        console.log("classids ", classIds);
+        if (classIds.length) {
+            const studentsCollection = await database.collection('student').where('class', 'in', classIds).get();
+            studentsCollection.docs.map(async (doc) => {
+                const subjects = doc.data().subjects;
+                students.push(doc.id);
+                for (const key in subjects) {
+                    subjects[key]['status'] = false;
+                }
+                await doc.ref.update({
+                    subjects: subjects
+                });
+            });
         }
-        let settings: any;
-        let editions: any[] = [];
-        let featuredEditions: any[] = [];
-        let lastReadEditons: any[] = [];
-        try {
-            const settingsQuerySnapshot = await database.collection(`settings`).limit(1).get();
-            const editonsQuerySnapshot = await database.collection('editions')
-                .where('class', '==', className)
-                .get();
-            console.log("students/${id}/lastread ", `student/${id}/lastread`);
+        resolve({ now: now, classIds, students })
+        //   res.status(201).send({ now: now, classIds, students });
 
-            const lastReadQuerySnapshot = await database.collection(`student/${id}/lastread`).orderBy('readAt', 'desc').get();
-            settings = snapshotToArray(settingsQuerySnapshot)[0];
-            editions = snapshotToArray(editonsQuerySnapshot);
-            lastReadEditons = snapshotToArray(lastReadQuerySnapshot);
-            console.log("Editions ", editions);
+        // } catch (error: any) {
+        //     res.status(error.code || 400).send(error);
 
-            featuredEditions = groupByField(editions, 'featureTag');
-            console.log("featuredEditions ", featuredEditions);
+        // }
 
-            if (lastReadEditons.length) {
-                featuredEditions = [...featuredEditions, { key: "last read", items: lastReadEditons },];
-            }
-            responseData['data'] = { settings: settings, featuredEditions: featuredEditions.sort((a, b) => a.key.localeCompare(b.key)) }
-            res.status(200).send(responseData)
-        } catch (error: any) {
-            responseData['status'] = 0;
-            responseData['message'] = error.toString();
-            res.status(error.code || 400).send(responseData);
-        }
-    })
-});
-
-function snapshotToArray(snapshot: any) {
-    let returnArr: any = [];
-    snapshot.forEach((childSnapshot: any) => {
-        let item = childSnapshot.data();
-        item.id = childSnapshot.id;
-        returnArr.push(item);
     });
-
-    return returnArr;
-};
-function groupByField(arr: any[], field: string) {
-    return arr.reduce(function (acc, obj) {
-        var fieldValue = obj[field];
-        if (fieldValue) { // Check if fieldValue is not null or undefined
-            var found = acc.find((item: any) => item.key === fieldValue);
-            if (!found) {
-                acc.push({ key: fieldValue, items: [obj] });
-            } else {
-                found.items.push(obj);
-            }
-        }
-        return acc;
-    }, []);
 }
-
 
 function getSHA512Hash(hashData: string) {
 

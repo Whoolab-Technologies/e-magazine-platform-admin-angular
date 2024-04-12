@@ -19,6 +19,7 @@ export interface Where {
   providedIn: 'root'
 })
 export class FirebaseService {
+  firestore = getFirestore(app);
   private db = getFirestore(app);
   private appAuth = getAuth(app);
   private firebaseStorage = getStorage(app);
