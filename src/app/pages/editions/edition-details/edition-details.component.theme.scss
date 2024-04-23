@@ -9,8 +9,6 @@
     $warn: map.get($color-config, 'warn');
 
     .add-editions {
-        &__card {}
-
         &__header-item {
             padding: 24px 24px 8px;
             font-size: $fs-medium;
@@ -29,6 +27,7 @@
 
         .select-section,
         .selected-file {
+            width: 100%;
             font-size: $fs-small;
             font-weight: $fw-lighter;
 

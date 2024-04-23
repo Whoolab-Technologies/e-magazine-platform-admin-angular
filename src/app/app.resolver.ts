@@ -4,7 +4,7 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
-import { Observable, forkJoin, of, switchMap } from 'rxjs';
+import { Observable, catchError, forkJoin, switchMap } from 'rxjs';
 import { AuthService } from '@app/shared/services/auth/auth.service';
 import { SettingsService } from './pages/settings/service/settings.service';
 
@@ -13,7 +13,8 @@ import { SettingsService } from './pages/settings/service/settings.service';
 })
 export class InitialDataResolver implements Resolve<boolean> {
   constructor(private _authService: AuthService,
-    private _setingsService: SettingsService
+    private _setingsService: SettingsService,
+    private _router: Router,
   ) {
 
   }
@@ -23,6 +24,15 @@ export class InitialDataResolver implements Resolve<boolean> {
     ])
       .pipe(switchMap((resp) => {
         return this._setingsService.loadSettings()
-      }))
+      }),
+        catchError((error) => {
+          this._authService.signOut()
+          const parentUrl = state.url.split('/').slice(0, -1).join('/');
+
+          // Navigate to there
+          this._router.navigateByUrl(parentUrl);
+          throw new Error(error);
+        })
+      )
   }
 }

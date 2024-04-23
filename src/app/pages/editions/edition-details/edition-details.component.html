@@ -76,9 +76,30 @@
                     <div fxFlex="100" class="m-5">
                         <div fxLayout="row wrap" fxLayoutAlign="space-between">
 
-                            <div fxFlex="45" class="text-center">
+                            <div fxFlex="30" class="text-center">
+                                <input type="file" hidden #pdfFileInput (change)="overviewPdfFileChangeEvent($event)" />
+                                <div class="pdf-wrapper">
+                                    <ng-template #overviewPdfSelector>
+                                        <span (click)="pdfFileInput.click()">
+                                            <mat-icon class="image-upload">picture_as_pdf</mat-icon>
+                                            <ng-container *ngIf="overviewPdfFile else selectoverviewPdfTemplete">
+                                                <div class="selected-file"> {{overviewPdfFile}}</div>
+
+                                            </ng-container>
+                                            <ng-template #selectoverviewPdfTemplete>
+                                                <div class="select-section"> Select Edition Overview PDF</div>
+                                            </ng-template>
+                                        </span>
+                                    </ng-template>
+                                    <ng-container *ngIf="isoverviewPdfFileUploading else overviewPdfSelector">
+                                        <app-loader></app-loader>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                            <div fxFlex="30" class="text-center">
                                 <input type="file" hidden #pdfFileInput (change)="pdfFileChangeEvent($event)" />
-                                <div class="image-wrapper">
+                                <div class="pdf-wrapper">
                                     <ng-template #topicPdfSelector>
                                         <span (click)="pdfFileInput.click()">
                                             <mat-icon class="image-upload">picture_as_pdf</mat-icon>
@@ -96,7 +117,8 @@
                                     </ng-container>
                                 </div>
                             </div>
-                            <div fxFlex="45">
+
+                            <div fxFlex="30" class="text-center">
                                 <div fxLayout="row wrap" fxLayoutAlign="space-between">
                                     <div fxFlex="30" class="text-center">
                                         <div class="image-wrapper">
@@ -113,17 +135,16 @@
                                             </ng-container>
                                         </div>
                                     </div>
-                                    <div fxFlex="70" style="display: flex; align-items: center;">
+                                    <div fxFlex="65" style="display: flex; align-items: center;">
                                         <input type="file" hidden #editionFileInput
                                             (change)="editionFileChangeEvent($event)" />
 
-                                        <mat-form-field appearance='outline'>
+                                        <mat-form-field appearance='outline' (click)="editionFileInput.click()">
                                             <mat-label>{{edition.image? 'update Poster':'Select Poster'}}</mat-label>
                                             <input matInput placeholder="Select Image" [(ngModel)]="editionImage"
-                                                readonly (click)="editionFileInput.click()">
+                                                readonly>
 
                                         </mat-form-field>
-
 
                                     </div>
                                 </div>

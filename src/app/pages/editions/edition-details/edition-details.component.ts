@@ -40,7 +40,9 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   isTopicFileUploading: boolean = false;
 
   topicPdfFile: any = null;
+  overviewPdfFile: any = null;
   isTopicPdfFileUploading: boolean = false;
+  isoverviewPdfFileUploading: boolean = false;
 
   editionImage: any = null;
   isEditionImageUploading: boolean = false;
@@ -205,6 +207,34 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  overviewPdfFileChangeEvent(event) {
+
+    if (event.target.files && event.target.files.length) {
+      const file = event.target.files[0];
+      if (file.type == 'application/pdf') {
+        this.isoverviewPdfFileUploading = true
+
+        this.uploadFile("editions/pdf", file).pipe(map(url => {
+          return url;
+        }
+        )).subscribe((url: any) => {
+
+          this.edition.overviewPdf = url;
+          this.edition.overviewPdfFileName = file.name;
+          this.overviewPdfFile = file.name;
+          this.isoverviewPdfFileUploading = false
+
+        }, (_error) => {
+          this.isoverviewPdfFileUploading = false
+
+        });
+      }
+      else {
+        this._toastService.showInfoToastr("Please select PDF file", this.toastrPositionTypes.bottomRight)
+      }
+    }
+  }
+
   uploadFile(path, file): any {
     return this._appService.uploadImage(path, file).pipe(filter(resp => resp), map(resp => {
       return resp;
@@ -221,8 +251,11 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     this.edition['image'] = '';
     this.edition['topicCount'] = 0;
     this.edition['topics'] = [];
+    this.edition['overviewPdf'] = '';
+    this.edition['overviewPdfFileName'] = '';
     this.editionImage = null;
     this.topicPdfFile = null;
+    this.overviewPdfFile = null;
   }
 
   editEdition() {

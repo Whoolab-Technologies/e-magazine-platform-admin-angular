@@ -6,10 +6,10 @@ const Razorpay = require('razorpay');
 var crypto = require('crypto');
 const _rPayOption = {
 
-    key_id: 'rzp_live_qs5T4yjZ2v0LQH',
-    key_secret: '4Sh81NXb7qy0qBG15xIu1s7Z',
-    // key_id: 'rzp_test_PgXrQp07PbCOhm',
-    // key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
+    // key_id: 'rzp_live_qs5T4yjZ2v0LQH',
+    // key_secret: '4Sh81NXb7qy0qBG15xIu1s7Z',
+    key_id: 'rzp_test_PgXrQp07PbCOhm',
+    key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
 }
 // const _rPayOptionTest = {
 // key_id: 'rzp_test_PgXrQp07PbCOhm',
@@ -405,23 +405,15 @@ export const verifyOtp = functions.https.onRequest((req, res) => {
             }
             else {
                 let data = doc.data()
-                functions.logger.info("data.date ", { structuredData: true });
-                functions.logger.info((data.date).toDate(), { structuredData: true });
                 const givenTime = moment(data.date.toDate());
 
                 // Get the current time
                 const currentTime = moment();
-                functions.logger.info("givenTime ", { structuredData: true });
-                functions.logger.info(givenTime, { structuredData: true });
-                functions.logger.info("currentTime ", { structuredData: true });
-                functions.logger.info(currentTime, { structuredData: true });
+
                 const timeDifferenceInMillis = givenTime.diff(currentTime);
-                functions.logger.info("timeDifferenceInMillis ", { structuredData: true });
-                functions.logger.info(timeDifferenceInMillis, { structuredData: true });
+
                 // Convert milliseconds to minutes
                 const timeDifferenceInMinutes = Math.abs(moment.duration(timeDifferenceInMillis).asMinutes());
-                functions.logger.info("timeDifferenceInMinutes ", { structuredData: true });
-                functions.logger.info(timeDifferenceInMinutes, { structuredData: true });
                 if (timeDifferenceInMinutes > 10) {
                     res.status(400).send({
                         success: 0,
@@ -429,7 +421,7 @@ export const verifyOtp = functions.https.onRequest((req, res) => {
                         text: 'Otp Expired',
                     });
                 }
-                else if (data.otp == request.code) {
+                else if (data.code == request.code) {
                     doc.ref.delete();
                     res.status(201).send({
                         success: 0,

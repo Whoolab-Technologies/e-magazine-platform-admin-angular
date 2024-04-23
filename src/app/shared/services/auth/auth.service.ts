@@ -128,12 +128,20 @@ export class AuthService {
   getMyDetails() {
     return this._firebaseService.getDocument(`admin`, this.uid).pipe(
       map((response) => {
-        return snapshot(response);
+        if (response.exists())
+          return snapshot(response);
+        else {
+
+          throw new Error("Wrong username or password");
+        }
       }),
       switchMap((response: any) => {
         this._authenticated = true;
         this._userService.user = response;
+
         return of(response);
+      },), catchError((error) => {
+        return throwError(() => error);
       })
     );
   }

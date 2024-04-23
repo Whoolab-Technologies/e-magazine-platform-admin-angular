@@ -9,8 +9,10 @@ import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms
 export class LoginFormComponent implements OnInit {
   @Output() sendLoginForm = new EventEmitter<void>();
   public form: UntypedFormGroup;
-  public flatlogicEmail = 'admin@ez-lessons.com';
-  public flatlogicPassword = 'admin@1234';
+  //public flatlogicEmail = 'admin@ez-lessons.com';
+  //public flatlogicPassword = 'admin@1234'; 
+  public flatlogicEmail = '';
+  public flatlogicPassword = '';
 
   public ngOnInit(): void {
     this.form = new UntypedFormGroup({
