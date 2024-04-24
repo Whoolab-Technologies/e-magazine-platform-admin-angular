@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService, snapshotToArray, snapshotToObj } from '@services/firebase/firebase.service';
-import { BehaviorSubject, Observable, catchError, combineLatest, concatMap, map, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, combineLatest, concatMap, forkJoin, map, switchMap, take, tap } from 'rxjs';
 import { Student } from '@app/pages/students/models/student';
 
 @Injectable({
@@ -72,5 +72,30 @@ export class StudentsService {
           return response;
         }),),
       ),)
+  }
+
+  deleteStudents(students) {
+    return this._students.pipe(take(1),
+      switchMap((_students: any) => {
+        const observables: Observable<any>[] = [];
+        students.forEach((student) => {
+          observables.push(this._firebaseService.removeDocument(`student`, `${student.id}`));
+
+        });
+        return forkJoin(observables).pipe(map((el) => {
+          console.log(" forkJoin el ", el)
+          return _students;
+        }))
+
+      }), map((_students) => {
+
+        _students = _students.filter((student) =>
+          !students.some(obj => obj.id === student.id)
+        )
+        console.log(" map el ", _students)
+
+        this._students.next(_students);
+        return _students;
+      }))
   }
 }

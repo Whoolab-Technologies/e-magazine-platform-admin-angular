@@ -180,7 +180,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
 
 
   pdfFileChangeEvent(event) {
-
+    console.log("pdfFileChangeEvent")
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0];
       if (file.type == 'application/pdf') {

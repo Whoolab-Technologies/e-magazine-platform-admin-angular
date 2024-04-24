@@ -1,17 +1,41 @@
 <div class="students">
     <mat-card class="students-table">
         <mat-card-title class="students-table__header">
-            <!-- <h5 class="students-table__title">Material-UI Table</h5> -->
+            <div class="students-table__btn">
+                <button mat-flat-button color="warn" [disabled]="!selection.selected.length"
+                    (click)="delete(selection.selected)">Delete</button>
+            </div>
         </mat-card-title>
+
 
         <mat-card-content class="students-table__content">
 
             <table mat-table [dataSource]="dataSource" class="students-table__table">
                 <ng-container *ngFor="let column of displayedColumns" matColumnDef="{{column}}"
                     class="students-table__table-row">
-                    <th mat-header-cell *matHeaderCellDef class="students-table__table-row-title">{{column}}</th>
+                    <th mat-header-cell *matHeaderCellDef class="students-table__table-row-title">
+                        <container-element [ngSwitch]="column">
+                            <span *ngSwitchCase="'select'">
+                                <ng-container>
+                                    <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                        [checked]="selection.hasValue() && isAllSelected()"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                    </mat-checkbox>
+                                </ng-container>
+                            </span>
+                            <span *ngSwitchDefault> {{column}}</span>
+                        </container-element>
+                    </th>
                     <td mat-cell *matCellDef="let element; let i=index" class="students-table__table-content">
                         <container-element [ngSwitch]="column">
+                            <span *ngSwitchCase="'select'">
+                                <ng-container>
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(element) : null"
+                                        [checked]="selection.isSelected(element)">
+                                    </mat-checkbox>
+                                </ng-container>
+                            </span>
                             <span *ngSwitchCase="'subjects'">
                                 <ng-container *ngFor="let subject of  ( element[column] | toArray) ">
                                     <span class="students-table__content-badge "
@@ -20,6 +44,11 @@
                                         <span>{{subject.value.name}}</span>
                                     </span>
                                 </ng-container>
+                            </span>
+
+                            <span *ngSwitchCase="'actions'">
+                                <app-action [view]="false" [edit]="false" [data]="element" [id]="element.id"
+                                    (onDelete)="delete($event)"></app-action>
                             </span>
                             <span *ngSwitchDefault> {{element[column]}}</span>
                         </container-element>

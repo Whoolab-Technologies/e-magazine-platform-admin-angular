@@ -8,6 +8,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 
 import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
+import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/materia
   ],
   imports: [
     CommonModule,
-    StudentsRoutingModule, SharedModule, MatTableModule, MatPaginatorModule,
+    StudentsRoutingModule, SharedModule, MatTableModule, MatPaginatorModule, MatCheckboxModule,
   ]
 })
 export class StudentsModule { }

@@ -53,24 +53,10 @@ exports.listenDeviceChange = functions.firestore
             const beforeData = change.before.data()
             const afterData = change.after.data()
             let tokens = [];
-            functions.logger.log("beforeData: ", {
-                data: beforeData
-            });
-            functions.logger.log("afterData: ", {
-                data: afterData
-            });
-
             if (afterData.currentDevice && beforeData.currentDevice != afterData.currentDevice) {
-                functions.logger.log("inside if:");
                 tokens = afterData.tokens
-                functions.logger.log("inside if tokens: ", tokens);
-
                 const indx = tokens.indexOf(afterData.currentDevice)
-                functions.logger.log("inside if indx: ", indx);
-
                 tokens.splice(indx, 1);
-                functions.logger.log("inside if after delete tokens: ", tokens);
-
             }
             const payload = {
                 notification: {
@@ -84,10 +70,8 @@ exports.listenDeviceChange = functions.firestore
             if (tokens.length) {
                 admin.messaging().sendToDevice([...tokens], payload).then((success) => {
                     resolve({ message: 'Notifications send successfully' })
-                    functions.logger.log("Notifications send successfully");
 
                 }, (error) => {
-                    functions.logger.log("Notifications error : ", error);
 
                     reject(error)
                 })
@@ -172,6 +156,28 @@ exports.listenStudent = functions.firestore
             }
         })
 
+    });
+
+
+exports.listenDeleteStudent = functions.firestore
+    .document('student/{studentId}')
+    .onDelete(async (_, context) => {
+        return new Promise(async (resolve, reject) => {
+            client.firestore
+                .delete(`student/${context.params.studentId}`, {
+                    project: process.env.GCLOUD_PROJECT,
+                    recursive: true,
+                    yes: true,
+                    force: true
+                }).then(() => {
+                    console.log("listenDeleteStudent deleted ");
+                    resolve(true)
+                }, (error: any) => {
+
+                    console.log("listenDeleteStudent ", error);
+                    reject(error)
+                });
+        });
     });
 
 // exports.listenEdition = functions.firestore
@@ -450,6 +456,23 @@ export const verifyOtp = functions.https.onRequest((req, res) => {
     });
 });
 
+export const updateRole = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        const request = req.body;
+        const customClaims = {
+            admin: true
+        }
+        try {
+            await auth.setCustomUserClaims(request.uid, customClaims);
+            const userRecord = await auth.getUser(request.uid);
+            res.status(204).send(userRecord);
+        } catch (error: any) {
+            res.status(error.code || 400).send(error);
+
+        }
+
+    });
+});
 export const phonePePay = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         try {
@@ -503,7 +526,6 @@ function updateExpiryStatus() {
         //     return doc.id;
         // });
         let students: any[] = []
-        console.log("classids ", classIds);
         if (classIds.length) {
             const studentsCollection = await database.collection('student').where('class', 'in', classIds).get();
             studentsCollection.docs.map(async (doc) => {

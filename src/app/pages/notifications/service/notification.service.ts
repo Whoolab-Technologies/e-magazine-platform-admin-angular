@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
-import { BehaviorSubject, Observable, mergeMap, of, map, tap, take, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, mergeMap, of, map, tap, take, switchMap, forkJoin } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { environment as env } from '@env/environment';
 @Injectable({
@@ -103,6 +103,7 @@ export class NotificationService {
 
   createNotification(notification, students) {
     const data = JSON.parse(JSON.stringify(notification))
+    data["students"] = students;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
     const path = `notifications`;
     return this._notifications.pipe(take(1),
@@ -122,5 +123,36 @@ export class NotificationService {
       )
     )
   }
+  deleteNotification(notifications) {
+    return this._notifications.pipe(take(1),
+      switchMap((_notifications: any) => {
+        const observables: Observable<any>[] = [];
+        notifications.forEach((notification) => {
+          console.log("  notification ", notification)
+          observables.push(this._firebaseService.removeDocument(`notifications`, `${notification.id}`));
+          const students = notification.students || [];
+          console.log("  students ", students)
+          students.forEach((el) => {
+            observables.push(this._firebaseService.removeDocument(`students/${el}/notifications`, `${notification.id}`));
+
+          });
+        });
+        return forkJoin(observables).pipe(map((el) => {
+          console.log(" forkJoin el ", el)
+          return _notifications;
+        }))
+      }), map((_notifications) => {
+
+        _notifications = _notifications.filter((notification) =>
+          !notifications.some(obj => obj.id === notification.id)
+        )
+        console.log(" map el ", _notifications)
+
+        this._notifications.next(_notifications);
+        return _notifications
+      })
+    )
+  }
+
 
 }

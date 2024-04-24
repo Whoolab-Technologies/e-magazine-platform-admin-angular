@@ -56,6 +56,10 @@
             &__btn {
                 text-align: right;
                 width: 100%;
+
+                .mat-flat-button {
+                    margin-right: 2rem;
+                }
             }
 
 
@@ -70,7 +74,7 @@
             &__table-row-title {
                 color: $dark-grey;
                 font-size: $fs-small;
-                font-weight: $fw-lighter;
+                font-weight: $fw-bold;
                 line-height: 24px;
                 text-transform: uppercase;
                 padding: 16px;

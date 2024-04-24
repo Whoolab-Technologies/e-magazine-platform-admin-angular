@@ -29,50 +29,21 @@
                     </div>
                     <div fxFlex="45">
                         <mat-form-field appearance='outline'>
-                            <mat-label> Edition</mat-label>
-                            <input matInput placeholder="Edition Name" [(ngModel)]="edition.name" required>
+                            <mat-label> Title</mat-label>
+                            <input matInput placeholder="Edition title" [(ngModel)]="edition.name" required>
 
                         </mat-form-field>
                     </div>
                     <div fxFlex="45">
                         <mat-form-field appearance='outline'>
-                            <mat-label>Description</mat-label>
+                            <mat-label>Subtitle</mat-label>
                             <textarea matInput [(ngModel)]="edition.desc" cdkTextareaAutosize
-                                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
-                                required></textarea>
+                                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                                cdkAutosizeMaxRows="5"></textarea>
                         </mat-form-field>
                     </div>
 
-                    <div fxFlex="45">
-                        <mat-form-field appearance='outline'>
-                            <mat-label> Price</mat-label>
-                            <input matInput placeholder="Edition Amount" [(ngModel)]="edition.amount" required>
 
-                        </mat-form-field>
-                    </div>
-
-                    <div fxFlex="45">
-                        <div fxLayout="row wrap" fxLayoutAlign="space-between">
-                            <div fxFlex="30">
-                                <mat-slide-toggle labelPosition="before" color="accent" name="published"
-                                    [(ngModel)]="edition.published"> <ng-container *ngIf="edit else next">
-                                        {{published? 'Published': 'Publish Now'}}
-                                    </ng-container>
-                                    <ng-template #next> Publish Now</ng-template>
-                                </mat-slide-toggle>
-                            </div>
-                            <div fxFlex="70">
-                                <mat-form-field appearance='outline' class="date-picker" *ngIf="!edition.published">
-
-                                    <input matInput placeholder="MM/DD/YYYY" (click)="picker.open()"
-                                        [(ngModel)]="publishDate" [matDatepicker]="picker">
-                                    <mat-hint>MM/DD/YYYY</mat-hint>
-                                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker></mat-datepicker>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
                     <div fxFlex="100" class="m-5">
                         <div fxLayout="row wrap" fxLayoutAlign="space-between">
 
@@ -87,7 +58,7 @@
 
                                             </ng-container>
                                             <ng-template #selectoverviewPdfTemplete>
-                                                <div class="select-section"> Select Edition Overview PDF</div>
+                                                <div class="select-section"> Contents Page</div>
                                             </ng-template>
                                         </span>
                                     </ng-template>
@@ -98,10 +69,10 @@
                             </div>
 
                             <div fxFlex="30" class="text-center">
-                                <input type="file" hidden #pdfFileInput (change)="pdfFileChangeEvent($event)" />
+                                <input type="file" hidden #pdfFileInputField (change)="pdfFileChangeEvent($event)" />
                                 <div class="pdf-wrapper">
                                     <ng-template #topicPdfSelector>
-                                        <span (click)="pdfFileInput.click()">
+                                        <span (click)="pdfFileInputField.click()">
                                             <mat-icon class="image-upload">picture_as_pdf</mat-icon>
                                             <ng-container *ngIf="topicPdfFile else selectPdfTemplete">
                                                 <div class="selected-file"> {{topicPdfFile}}</div>
@@ -126,8 +97,9 @@
                                                 <ng-container *ngIf="edition.image else imageSelector">
                                                     <img [src]="edition.image" (click)="openFile(edition.image)" />
                                                 </ng-container>
-                                                <ng-template #imageSelector (click)="editionFileInput.click()">
-                                                    <mat-icon class="image-upload">photo_library</mat-icon>
+                                                <ng-template #imageSelector>
+                                                    <mat-icon (click)="editionFileInput.click()"
+                                                        class="image-upload">photo_library</mat-icon>
                                                 </ng-template>
                                             </ng-template>
                                             <ng-container *ngIf="isEditionImageUploading else editionImageSelector">
@@ -171,6 +143,28 @@
                                         <mat-option *ngFor="let item of settings.specialTags" [value]="item">{{ item
                                             }}</mat-option>
                                     </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div fxFlex="45" class="m-5">
+                        <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                            <div fxFlex="30">
+                                <mat-slide-toggle labelPosition="before" color="accent" name="published"
+                                    [(ngModel)]="edition.published"> <ng-container *ngIf="edit else next">
+                                        {{published? 'Published': 'Publish Now'}}
+                                    </ng-container>
+                                    <ng-template #next> Publish Now</ng-template>
+                                </mat-slide-toggle>
+                            </div>
+                            <div fxFlex="70">
+                                <mat-form-field appearance='outline' class="date-picker" *ngIf="!edition.published">
+
+                                    <input matInput placeholder="MM/DD/YYYY" (click)="picker.open()"
+                                        [(ngModel)]="publishDate" [matDatepicker]="picker">
+                                    <mat-hint>MM/DD/YYYY</mat-hint>
+                                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
                                 </mat-form-field>
                             </div>
                         </div>
