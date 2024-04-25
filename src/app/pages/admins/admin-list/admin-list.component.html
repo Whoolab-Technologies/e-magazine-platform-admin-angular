@@ -1,0 +1,59 @@
+<div class="admins">
+    <mat-card class="admins-table">
+        <mat-card-title class="admins-table__header">
+            <div class="admins-table__btn">
+                <button mat-flat-button color="warn" [disabled]="!selection.selected.length"
+                    (click)="delete(selection.selected)">Delete</button>
+                <button mat-flat-button color="primary" (click)="adsOrEdit('new')">Create</button>
+            </div>
+        </mat-card-title>
+
+
+        <mat-card-content class="admins-table__content">
+
+            <table mat-table [dataSource]="dataSource" class="admins-table__table">
+                <ng-container *ngFor="let column of displayedColumns" matColumnDef="{{column}}"
+                    class="admins-table__table-row">
+                    <th mat-header-cell *matHeaderCellDef class="admins-table__table-row-title">
+                        <container-element [ngSwitch]="column">
+                            <span *ngSwitchCase="'select'">
+                                <ng-container>
+                                    <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                        [checked]="selection.hasValue() && isAllSelected()"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                    </mat-checkbox>
+                                </ng-container>
+                            </span>
+                            <span *ngSwitchDefault> {{column}}</span>
+                        </container-element>
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i=index" class="admins-table__table-content">
+                        <container-element [ngSwitch]="column">
+                            <span *ngSwitchCase="'select'">
+                                <ng-container>
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(element) : null"
+                                        [checked]="selection.isSelected(element)">
+                                    </mat-checkbox>
+                                </ng-container>
+                            </span>
+                            <span *ngSwitchCase="'actions'">
+                                <app-action [view]="false" [edit]="false" [data]="element" [id]="element.id"
+                                    (onDelete)="delete($event)"></app-action>
+                            </span>
+                            <span *ngSwitchDefault> {{element[column]}}</span>
+                        </container-element>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <ng-container *ngIf="!dataSource.data || !dataSource.data.length">
+                <div class="admins-table__content__no-content ">
+                    No data found
+                </div>
+            </ng-container>
+        </mat-card-content>
+    </mat-card>
+</div>

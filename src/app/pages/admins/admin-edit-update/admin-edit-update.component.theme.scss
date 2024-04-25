@@ -1,0 +1,58 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@import '/src/assets/styles/styles';
+
+@mixin color($theme) {
+    $color-config: mat.get-color-config($theme);
+    $primary: map.get($color-config, 'primary');
+    $accent: map.get($color-config, 'accent');
+    $warn: map.get($color-config, 'warn');
+
+    .add-admins {
+        &__header-item {
+            padding: 24px 24px 8px;
+            font-size: $fs-medium;
+            font-weight: $fw-lighter;
+            border-bottom: .2px solid $light-grey;
+        }
+
+        .mat-card-content {
+            padding: 20px 0 0 0;
+        }
+
+        &__form-section,
+        &__topics {
+            padding: 20px 0;
+        }
+
+        .select-section,
+        .selected-file {
+            width: 100%;
+            font-size: $fs-small;
+            font-weight: $fw-lighter;
+
+        }
+
+        .select-section {
+            color: mat.get-color-from-palette($warn);
+        }
+
+        .selected-file {
+            color: mat.get-color-from-palette($primary);
+        }
+
+        .m-5 {
+            margin-top: 12px;
+        }
+    }
+
+}
+
+@mixin theme($theme) {
+    $color-config: mat.get-color-config($theme);
+
+    @if $color-config !=null {
+        @include color($theme);
+    }
+
+}

@@ -47,4 +47,11 @@ export const menu = [
     icon: 'settings',
     link: '/settings',
   },
+  {
+    id: 'admins',
+    title: 'Admins',
+    type: 'basic',
+    icon: 'admin_panel_settings',
+    link: '/admins',
+  },
 ];

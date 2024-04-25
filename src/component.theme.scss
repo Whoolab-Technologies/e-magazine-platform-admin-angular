@@ -13,6 +13,8 @@
 @use '/src/app/pages/classes/class-list/class-list.component.theme.scss' as classes;
 @use '/src/app/pages/classes/add-edit-class/add-edit-class.component.theme.scss' as add-edit-class;
 @use '/src/app/pages/settings/component/settings/settings.component.theme.scss' as settings;
+@use '/src/app/pages/admins/admin-list/admin-list.component.theme.scss' as admins;
+@use '/src/app/pages/admins/admin-edit-update/admin-edit-update.component.theme.scss' as edit-admin;
 
 @mixin app-component($theme) {
     @include header.theme($theme);
@@ -29,5 +31,7 @@
     @include add-edit-class.theme($theme);
     @include edition-video.theme($theme);
     @include settings.theme($theme);
+    @include admins.theme($theme);
+    @include edit-admin.theme($theme);
 
 }

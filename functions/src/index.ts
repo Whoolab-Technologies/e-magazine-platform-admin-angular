@@ -84,18 +84,23 @@ exports.listenDeviceChange = functions.firestore
 export const createAdmin = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         const request = req.body;
+        const admin = request.admin;
+        const { name, email } = admin;
         auth.createUser({
-            email: request.email,
+            email: email,
             emailVerified: false,
             password: request.password,
-            displayName: request.name,
+            displayName: name,
             disabled: false,
-        }).then((usrRecord) => {
-            database.doc(`admin/${usrRecord.uid}`).set({
-                name: usrRecord.displayName,
-                email: usrRecord.email,
-            }).then(() => {
-                res.status(200).json({ msg: 'Admin has been created!' });
+        }).then(async (usrRecord) => {
+            const customClaims = {
+                admin: true
+            }
+            await auth.setCustomUserClaims(request.uid, customClaims);
+
+            database.doc(`admin/${usrRecord.uid}`).set({ name, email }).then(() => {
+                database.doc(`student/${usrRecord.uid}`).set(admin)
+                res.status(200).json({ uid: usrRecord.uid, msg: 'Admin has been created!' });
 
             }, error => {
                 auth.deleteUser(usrRecord.uid);
@@ -158,6 +163,19 @@ exports.listenStudent = functions.firestore
 
     });
 
+exports.listenAdminDelete = functions.firestore
+    .document('admin/{id}')
+    .onDelete(async (_, context) => {
+        return new Promise(async (resolve, reject) => {
+            auth.deleteUser(`${context.params.id}`).then(() => {
+                console.log("listenAdminDelete deleted");
+                resolve(true)
+            }, (error) => {
+                console.log("listenAdminDelete ", error);
+                reject(error)
+            })
+        });
+    });
 
 exports.listenDeleteStudent = functions.firestore
     .document('student/{studentId}')
@@ -170,6 +188,7 @@ exports.listenDeleteStudent = functions.firestore
                     yes: true,
                     force: true
                 }).then(() => {
+                    auth.deleteUser(`${context.params.studentId}`);
                     console.log("listenDeleteStudent deleted ");
                     resolve(true)
                 }, (error: any) => {
@@ -179,33 +198,6 @@ exports.listenDeleteStudent = functions.firestore
                 });
         });
     });
-
-// exports.listenEdition = functions.firestore
-//     .document('classes/{className}/subjects/{subject}/editions/{edition}')
-//     .onWrite(async (change, _context) => {
-//         const afterData = change.after.data();
-//         const beforeData = change.before.data();
-//         if (!beforeData) {
-//             return true;
-
-//         }
-//         if (!afterData) {
-//             await database.doc(`editions/${beforeData.docId}`).delete();
-//             return true;
-//         }
-//         if (beforeData && afterData) {
-//             const update: any = {}
-//             if (beforeData.date != afterData.date)
-//                 update['date'] = afterData.date;
-//             if (beforeData.published != afterData.published)
-//                 update['published'] = afterData.published;
-//             await database.doc(`editions/${beforeData.docId}`).update(update);
-//             return true;
-//         }
-//         return true;
-
-
-//     });
 
 
 
@@ -371,15 +363,6 @@ exports.scheduledPublish = functions.pubsub.schedule('05 00 * * *').timeZone('As
         }, error => {
             reject()
         });
-    });
-});
-
-export const createUser = functions.https.onRequest((req, res) => {
-    return cors(req, res, async () => {
-        //   const request = req.body;
-        res.status(201).send({
-            message: 'Request received send',
-        })
     });
 });
 
