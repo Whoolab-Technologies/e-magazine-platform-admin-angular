@@ -21,7 +21,6 @@ export class EmailValidatorDirective implements Validator {
     const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!emailRegex.test(value)) {
-      console.log("invalidEmail")
       return { 'invalidEmail': true }; // Return an error if the email format is invalid
     }
 

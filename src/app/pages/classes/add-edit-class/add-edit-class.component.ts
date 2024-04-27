@@ -48,7 +48,6 @@ export class AddEditClassComponent implements OnInit {
       // If it has passed, set the date to March 31st of the next year
       this.expiryDate = this.expiryDate.add(1, 'year');
     }
-    console.log(" this.expiryDate => ", this.expiryDate.toDate())
   }
 
   ngOnDestroy(): void {
@@ -66,7 +65,6 @@ export class AddEditClassComponent implements OnInit {
     this.classObj.expiry_date = (this.classObj.expiry_date) ? (moment(this.classObj.expiry_date?.toDate()).isValid ?
       moment(this.classObj.expiry_date.toDate()).toDate() : this.classObj.expiry_date.toDate()) : this.expiryDate.toDate();
 
-    console.log("classObj => ", this.classObj);
     this.actionText = this.btnText;
     this._classService.subjects$.pipe(takeUntil(this._unsubscribeAll), map((subjects) => {
       subjects = subjects.map(el => { return { ...el, offer_price: el.offer_price ?? 0, } });
@@ -102,14 +100,11 @@ export class AddEditClassComponent implements OnInit {
       return;
     }
     this.classObj.expiry_date = moment(this.classObj.expiry_date).endOf("day").toDate();
-    console.log(".classObj ");
-    console.log(this.classObj);
 
     this._classService.addOrUpdate(this.classObj, subjects, this.isEdit)
       .pipe(tap((resp: any) => {
         return resp;
       })).subscribe((res: any) => {
-        console.log("res ", res);
         this.btnDisabled = false;
         this.showEditSection = false;
         this.btnText = this.actionText
@@ -177,7 +172,6 @@ export class EditSubjectComponent implements OnInit {
     var returnData = this.subject
     // if (this.subject.name.toUpperCase() == this.data.name.toUpperCase())
     //   returnData = null
-    console.log(" submit => ", returnData)
     this.dialogRef.close(returnData)
   }
 

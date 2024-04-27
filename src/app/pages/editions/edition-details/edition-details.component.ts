@@ -108,7 +108,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       this.edition.videos = this.edition.videos ? this.edition.videos : [];
     })).subscribe();
     this._settingsService.settings$.subscribe(data => {
-      console.log("settings ", data)
       this.settings = data
     })
   }
@@ -180,7 +179,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
 
 
   pdfFileChangeEvent(event) {
-    console.log("pdfFileChangeEvent")
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0];
       if (file.type == 'application/pdf') {
@@ -279,7 +277,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   }
 
   onUpdateVideoList(event) {
-    console.log("event => ", event)
     this.edition.videos = this.edition.videos ? this.edition.videos : []
     this.edition.videos = [...event]
   }

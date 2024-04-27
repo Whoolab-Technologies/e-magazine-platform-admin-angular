@@ -39,7 +39,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.featureTags = settings.featureTags;
         this.specialTags = settings.specialTags;
         this.banners = settings.banners || [];
-        console.log("settings ", settings)
         return settings;
       }),
     )

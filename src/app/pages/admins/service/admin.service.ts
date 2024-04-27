@@ -53,7 +53,6 @@ export class AdminService {
       mergeMap((response) => {
         const classes = snapshotToArray(response);
         this._classes.next(classes);
-        console.log("classes", classes)
         if (classes.length)
           this._class.next(classes[0])
         return of(classes)
@@ -70,7 +69,6 @@ export class AdminService {
       return this._firebaseService.getCollection('admin', condition).pipe(
         map((_admins: any) => {
           const admins = snapshotToArray(_admins)
-          console.log(admins)
           this._admins.next(admins);
           return admins
         })
@@ -111,7 +109,6 @@ export class AdminService {
 
         });
         return forkJoin(observables).pipe(map((el) => {
-          console.log(" forkJoin el ", el)
           return _admins;
         }))
 
@@ -120,7 +117,6 @@ export class AdminService {
         _admins = _admins.filter((admin) =>
           !admins.some(obj => obj.id === admin.id)
         )
-        console.log(" map el ", _admins)
 
         this._admins.next(_admins);
         return _admins;
@@ -135,8 +131,7 @@ export class AdminService {
           { admin, password },
           { headers: headers, })
           .pipe(map((response: any) => {
-            console.log("response ", response);
-            admin["id"] = response.uid;
+            admin["id"] = response.user.uid;
             const admins = [..._admins, admin]
             this._admins.next(admins);
             return response;

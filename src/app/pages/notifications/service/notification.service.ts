@@ -128,17 +128,14 @@ export class NotificationService {
       switchMap((_notifications: any) => {
         const observables: Observable<any>[] = [];
         notifications.forEach((notification) => {
-          console.log("  notification ", notification)
           observables.push(this._firebaseService.removeDocument(`notifications`, `${notification.id}`));
           const students = notification.students || [];
-          console.log("  students ", students)
           students.forEach((el) => {
             observables.push(this._firebaseService.removeDocument(`students/${el}/notifications`, `${notification.id}`));
 
           });
         });
         return forkJoin(observables).pipe(map((el) => {
-          console.log(" forkJoin el ", el)
           return _notifications;
         }))
       }), map((_notifications) => {
@@ -146,7 +143,6 @@ export class NotificationService {
         _notifications = _notifications.filter((notification) =>
           !notifications.some(obj => obj.id === notification.id)
         )
-        console.log(" map el ", _notifications)
 
         this._notifications.next(_notifications);
         return _notifications

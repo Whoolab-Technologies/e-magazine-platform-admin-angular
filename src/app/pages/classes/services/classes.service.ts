@@ -171,7 +171,6 @@ export class ClassesService {
   }
 
   editSubject(classId, subject): Observable<any> {
-    console.log("editSubject ", subject);
     const clsName = `${(classId).toUpperCase()}`;
     const subjectName = `${(subject.name).toUpperCase()}`;
 

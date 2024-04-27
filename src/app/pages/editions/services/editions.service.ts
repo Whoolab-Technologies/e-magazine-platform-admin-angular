@@ -167,14 +167,12 @@ export class EditionsService {
         return forkJoin([this._firebaseService
           .setDoc(`${collection}/${editionData.id}`, editionData, { merge: true },), this._firebaseService
             .setDoc(`editions/${editionData.id}`, editionData, { merge: true },),]).pipe(map(() => {
-              console.log("after update")
               const index = editions.findIndex(
                 (item) => item.id === edition.id
               );
 
               // Update the booking
               editions[index] = editionData;
-              console.log(" editions[index] ", editions[index])
               this._editions.next(editions);
 
               return editionData;

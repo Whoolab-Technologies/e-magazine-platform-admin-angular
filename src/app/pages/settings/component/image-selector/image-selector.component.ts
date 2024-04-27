@@ -29,7 +29,6 @@ export class ImageSelectorComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    console.log('event.target.files[0] => ', event.target.files[0])
     this.selectedFile = event.target.files[0];
     this.selectedFileName = this.selectedFile?.name || '';
     this.previewSelectedImage();
