@@ -84,31 +84,41 @@ exports.listenDeviceChange = functions.firestore
 export const createAdmin = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         const request = req.body;
-        const admin = request.admin;
-        const { name, email } = admin;
+        const adminRequest = request.admin;
+        const { name, email } = adminRequest;
+        let usrRecord: any = null;
+        let adm: any;
+        let student: any;
         auth.createUser({
             email: email,
-            emailVerified: false,
+            emailVerified: true,
             password: request.password,
             displayName: name,
             disabled: false,
-        }).then(async (usrRecord) => {
+        }).then(async (userRecod) => {
             const customClaims = {
                 admin: true
             }
-            await auth.setCustomUserClaims(request.uid, customClaims);
+            usrRecord = userRecod;
+            try {
+                await auth.setCustomUserClaims(usrRecord.uid, customClaims);
+                adm = await database.doc(`admin/${usrRecord.uid}`);
+                adm.set({ name, email });
+                student = await database.doc(`student/${usrRecord.uid}`);
+                res.status(200).send({ user: usrRecord, msg: 'Admin has been created!' });
 
-            database.doc(`admin/${usrRecord.uid}`).set({ name, email }).then(() => {
-                database.doc(`student/${usrRecord.uid}`).set(admin)
-                res.status(200).json({ uid: usrRecord.uid, msg: 'Admin has been created!' });
-
-            }, error => {
+            } catch (error) {
+                if (adm)
+                    adm.ref.delete();
+                if (student)
+                    student.ref.delete();
                 auth.deleteUser(usrRecord.uid);
-                res.status(500).json(error);
-            })
+                res.status(500).send(error);
+            }
 
         }, (error) => {
-            res.status(500).json(error);
+            auth.deleteUser(usrRecord.uid);
+            res.status(500).send(error);
         })
     });
 });
@@ -125,9 +135,9 @@ export const createStudent = functions.https.onRequest((req, res) => {
         }
 
         database.collection(`student`).add(student).then((doc) => {
-            res.status(200).json({ msg: 'Student has been created!' });
+            res.status(200).send({ msg: 'Student has been created!' });
         }, error => {
-            res.status(500).json(error);
+            res.status(500).send(error);
         })
 
 
@@ -168,10 +178,8 @@ exports.listenAdminDelete = functions.firestore
     .onDelete(async (_, context) => {
         return new Promise(async (resolve, reject) => {
             auth.deleteUser(`${context.params.id}`).then(() => {
-                console.log("listenAdminDelete deleted");
                 resolve(true)
             }, (error) => {
-                console.log("listenAdminDelete ", error);
                 reject(error)
             })
         });
@@ -189,11 +197,9 @@ exports.listenDeleteStudent = functions.firestore
                     force: true
                 }).then(() => {
                     auth.deleteUser(`${context.params.studentId}`);
-                    console.log("listenDeleteStudent deleted ");
                     resolve(true)
                 }, (error: any) => {
 
-                    console.log("listenDeleteStudent ", error);
                     reject(error)
                 });
         });
@@ -282,15 +288,15 @@ export const removeSubject = functions.https.onRequest((req, res) => {
                             });
                         });
                 database.doc(`classes/${request.classId}`).update(updates).then(() => {
-                    res.status(200).json({ msg: "Subject has been removed successfully", body: updates });
+                    res.status(200).send({ msg: "Subject has been removed successfully", body: updates });
 
                 }, (error: any) => {
 
-                    res.status(500).json(error);
+                    res.status(500).send(error);
                 });
             }, (error: any) => {
 
-                res.status(500).json(error);
+                res.status(500).send(error);
             });
     })
 });
@@ -314,9 +320,9 @@ export const removeClass = functions.https.onRequest((req, res) => {
                             document.ref.delete()
                         });
                     });
-                res.status(200).json({ msg: 'Class and subjects deleted successfully' });
+                res.status(200).send({ msg: 'Class and subjects deleted successfully' });
             }, (error: any) => {
-                res.status(500).json(error);
+                res.status(500).send(error);
             });
     });
 });

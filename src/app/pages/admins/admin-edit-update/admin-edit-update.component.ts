@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastService } from '@app/shared/services/toast/toast.service';
 import { AdminService } from '../service/admin.service';
-import { Subject, catchError, filter, map, take, takeUntil } from 'rxjs';
+import { Subject, catchError, filter, map, take, takeUntil, tap } from 'rxjs';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 
 @Component({
@@ -65,20 +65,25 @@ export class AdminEditUpdateComponent implements OnInit, OnDestroy {
     this.admin.syllabus = "CBSE"
     this.admin.lastRead = "";
     this.admin.image = "";
-    console.log(this.admin)
-    this._service.createAdmin(this.admin, this.password).pipe(take(1), map((admin) => {
-      return admin
-    }),
+    this._service.createAdmin(this.admin, this.password)
+      .pipe(take(1),
+        map((admin) => {
+          return admin
+        }),
+        tap(() => {
+          this.admin = {};
+          this.password = "";
+        }),
 
-    ).subscribe((res) => {
-      this._toastService.showSuccess(res.msg)
-    }, (error) => {
+      ).subscribe((res) => {
+        this._toastService.showSuccess(res.msg)
+      }, (error) => {
 
-      this._toastService.showErrorToastr(error ? error.message ?
-        error.message : JSON.stringify(error) :
-        "Something went wrong!",
-      )
-    });
+        this._toastService.showErrorToastr(error ? error.message ?
+          error.message : JSON.stringify(error) :
+          "Something went wrong!",
+        )
+      });
   }
 
   editAdmin() {

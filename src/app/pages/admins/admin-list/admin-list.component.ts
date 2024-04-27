@@ -35,7 +35,6 @@ export class AdminListComponent implements OnInit, OnDestroy {
     this._service.admins$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((admins: any[]) => {
-        console.log("admins ", admins)
         this.dataSource.data = JSON.parse(JSON.stringify(admins))
         this.admins = [...admins];
         this.selection = new SelectionModel<any>(this.allowMultiSelect, this.initialSelection);

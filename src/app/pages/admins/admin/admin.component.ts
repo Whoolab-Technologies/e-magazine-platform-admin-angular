@@ -7,6 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AdminComponent {
   constructor() {
-    console.log("AdminComponent ");
   }
 }
