@@ -113,7 +113,7 @@ export class EditionsService {
     const collection = `classes/${className}/subjects/${subject}/editions`;
     const data = {
       ...editionData,
-      date: publishDate.toDate(), published: false,
+      date: publishDate.toDate(),
       class: className, subject: subject,
     }
     return this.editions$.pipe(

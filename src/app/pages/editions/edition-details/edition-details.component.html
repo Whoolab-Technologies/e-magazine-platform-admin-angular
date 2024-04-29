@@ -151,14 +151,14 @@
                         <div fxLayout="row wrap" fxLayoutAlign="space-between">
                             <div fxFlex="30">
                                 <mat-slide-toggle labelPosition="before" color="accent" name="published"
-                                    [(ngModel)]="edition.published"> <ng-container *ngIf="edit else next">
+                                    [(ngModel)]="published"> <ng-container *ngIf="edit else next">
                                         {{published? 'Published': 'Publish Now'}}
                                     </ng-container>
                                     <ng-template #next> Publish Now</ng-template>
                                 </mat-slide-toggle>
                             </div>
                             <div fxFlex="70">
-                                <mat-form-field appearance='outline' class="date-picker" *ngIf="!edition.published">
+                                <mat-form-field appearance='outline' class="date-picker" *ngIf="!published">
 
                                     <input matInput placeholder="MM/DD/YYYY" (click)="picker.open()"
                                         [(ngModel)]="publishDate" [matDatepicker]="picker">

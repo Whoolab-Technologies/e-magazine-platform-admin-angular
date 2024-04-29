@@ -353,8 +353,9 @@ exports.scheduledPublish = functions.pubsub.schedule('05 00 * * *').timeZone('As
     const now = admin.firestore.Timestamp.now();
     return new Promise(async (resolve, reject) => {
         var promises: any = [];
-        const update = { published: true };
+        const update = { published: true, featureTag: "Latest", };
         updateExpiryStatus()
+        updateTagStatus()
         database.collection('editions').where('published', '==', false).where('date', '<', now).get().then((snapshots) => {
             snapshots.forEach(doc => {
                 const path = doc.data().path;
@@ -496,7 +497,35 @@ export const phonePePay = functions.https.onRequest((req, res) => {
         }
     });
 });
-
+function updateTagStatus() {
+    const now = admin.firestore.Timestamp.now();
+    let oneMonth = moment(now).subtract(1, 'months');
+    console.log(" oneMonth ", oneMonth)
+    let promises: any = [];
+    return new Promise(async (resolve, reject) => {
+        const update = {
+            featureTag: ""
+        }
+        database.collection('editions')
+            .where('published', '==', true)
+            .where('featureTag', '==', 'Latest')
+            .where('date', '<', oneMonth)
+            .get().then((snapshots) => {
+                snapshots.forEach(doc => {
+                    const path = doc.data().path;
+                    //promises.push(doc.ref.delete())
+                    promises.push(database.doc(`${path}`).update(update))
+                })
+                Promise.all(promises).then(() => {
+                    resolve(true);
+                }, error => {
+                    reject(error);
+                })
+            }, error => {
+                reject(error)
+            });
+    });
+}
 function updateExpiryStatus() {
     return new Promise(async (resolve, reject) => {
         //   try {

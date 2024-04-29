@@ -22,8 +22,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     desc: "",
     image: null,
     index: 1,
-    topicCount: 1,
-    amount: 19
   };
   topic: any = { name: '', desc: '', pdf: '', pages: 1 }
   toastrPositionTypes: typeof ToastPositionTypes = ToastPositionTypes;
@@ -66,7 +64,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       desc: "",
       image: null,
       index: 1,
-      topicCount: 1,
     };
     this.publishDate = moment().add(1, 'M').startOf('month');
     this.classes$ = this._service.classes$.pipe(takeUntil(this._unsubscribeAll));
@@ -104,7 +101,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
         this.latestIndex = el.index
       this.title = "Edit"
       this.edit = true
-      this.published = this.edition.published
+      this.published = JSON.parse(JSON.stringify(this.edition.published))
       this.edition.videos = this.edition.videos ? this.edition.videos : [];
     })).subscribe();
     this._settingsService.settings$.subscribe(data => {
@@ -128,20 +125,22 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       return false
     }
     this.edition.index = this.edition.index == -1 ? 1 : this.edition.index
+    const desc = this.edition.desc;
+    delete this.edition.desc;
     if (isNullish(this.edition)) {
       this._toastService.showInfoToastr("All fields are required", this.toastrPositionTypes.topRight);
       return
     }
-
+    this.edition.desc = desc;
     if (!this.edition.published && !this.publishDate) {
       this._toastService.showInfoToastr("Publish date is required if 'Publish Now' is not selected", this.toastrPositionTypes.topRight);
       return
     }
-
-    if (!this.edition.topics) {
-      this.edition.topics = [];
+    console.log("published", this.published)
+    this.edition.published = this.published;
+    if (this.edition.published) {
+      this.edition.featureTag = "Latest"
     }
-    this.edition['topicCount'] = this.edition.topics.length;
     this._service.addEditions(this.class, this.subject, this.publishDate, this.edition).pipe(
       tap(_el => this._toastService.showSuccess("Added successfully"))
     )
@@ -245,10 +244,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     this.edition['name'] = '';
     this.edition['fileName'] = '';
     this.edition['pdf'] = '';
-    this.edition['desc'] = '';
     this.edition['image'] = '';
-    this.edition['topicCount'] = 0;
-    this.edition['topics'] = [];
     this.edition['overviewPdf'] = '';
     this.edition['overviewPdfFileName'] = '';
     this.editionImage = null;
@@ -257,10 +253,13 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   }
 
   editEdition() {
+
     if (this.isEditionImageUploading || this.isTopicFileUploading || this.isTopicPdfFileUploading) {
       return false;
     }
     this.edition.index = this.latestIndex;
+    this.edition.featureTag = this.edition.published != this.published && this.published ? "Latest" : ((this.edition.featureTag == "Latest") ? "" : this.edition.featureTag);
+    this.edition.published = this.published;
     this._service.editEditions(this.class, this.subject, this.publishDate, this.edition)
       .pipe(tap(_el => {
         this._toastService.showSuccess("Updated successfully")
