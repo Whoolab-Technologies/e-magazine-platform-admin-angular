@@ -138,9 +138,11 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     }
     console.log("published", this.published)
     this.edition.published = this.published;
-    if (this.edition.published) {
+    if (this.edition.published && this.edition.featureTag != "Complementary") {
       this.edition.featureTag = "Latest"
     }
+    if (this.edition.featureTag == "Complementary")
+      this.edition.published = this.published = true;
     this._service.addEditions(this.class, this.subject, this.publishDate, this.edition).pipe(
       tap(_el => this._toastService.showSuccess("Added successfully"))
     )
