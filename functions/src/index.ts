@@ -105,6 +105,7 @@ export const createAdmin = functions.https.onRequest((req, res) => {
                 adm = await database.doc(`admin/${usrRecord.uid}`);
                 adm.set({ name, email });
                 student = await database.doc(`student/${usrRecord.uid}`);
+                student.set(adminRequest)
                 res.status(200).send({ user: usrRecord, msg: 'Admin has been created!' });
 
             } catch (error) {
@@ -177,6 +178,13 @@ exports.listenAdminDelete = functions.firestore
     .document('admin/{id}')
     .onDelete(async (_, context) => {
         return new Promise(async (resolve, reject) => {
+            client.firestore
+                .delete(`student/${context.params.id}`, {
+                    project: process.env.GCLOUD_PROJECT,
+                    recursive: true,
+                    yes: true,
+                    force: true
+                })
             auth.deleteUser(`${context.params.id}`).then(() => {
                 resolve(true)
             }, (error) => {
@@ -196,6 +204,13 @@ exports.listenDeleteStudent = functions.firestore
                     yes: true,
                     force: true
                 }).then(() => {
+                    client.firestore
+                        .delete(`admin/${context.params.studentId}`, {
+                            project: process.env.GCLOUD_PROJECT,
+                            recursive: true,
+                            yes: true,
+                            force: true
+                        });
                     auth.deleteUser(`${context.params.studentId}`);
                     resolve(true)
                 }, (error: any) => {
