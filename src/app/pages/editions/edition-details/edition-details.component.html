@@ -50,6 +50,12 @@
                             <div fxFlex="30" class="text-center">
                                 <input type="file" hidden #pdfFileInput (change)="overviewPdfFileChangeEvent($event)" />
                                 <div class="pdf-wrapper">
+                                    <ng-container *ngIf="overviewPdfFile">
+                                        <div class="remove-file">
+                                            <mat-icon color="warn"
+                                                (click)="clearOverViewPdf(pdfFileInput)">delete</mat-icon>
+                                        </div>
+                                    </ng-container>
                                     <ng-template #overviewPdfSelector>
                                         <span (click)="pdfFileInput.click()">
                                             <mat-icon class="image-upload">picture_as_pdf</mat-icon>
@@ -71,6 +77,12 @@
                             <div fxFlex="30" class="text-center">
                                 <input type="file" hidden #pdfFileInputField (change)="pdfFileChangeEvent($event)" />
                                 <div class="pdf-wrapper">
+                                    <ng-container *ngIf="topicPdfFile">
+                                        <div class="remove-file">
+                                            <mat-icon color="warn"
+                                                (click)="clearEditionPdf(pdfFileInputField)">delete</mat-icon>
+                                        </div>
+                                    </ng-container>
                                     <ng-template #topicPdfSelector>
                                         <span (click)="pdfFileInputField.click()">
                                             <mat-icon class="image-upload">picture_as_pdf</mat-icon>
@@ -93,6 +105,12 @@
                                 <div fxLayout="row wrap" fxLayoutAlign="space-between">
                                     <div fxFlex="30" class="text-center">
                                         <div class="image-wrapper">
+                                            <ng-container *ngIf="edition.image">
+                                                <div class="remove-file">
+                                                    <mat-icon color="warn"
+                                                        (click)="clearEditionPosture(editionFileInput)">delete</mat-icon>
+                                                </div>
+                                            </ng-container>
                                             <ng-template #editionImageSelector>
                                                 <ng-container *ngIf="edition.image else imageSelector">
                                                     <img [src]="edition.image" (click)="openFile(edition.image)" />

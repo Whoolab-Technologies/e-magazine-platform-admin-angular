@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { EditionsService } from '../services/editions.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, filter, map, takeUntil, tap } from 'rxjs';
@@ -280,5 +280,26 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   onUpdateVideoList(event) {
     this.edition.videos = this.edition.videos ? this.edition.videos : []
     this.edition.videos = [...event]
+  }
+
+  clearOverViewPdf(pdfFileInput: HTMLInputElement) {
+    pdfFileInput.value = '';
+    this.edition.overviewPdf = '';
+    this.edition.overviewPdfFileName = '';
+    this.overviewPdfFile = null;
+  }
+
+  clearEditionPdf(pdfFileInput: HTMLInputElement) {
+    pdfFileInput.value = '';
+    this.edition.pdf = '';
+    this.edition.fileName = '';
+    this.topicPdfFile = null;
+
+  }
+
+  clearEditionPosture(imageFileInput: HTMLInputElement) {
+    imageFileInput.value = '';
+    this.edition.image = '';
+    this.editionImage = null
   }
 }

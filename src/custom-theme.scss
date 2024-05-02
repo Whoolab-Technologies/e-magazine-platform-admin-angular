@@ -465,8 +465,12 @@ mat-select.mat-select {
 }
 
 .image-wrapper {
+  position: relative;
   height: 100px;
   width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   div {
     white-space: nowrap;
@@ -515,4 +519,30 @@ mat-select.mat-select {
 
 .text-secondary {
   color: mat.get-color-from-palette($ez-lesson-accent);
+}
+
+.remove-file {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: rgb(255, 255, 255);
+
+}
+
+.pdf-wrapper {
+  position: relative;
+  /* Ensure the wrapper is a positioned parent */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  /* Adjust height as needed */
+  width: 100px;
+
 }
