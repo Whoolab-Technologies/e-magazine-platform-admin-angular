@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { ToastPositionTypes } from '@app/shared/model/toast'
 import { ToastService } from '@app/shared/services/toast/toast.service';
 import { SettingsService } from '@app/pages/settings/service/settings.service';
+import { PdfCompressionService } from '@app/shared/services/pdf-compression/pdf-compression.service';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     private _activatedRoute: ActivatedRoute,
     private _settingsService: SettingsService,
     private _router: Router,
+    private _pdfCompressionService: PdfCompressionService,
   ) {
 
   }
@@ -160,7 +162,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
         return
       }
       this.isEditionImageUploading = true;
-      this.uploadFile("editions/images", file).pipe(map(url => {
+      this.uploadFile("editions/images", file, file.name).pipe(map(url => {
         return url
       }
       )).subscribe((url) => {
@@ -184,21 +186,28 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       const file = event.target.files[0];
       if (file.type == 'application/pdf') {
         this.isTopicPdfFileUploading = true
+        this._pdfCompressionService.compressPDF(file).then(compressedFile => {
+          console.log("compressedFile ", compressedFile)
+          this.uploadFile("editions/compressed", compressedFile, file.name).pipe(map(url => {
 
-        this.uploadFile("editions/pdf", file).pipe(map(url => {
-          return url;
-        }
-        )).subscribe((url: any) => {
 
-          this.edition.pdf = url;
-          this.edition.fileName = file.name;
-          this.topicPdfFile = file.name;
-          this.isTopicPdfFileUploading = false
+            return url;
+          }
+          )).subscribe((url: any) => {
+            console.log("url ", url)
+            this.edition.pdf = url;
+            this.edition.fileName = file.name;
+            this.topicPdfFile = file.name;
+            this.isTopicPdfFileUploading = false
 
-        }, (_error) => {
-          this.isTopicPdfFileUploading = false
+          }, (_error) => {
+            this.isTopicPdfFileUploading = false
 
-        });
+          });
+        })
+
+
+
       }
       else {
         this._toastService.showInfoToastr("Please select PDF file", this.toastrPositionTypes.bottomRight)
@@ -213,7 +222,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       if (file.type == 'application/pdf') {
         this.isoverviewPdfFileUploading = true
 
-        this.uploadFile("editions/pdf", file).pipe(map(url => {
+        this.uploadFile("editions/pdf", file, file.name).pipe(map(url => {
           return url;
         }
         )).subscribe((url: any) => {
@@ -234,8 +243,8 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  uploadFile(path, file): any {
-    return this._appService.uploadImage(path, file).pipe(filter(resp => resp), map(resp => {
+  uploadFile(path, file, fileName): any {
+    return this._appService.uploadImage(path, file, fileName).pipe(filter(resp => resp), map(resp => {
       return resp;
     }));
   }

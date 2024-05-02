@@ -101,7 +101,7 @@ export class ImageSelectorComponent implements OnInit {
   }
 
   uploadFile(path, file): any {
-    return this._appService.uploadImage(path, file).pipe(filter(resp => resp), map(resp => {
+    return this._appService.uploadImage(path, file, file.name).pipe(filter(resp => resp), map(resp => {
       return resp;
     }));
   }

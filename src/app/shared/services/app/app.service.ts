@@ -37,10 +37,10 @@ export class AppService {
   //   return throwError(() => message);
   // }
 
-  uploadImage(path: string, file): Observable<any> {
+  uploadImage(path: string, file, filename: string): Observable<any> {
     const _uploadTask: BehaviorSubject<string> = new BehaviorSubject(null);
 
-    const storageRef = ref(this._firebaseService.storage, `${path}/${file.name}`);
+    const storageRef = ref(this._firebaseService.storage, `${path}/${filename}`);
 
     const uploadTask: UploadTask = uploadBytesResumable(storageRef, file);
 
