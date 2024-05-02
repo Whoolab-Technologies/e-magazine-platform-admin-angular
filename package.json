@@ -9,6 +9,8 @@
     "lint": "ng lint",
     "hmr": "ng serve --configuration hmr",
     "build:deploy": "npm run build:prod && firebase deploy",
+    "build:hosting": "npm run build:prod && firebase deploy --only hosting",
+    "hosting": "npm run build:hosting",
     "watch": "ng build --watch --configuration development"
   },
   "private": true,
