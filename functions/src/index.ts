@@ -3,13 +3,12 @@ import * as admin from 'firebase-admin';
 import * as moment from 'moment';
 const Razorpay = require('razorpay');
 
-var crypto = require('crypto');
 const _rPayOption = {
 
-    // key_id: 'rzp_live_qs5T4yjZ2v0LQH',
-    // key_secret: '4Sh81NXb7qy0qBG15xIu1s7Z',
-    key_id: 'rzp_test_PgXrQp07PbCOhm',
-    key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
+    key_id: 'rzp_live_qs5T4yjZ2v0LQH',
+    key_secret: '4Sh81NXb7qy0qBG15xIu1s7Z',
+    // key_id: 'rzp_test_PgXrQp07PbCOhm',
+    // key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
 }
 // const _rPayOptionTest = {
 // key_id: 'rzp_test_PgXrQp07PbCOhm',
@@ -30,22 +29,11 @@ admin
         credential: admin.credential.applicationDefault(),
     }
     );
-const merchantSalt =
-    "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCfbJKVAwFtR27A5tdkOZApXuT99w195vkkITSVTVNvwxAijjJFup3eO4i84iWCK6SeisXboha+4TKpVWKaHOGidN7EERmdxTPreZSl5I6Y7/hEzU1NJDSLnRcIctNurmff0wmcxiO5mfCUcGMoX4bmGkyAfaMdZPUilfF+Mjqz0knF7abCn/pc22RUc83uugEK4QNVmnh/l9ItIDu03Ss3G2KX1VNn3DKpEwkITOYsEtkq/BTkC3T5lgfxC9KGZAAUTOrZamhRNLXNm6zCOpt36X7A0aqqjAGv843Z1XAQqoXzbjRf34DbYvqD/4AQsdvbqWRKFWRn3HqfP4640XdvAgMBAAECggEAdfVUo/LcXGoNNafX2S2KUEIJdywUDIMY9rWm/Y2AXeJbjuXdpqBE7MjqDK/bhuwZ2sDdUvwkjkl8PbSSx2r1PEnzBemNJaJjHykPZoutQtXTwbySJLDUPDUYdMTZUjyzWPYCV8B3cH3Jd1uM0rOT0a/FyRCs3zPy+Qsu6uvpaWDU5RfZQEoF+L6cCAKAqBrCOS3yHIWNpfl1M2JT7TA+yPFlzmcObHAqmJE/6ke90YmfBYVuM+7S+2c/dA0k7DyATDVlAVCThKTNwHvzT5/hQx3Q7bWuJN+iZCtUqoV114H5Kxqi73W3ezZFkRfQQUGzXv5lpnwsQytEp6sdCrjR2QKBgQDQDe/7BUZzmxI7fBYetT1OCoq/zl4l+/6lkSblRHro+Sa1/dVya2AdyA/jg9xcXiC8CZrrwr0ULsY+wXkLPk3maGtksYG1AKp7prXJUhOka95u80tsQVt0KExBtUrYg6Bx5n1BhaCgY66HtRMT8UeaIZh+Ub4cCXQRHuVsObH+BQKBgQDEKbbc14tXPSvU161EUJ5ywI/P7fkhop5+sXE1XzAp0EV8e0Tu8+hvMaDj8KLRcDAUYbzKSPbfp0EQsrQXVdjo90FtXvgmDe3PH2BkHmU+8j4iPEgR5IVxbdbL4zFy1rE5P5DT4iqcGx4Gkyd6+ncbzT3kAb007wr5Y819WXSl4wKBgBRPqAP7idszYl5ISOiKjQeXY+BBx1Mx/LQxLXjobI9d83eE5lebP/DoXRS7BMJHti5lSaiGhGr5/gSWYrjERlqeCw3zflQrUnlr1wdmaeB9X2O5gL16y/DVFky75CirAPjdpZDF+N5vnNRGyywBPBpB+V8rn8Gg8qHRQFiGcWf5AoGAAxLwRaevDE/uFujGU1K8GOpBlq2RAODugOfA8WgrdgxIennoC6KQ2uU5Mzk7I/MRHdCmR7k6/Sg+0ccrIU58FrKBOPiLBPWk62D/frInPgRHyvuM2ZLuMGfbPNizlqwcnNwNJfTeXBHkt4+ox7mTEkF2HdOVJnY0gtH4j2VOeacCgYAK3aPWGCjymXs/UGhsnFY5FXE0ed6d9g4a8SX7yAJveSDJ58zLwrSgposQFz0Q9XQfadx4xF6yQ3yjCtSdxtaGgt1MJlahg2BGEdfydsq9bm8yPldpPM7+nXHODpEAaDRKe4tQ5F5UdK01hr38MwoMUXGB0SrGPA/yP7wyCjhEsg=="; // Add you Salt here.
-const merchantSecretKey = ""; // Add Merchant Secrete Key - Optional
 
 const database = admin.firestore()
 
 const auth = admin.auth();
-const PayUHashConstantsKeys = {
-    hashName: "hashName",
-    hashString: "hashString",
-    hashType: "hashType",
-    hashVersionV1: "V1",
-    hashVersionV2: "V2",
-    mcpLookup: "mcpLookup",
-    postSalt: "postSalt",
-}
+
 exports.listenDeviceChange = functions.firestore
     .document('device/{studentId}')
     .onUpdate(async (change, context) => {
@@ -365,27 +353,16 @@ export const razorpayOrder = functions.https.onRequest((req, res) => {
 });
 
 exports.scheduledPublish = functions.pubsub.schedule('05 00 * * *').timeZone('Asia/Kolkata').onRun((context) => {
-    const now = admin.firestore.Timestamp.now();
     return new Promise(async (resolve, reject) => {
-        var promises: any = [];
-        const update = { published: true, featureTag: "Latest", };
-        updateExpiryStatus()
-        updateTagStatus()
-        database.collection('editions').where('published', '==', false).where('date', '<', now).get().then((snapshots) => {
-            snapshots.forEach(doc => {
-                const path = doc.data().path;
-                //promises.push(doc.ref.delete())
-                promises.push(database.doc(`${path}`).update(update))
-            })
-            Promise.all(promises).then(() => {
-                resolve(true);
-            }, error => {
-                reject();
-            })
+        updatePublish().then(() => {
+            console.log("updated all to latest and published");
+            resolve(true)
         }, error => {
-            reject()
+            console.log("update to  published failed");
+            reject(error)
+
         });
-    });
+    })
 });
 
 export const sendOtp = functions.https.onRequest((req, res) => {
@@ -478,43 +455,30 @@ export const updateRole = functions.https.onRequest((req, res) => {
 
     });
 });
-export const phonePePay = functions.https.onRequest((req, res) => {
-    return cors(req, res, async () => {
-        try {
-            const request = req.body;
-            // const tempRef = database.collection(`paymentsTemp`).doc();
-            var hashName = request[PayUHashConstantsKeys.hashName];
-            var hashStringWithoutSalt = request[PayUHashConstantsKeys.hashString];
-            var hashType = request[PayUHashConstantsKeys.hashType];
-            var postSalt = request[PayUHashConstantsKeys.postSalt];
-
-            var hash = "";
-
-            if (hashType == PayUHashConstantsKeys.hashVersionV2) {
-                hash = getHmacSHA256Hash(hashStringWithoutSalt, merchantSalt);
-            } else if (hashName == PayUHashConstantsKeys.mcpLookup) {
-                hash = getHmacSHA1Hash(hashStringWithoutSalt, merchantSecretKey);
-            } else {
-                var hashDataWithSalt = hashStringWithoutSalt + merchantSalt;
-                if (postSalt != null) {
-                    hashDataWithSalt = hashDataWithSalt + postSalt;
-                }
-                hash = getSHA512Hash(hashDataWithSalt);
-            }
-
-            var finalHash: any = {};
-            finalHash[hashName] = hash;
-
-
-            res.status(201).send(finalHash)
-        } catch (error: any) {
-            res.status(error.code || 400).send(error);
-        }
+function updatePublish() {
+    const now = admin.firestore.Timestamp.now();
+    return new Promise(async (resolve, reject) => {
+        var promises: any = [];
+        const update = { published: true, featureTag: "Published", };
+        updateExpiryStatus()
+        updateTagStatus()
+        database.collection('editions').where('published', '==', false).where('date', '<', now).get().then((snapshots) => {
+            snapshots.forEach(doc => {
+                promises.push(doc.ref.update(update))
+            })
+            Promise.all(promises).then(() => {
+                resolve(true);
+            }, error => {
+                reject(error);
+            })
+        }, error => {
+            reject(error)
+        });
     });
-});
+}
 function updateTagStatus() {
     const now = admin.firestore.Timestamp.now();
-    let oneMonth = moment(now).subtract(1, 'months');
+    let oneMonth = moment(now).subtract(1, 'months').toDate();
     console.log(" oneMonth ", oneMonth)
     let promises: any = [];
     return new Promise(async (resolve, reject) => {
@@ -523,13 +487,11 @@ function updateTagStatus() {
         }
         database.collection('editions')
             .where('published', '==', true)
-            .where('featureTag', '==', 'Latest')
+            .where('featureTag', '==', 'Published')
             .where('date', '<', oneMonth)
             .get().then((snapshots) => {
                 snapshots.forEach(doc => {
-                    const path = doc.data().path;
-                    //promises.push(doc.ref.delete())
-                    promises.push(database.doc(`${path}`).update(update))
+                    promises.push(doc.ref.update(update))
                 })
                 Promise.all(promises).then(() => {
                     resolve(true);
@@ -581,23 +543,6 @@ function updateExpiryStatus() {
         // }
 
     });
-}
-
-function getSHA512Hash(hashData: string) {
-
-    var hash = crypto.createHash('sha512');
-    var data = hash.update(hashData, 'utf-8');
-    return data.digest('hex');
-}
-
-function getHmacSHA1Hash(hashData: string, salt: string) {
-    return crypto.createHmac('sha1', salt).update(hashData).digest('hex');
-
-}
-
-function getHmacSHA256Hash(hashData: string, salt: string) {
-
-    return crypto.createHmac('sha256', salt).update(hashData).digest('base64');
 }
 
 

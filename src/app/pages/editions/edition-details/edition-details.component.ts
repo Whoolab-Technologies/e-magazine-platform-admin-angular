@@ -139,7 +139,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     console.log("published", this.published)
     this.edition.published = this.published;
     if (this.edition.published && this.edition.featureTag != "Complementary") {
-      this.edition.featureTag = "Latest"
+      this.edition.featureTag = "Published"
     }
     if (this.edition.featureTag == "Complementary")
       this.edition.published = this.published = true;
@@ -260,7 +260,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       return false;
     }
     this.edition.index = this.latestIndex;
-    this.edition.featureTag = this.edition.published != this.published && this.published ? "Latest" : ((this.edition.featureTag == "Latest") ? "" : this.edition.featureTag);
+    this.edition.featureTag = this.edition.published != this.published && this.published ? "Published" : ((this.edition.featureTag == "Published") ? "" : this.edition.featureTag);
     this.edition.published = this.published;
     this._service.editEditions(this.class, this.subject, this.publishDate, this.edition)
       .pipe(tap(_el => {
