@@ -22,6 +22,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     desc: "",
     image: null,
     index: 1,
+    featureTag: ""
   };
   topic: any = { name: '', desc: '', pdf: '', pages: 1 }
   toastrPositionTypes: typeof ToastPositionTypes = ToastPositionTypes;
@@ -64,6 +65,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       desc: "",
       image: null,
       index: 1,
+      featureTag: ""
     };
     this.publishDate = moment().add(1, 'M').startOf('month');
     this.classes$ = this._service.classes$.pipe(takeUntil(this._unsubscribeAll));
@@ -103,6 +105,8 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       this.edit = true
       this.published = JSON.parse(JSON.stringify(this.edition.published))
       this.edition.videos = this.edition.videos ? this.edition.videos : [];
+      this.edition.featureTag = this.edition.featureTag ?? "";
+      console.log(" this.edition.featureTag ", this.edition.featureTag);
     })).subscribe();
     this._settingsService.settings$.subscribe(data => {
       this.settings = data
