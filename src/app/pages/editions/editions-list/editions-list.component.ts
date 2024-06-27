@@ -20,7 +20,7 @@ export class EditionsListComponent implements OnInit, OnDestroy {
   class: string;
   subject: string;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  displayedColumns: string[] = ['name', 'image', 'description', 'topics', 'published', 'action'];
+  displayedColumns: string[] = ['index', 'name', 'image', 'description', 'topics', 'published', 'action'];
   public dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;

@@ -39,9 +39,8 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
   isTopicFileUploading: boolean = false;
 
   topicPdfFile: any = null;
-  overviewPdfFile: any = null;
+
   isTopicPdfFileUploading: boolean = false;
-  isoverviewPdfFileUploading: boolean = false;
 
   editionImage: any = null;
   isEditionImageUploading: boolean = false;
@@ -130,12 +129,15 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     }
     this.edition.index = this.edition.index == -1 ? 1 : this.edition.index
     const desc = this.edition.desc;
+    const featureTag = this.edition.featureTag;
     delete this.edition.desc;
+    delete this.edition.featureTag;
     if (isNullish(this.edition)) {
       this._toastService.showInfoToastr("All fields are required", this.toastrPositionTypes.topRight);
       return
     }
     this.edition.desc = desc;
+    this.edition.featureTag = featureTag;
     if (!this.edition.published && !this.publishDate) {
       this._toastService.showInfoToastr("Publish date is required if 'Publish Now' is not selected", this.toastrPositionTypes.topRight);
       return
@@ -164,7 +166,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
         return
       }
       this.isEditionImageUploading = true;
-      this.uploadFile("editions/images", file).pipe(map(url => {
+      this.uploadFile(`editions/images/${this.class}/${this.subject}`, file).pipe(map(url => {
         return url
       }
       )).subscribe((url) => {
@@ -189,7 +191,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       if (file.type == 'application/pdf') {
         this.isTopicPdfFileUploading = true
 
-        this.uploadFile("editions/pdf", file).pipe(map(url => {
+        this.uploadFile(`editions/pdf/${this.class}/${this.subject}`, file).pipe(map(url => {
           return url;
         }
         )).subscribe((url: any) => {
@@ -210,33 +212,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  overviewPdfFileChangeEvent(event) {
 
-    if (event.target.files && event.target.files.length) {
-      const file = event.target.files[0];
-      if (file.type == 'application/pdf') {
-        this.isoverviewPdfFileUploading = true
-
-        this.uploadFile("editions/pdf", file).pipe(map(url => {
-          return url;
-        }
-        )).subscribe((url: any) => {
-
-          this.edition.overviewPdf = url;
-          this.edition.overviewPdfFileName = file.name;
-          this.overviewPdfFile = file.name;
-          this.isoverviewPdfFileUploading = false
-
-        }, (_error) => {
-          this.isoverviewPdfFileUploading = false
-
-        });
-      }
-      else {
-        this._toastService.showInfoToastr("Please select PDF file", this.toastrPositionTypes.bottomRight)
-      }
-    }
-  }
 
   uploadFile(path, file): any {
     return this._appService.uploadImage(path, file).pipe(filter(resp => resp), map(resp => {
@@ -251,11 +227,8 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     this.edition['fileName'] = '';
     this.edition['pdf'] = '';
     this.edition['image'] = '';
-    this.edition['overviewPdf'] = '';
-    this.edition['overviewPdfFileName'] = '';
     this.editionImage = null;
     this.topicPdfFile = null;
-    this.overviewPdfFile = null;
   }
 
   editEdition() {
@@ -286,12 +259,7 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
     this.edition.videos = [...event]
   }
 
-  clearOverViewPdf(pdfFileInput: HTMLInputElement) {
-    pdfFileInput.value = '';
-    this.edition.overviewPdf = '';
-    this.edition.overviewPdfFileName = '';
-    this.overviewPdfFile = null;
-  }
+
 
   clearEditionPdf(pdfFileInput: HTMLInputElement) {
     pdfFileInput.value = '';

@@ -44,6 +44,17 @@
         .m-5 {
             margin-top: 12px;
         }
+
+        .image-upload>mat-icon {
+            font-size: 60px;
+            height: 60px;
+            width: 60px;
+        }
+
+        .image-upload>.remove-file {
+            top: 0;
+            right: -12px;
+        }
     }
 
 }

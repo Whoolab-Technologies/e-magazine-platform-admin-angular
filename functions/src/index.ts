@@ -332,6 +332,7 @@ export const removeClass = functions.https.onRequest((req, res) => {
 
 export const razorpayOrder = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
+        console.log(req.body);
         const request = req.body;
         var options = {
             amount: request.amount * 100,  // amount in the smallest currency unit

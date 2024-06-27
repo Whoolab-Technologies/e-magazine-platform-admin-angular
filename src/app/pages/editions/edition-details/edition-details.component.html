@@ -36,10 +36,8 @@
                     </div>
                     <div fxFlex="45">
                         <mat-form-field appearance='outline'>
-                            <mat-label>Subtitle</mat-label>
-                            <textarea matInput [(ngModel)]="edition.desc" cdkTextareaAutosize
-                                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
-                                cdkAutosizeMaxRows="5"></textarea>
+                            <mat-label>Index</mat-label>
+                            <input matInput placeholder="Edition index" [(ngModel)]="edition.index" required>
                         </mat-form-field>
                     </div>
 
@@ -47,7 +45,7 @@
                     <div fxFlex="100" class="m-5">
                         <div fxLayout="row wrap" fxLayoutAlign="space-between">
 
-                            <div fxFlex="30" class="text-center">
+                            <!-- <div fxFlex="30" class="text-center">
                                 <input type="file" hidden #pdfFileInput (change)="overviewPdfFileChangeEvent($event)" />
                                 <div class="pdf-wrapper">
                                     <ng-container *ngIf="overviewPdfFile">
@@ -72,20 +70,34 @@
                                         <app-loader></app-loader>
                                     </ng-container>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div fxFlex="30" class="text-center">
+                            <div fxFlex="45" class="text-center">
                                 <input type="file" hidden #pdfFileInputField (change)="pdfFileChangeEvent($event)" />
                                 <div class="pdf-wrapper">
-                                    <ng-container *ngIf="topicPdfFile">
-                                        <div class="remove-file">
-                                            <mat-icon color="warn"
-                                                (click)="clearEditionPdf(pdfFileInputField)">delete</mat-icon>
-                                        </div>
-                                    </ng-container>
+
                                     <ng-template #topicPdfSelector>
-                                        <span (click)="pdfFileInputField.click()">
-                                            <mat-icon class="image-upload">picture_as_pdf</mat-icon>
+                                        <div (click)="pdfFileInputField.click()">
+                                            <div class="image-upload" style="position: relative;">
+                                                <mat-icon>picture_as_pdf</mat-icon>
+                                                <ng-container *ngIf="topicPdfFile">
+                                                    <div class="remove-file">
+                                                        <mat-icon color="warn"
+                                                            (click)="clearEditionPdf(pdfFileInputField)">delete</mat-icon>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+
+                                            <!-- <div style="position: relative; background-color: red;">
+                                                <mat-icon class="image-upload">picture_as_pdf</mat-icon>
+                                                <ng-container *ngIf="topicPdfFile">
+                                                    <div class="remove-file">
+                                                        <mat-icon color="warn"
+                                                            (click)="clearEditionPdf(pdfFileInputField)">delete</mat-icon>
+                                                    </div>
+                                                </ng-container>
+                                            </div> -->
+
                                             <ng-container *ngIf="topicPdfFile else selectPdfTemplete">
                                                 <div class="selected-file"> {{topicPdfFile}}</div>
 
@@ -93,7 +105,7 @@
                                             <ng-template #selectPdfTemplete>
                                                 <div class="select-section"> Select PDF</div>
                                             </ng-template>
-                                        </span>
+                                        </div>
                                     </ng-template>
                                     <ng-container *ngIf="isTopicPdfFileUploading else topicPdfSelector">
                                         <app-loader></app-loader>
@@ -101,7 +113,7 @@
                                 </div>
                             </div>
 
-                            <div fxFlex="30" class="text-center">
+                            <div fxFlex="45" class="text-center">
                                 <div fxLayout="row wrap" fxLayoutAlign="space-between">
                                     <div fxFlex="30" class="text-center">
                                         <div class="image-wrapper">
