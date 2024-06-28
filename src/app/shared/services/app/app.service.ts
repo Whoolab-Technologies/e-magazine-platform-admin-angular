@@ -42,7 +42,9 @@ export class AppService {
 
     const storageRef = ref(this._firebaseService.storage, `${path}/${file.name}`);
 
-    const uploadTask: UploadTask = uploadBytesResumable(storageRef, file);
+    const uploadTask: UploadTask = uploadBytesResumable(storageRef, file, {
+      cacheControl: 'public, max-age=86400'
+    });
 
     var unSubscribe = uploadTask.on(
       'state_changed',

@@ -37,6 +37,7 @@ const auth = admin.auth();
 exports.listenDeviceChange = functions.firestore
     .document('device/{studentId}')
     .onUpdate(async (change, context) => {
+        console.log("listenDeviceChange onUpdate ");
         return new Promise(async (resolve, reject) => {
             const beforeData = change.before.data()
             const afterData = change.after.data()
@@ -55,16 +56,23 @@ exports.listenDeviceChange = functions.firestore
                     removed: "true",
                 }
             };
-            if (tokens.length) {
+            console.log("listenDeviceChange tokens.length => ", tokens.length);
+            if (tokens.length > 0) {
                 admin.messaging().sendToDevice([...tokens], payload).then((success) => {
+                    console.log("listenDeviceChange success => ", success)
                     resolve({ message: 'Notifications send successfully' })
 
                 }, (error) => {
+                    console.log("listenDeviceChange error => ", error)
 
                     reject(error)
                 })
             }
-            resolve({ message: 'Notifications send successfully' })
+            else {
+                console.log("listenDeviceChange tokens.length ==0");
+                resolve({ message: 'Notifications send successfully' })
+
+            }
 
         });
     });
@@ -246,14 +254,15 @@ export const notification = functions.https.onRequest((req, res) => {
 function getToken(students: any[], notification: any) {
     let token: any = []
     let promises: any = []
+    let updatePromises: any = []
     return new Promise((resolve, rejects) => {
         students.forEach(async (el, index) => {
             promises.push(database.doc(`device/${el}`).get())
 
             notification['read'] = false
-            database.doc(`student/${el}/notifications/${notification.id}`).set(notification)
+            updatePromises.push(database.doc(`student/${el}/notifications/${notification.id}`).set(notification))
         })
-
+        Promise.all(updatePromises);
         Promise.all(promises).then((results) => {
             results.forEach((doc) => {
                 if (doc.exists && doc.data() != undefined) {
