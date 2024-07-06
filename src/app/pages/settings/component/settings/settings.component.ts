@@ -36,15 +36,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
       takeUntil(this._onDestroy$),
       filter((settings: any) => settings && settings.id),
       map(settings => {
-        this.featureTags = settings.featureTags;
-        this.specialTags = settings.specialTags;
+        this.featureTags = [...settings.featureTags];
+        this.specialTags = [...settings.specialTags];
         this.banners = settings.banners || [];
         return settings;
       }),
     )
       .subscribe((settings) => {
-        this.selectedFeatureTags = settings.featureTags;
-        this.selectedSpecialTags = settings.specialTags;
+        this.selectedFeatureTags = [...settings.featureTags];
+        this.selectedSpecialTags = [...settings.specialTags];
       });
   }
 

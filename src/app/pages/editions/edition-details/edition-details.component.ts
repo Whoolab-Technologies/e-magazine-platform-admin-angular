@@ -142,7 +142,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       this._toastService.showInfoToastr("Publish date is required if 'Publish Now' is not selected", this.toastrPositionTypes.topRight);
       return
     }
-    console.log("published", this.published)
     this.edition.published = this.published;
     if (this.edition.published && this.edition.featureTag != "Complementary") {
       this.edition.featureTag = "Published"
@@ -237,7 +236,15 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       return false;
     }
     this.edition.index = this.latestIndex;
-    this.edition.featureTag = this.edition.published != this.published && this.published ? "Published" : ((this.edition.featureTag == "Published") ? "" : this.edition.featureTag);
+
+    if (this.edition.published != this.published) {
+      if (this.published) {
+        this.edition.featureTag = "Published";
+      }
+      else {
+        this.edition.featureTag = "";
+      }
+    }
     this.edition.published = this.published;
     this._service.editEditions(this.class, this.subject, this.publishDate, this.edition)
       .pipe(tap(_el => {

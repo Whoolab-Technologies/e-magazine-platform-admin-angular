@@ -476,40 +476,39 @@ export const updateRole = functions.https.onRequest((req, res) => {
 export const deleteAccount = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         try {
+            const now = admin.firestore.Timestamp.now();
+            let batch = database.batch()
             const request = req.body;
-            functions.logger.info(["request ", request]);
-
-            const promises: any[] = []
-            request.date = new Date(request.date);
-            //request.date = moment(request.date).toDate()
-            functions.logger.info([" request.date ", request]);
-
+            request.date = now;
+            let otpRef: any;
             const studentRef = database.collection(`student`).doc(request.id);
             const deviceRef = database.collection(`device`).doc(request.id);
             const deletedAccRef = database.collection(`deleted_acccounts`).doc(request.id)
             const paymentRef = database.collection(`payments`);
 
             const studentDoc = await studentRef.get()
-            const studentData = studentDoc.data();
-            functions.logger.info([" studentData ", studentData]);
-            functions.logger.info([" mobile ", studentData?.mobile]);
-
-            const otpRef = database.collection(`otp`).doc(studentData?.mobile);
+            const studentData = studentDoc.data() || {};
+            if (studentData?.mobile)
+                otpRef = database.collection(`otp`).doc(studentData?.mobile);
             const deletedAccData = { ...studentData, ...request };
-            functions.logger.info([" deletedAccData ", deletedAccData]);
 
-            auth.deleteUser(request.id).then(() => {
-                promises.push(deletedAccRef.set(deletedAccData))
-                promises.push(studentRef.delete())
-                promises.push(deviceRef.delete())
-                promises.push(otpRef.delete())
-                promises.push(removeSubCollections(`student/${request.id}/lastread`))
+            if (studentDoc.exists) {
+                batch.set(deletedAccRef, deletedAccData);
+                batch.delete(studentRef);
+                batch.delete(deviceRef);
+                if (otpRef)
+                    batch.delete(otpRef);
                 paymentRef.where('studentId', '==', request.id).get().then((snaphots) => {
                     snaphots.forEach((doc) => {
-                        promises.push(doc.ref.delete())
+                        batch.delete(doc.ref);
                     })
                 })
-                return Promise.all(promises)
+            }
+
+            batch.commit().then(() => {
+                functions.logger.info(["    batch.commit", "completed"]);
+                removeSubCollections(`student/${request.id}/lastread`)
+                return auth.deleteUser(request.id);
             }).then(() => {
                 res.status(201).send({
                     success: 0,
@@ -524,34 +523,7 @@ export const deleteAccount = functions.https.onRequest((req, res) => {
                 });
             });
 
-            // promises.push(deletedAccRef.set(deletedAccData))
-            // promises.push(studentRef.delete())
-            // promises.push(deviceRef.delete())
-            // promises.push(otpRef.delete())
-            // promises.push(removeSubCollections(`student/${request.id}/lastread`))
-            // paymentRef.where('studentId', '==', request.id).get().then((snaphots) => {
-            //     snaphots.forEach((doc) => {
-            //         promises.push(doc.ref.delete())
-            //     })
-            // })
-            // Promise.all(promises).then(() => {
-            //     res.status(201).send({
-            //         success: 0,
-            //         data: [],
-            //         text: 'Account remove successfully',
-            //     });
-            // }, error => {
-            //     res.status(201).send({
-            //         success: 0,
-            //         data: [],
-            //         text: error.toString(),
-            //     });
-            // })
-            res.status(201).send({
-                success: 0,
-                data: [],
-                text: 'Account remove successfully',
-            });
+
         } catch (error: any) {
             res.status(400).send({
                 success: 0,
@@ -563,6 +535,34 @@ export const deleteAccount = functions.https.onRequest((req, res) => {
     });
 });
 
+
+export const publishEditions = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        const promises: any = [];
+        const now = admin.firestore.Timestamp.now();
+        console.log(" now ", now);
+        return new Promise((resolve, reject) => {
+            const update = { published: true, featureTag: "Published", };
+            database.collection('editions').where('published', '==', true).where('featureTag', '!=', "Complementary").get().then((snapshots) => {
+                snapshots.forEach(doc => {
+                    console.log(" docs to set published ", doc.data());
+                    promises.push(doc.ref.update(update))
+                })
+                Promise.all(promises).then(() => {
+                    resolve(true);
+                }, error => {
+                    reject(error);
+                })
+            }, error => {
+                reject(error)
+            });
+        })
+
+    });
+});
+
+
+
 export const removeSubCollections = async (path: string) => {
     return client.firestore.delete(path, {
         project: process.env.GCLOUD_PROJECT,
@@ -572,7 +572,7 @@ export const removeSubCollections = async (path: string) => {
     });
 };
 
-function updatePublish() {
+export const updatePublish = () => {
     const now = admin.firestore.Timestamp.now();
     return new Promise(async (resolve, reject) => {
         var promises: any = [];
@@ -581,6 +581,7 @@ function updatePublish() {
         updateTagStatus()
         database.collection('editions').where('published', '==', false).where('date', '<', now).get().then((snapshots) => {
             snapshots.forEach(doc => {
+                console.log(" docs to set published ", doc.data());
                 promises.push(doc.ref.update(update))
             })
             Promise.all(promises).then(() => {
@@ -592,11 +593,12 @@ function updatePublish() {
             reject(error)
         });
     });
-}
-function updateTagStatus() {
+};
+
+export const updateTagStatus = () => {
     const now = admin.firestore.Timestamp.now();
-    let oneMonth = moment(now).subtract(1, 'months').toDate();
-    console.log(" oneMonth ", oneMonth)
+    let oneMonthAgo = moment(now).subtract(1, 'months').toDate();
+
     let promises: any = [];
     return new Promise(async (resolve, reject) => {
         const update = {
@@ -605,9 +607,10 @@ function updateTagStatus() {
         database.collection('editions')
             .where('published', '==', true)
             .where('featureTag', '==', 'Published')
-            .where('date', '<', oneMonth)
+            .where('date', '<', oneMonthAgo)
             .get().then((snapshots) => {
                 snapshots.forEach(doc => {
+                    console.log(" docs to reset tags ", doc.data());
                     promises.push(doc.ref.update(update))
                 })
                 Promise.all(promises).then(() => {
@@ -619,8 +622,9 @@ function updateTagStatus() {
                 reject(error)
             });
     });
-}
-function updateExpiryStatus() {
+};
+
+export const updateExpiryStatus = () => {
     return new Promise(async (resolve, reject) => {
         //   try {
 
@@ -660,6 +664,4 @@ function updateExpiryStatus() {
         // }
 
     });
-}
-
-
+};

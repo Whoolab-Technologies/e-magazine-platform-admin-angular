@@ -23,7 +23,7 @@ export class SettingsService {
       .pipe(
         map((response) => {
           this._settings.next(data);
-          return response;
+          return data;
         }),
       )
   }
