@@ -223,7 +223,11 @@ export const notification = functions.https.onRequest((req, res) => {
         const request = req.body;
         const students = request.students;
         const notification = request.notification;
+
+        functions.logger.info([" notification", notification]);
         notification['createdOn'] = moment(notification['createdOn']).toDate()
+        functions.logger.info([" notification createdOn", notification['createdOn']]);
+
         var doc = await database.collection('notifications').add(notification);
         notification['id'] = doc.id;
         const payload = {
@@ -356,6 +360,7 @@ export const razorpayOrder = functions.https.onRequest((req, res) => {
             responseData.rpayKey = _rPayOption.key_id;
             res.status(201).send(responseData)
         }, (error: any) => {
+            console.log("error => ", error);
             res.status(400).send(error)
 
         })
@@ -448,6 +453,8 @@ export const verifyOtp = functions.https.onRequest((req, res) => {
     });
 });
 
+
+
 export const updateRole = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         const request = req.body;
@@ -465,6 +472,106 @@ export const updateRole = functions.https.onRequest((req, res) => {
 
     });
 });
+
+export const deleteAccount = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
+        try {
+            const request = req.body;
+            functions.logger.info(["request ", request]);
+
+            const promises: any[] = []
+            request.date = new Date(request.date);
+            //request.date = moment(request.date).toDate()
+            functions.logger.info([" request.date ", request]);
+
+            const studentRef = database.collection(`student`).doc(request.id);
+            const deviceRef = database.collection(`device`).doc(request.id);
+            const deletedAccRef = database.collection(`deleted_acccounts`).doc(request.id)
+            const paymentRef = database.collection(`payments`);
+
+            const studentDoc = await studentRef.get()
+            const studentData = studentDoc.data();
+            functions.logger.info([" studentData ", studentData]);
+            functions.logger.info([" mobile ", studentData?.mobile]);
+
+            const otpRef = database.collection(`otp`).doc(studentData?.mobile);
+            const deletedAccData = { ...studentData, ...request };
+            functions.logger.info([" deletedAccData ", deletedAccData]);
+
+            auth.deleteUser(request.id).then(() => {
+                promises.push(deletedAccRef.set(deletedAccData))
+                promises.push(studentRef.delete())
+                promises.push(deviceRef.delete())
+                promises.push(otpRef.delete())
+                promises.push(removeSubCollections(`student/${request.id}/lastread`))
+                paymentRef.where('studentId', '==', request.id).get().then((snaphots) => {
+                    snaphots.forEach((doc) => {
+                        promises.push(doc.ref.delete())
+                    })
+                })
+                return Promise.all(promises)
+            }).then(() => {
+                res.status(201).send({
+                    success: 0,
+                    data: [],
+                    text: 'Account remove successfully',
+                });
+            }).catch((error) => {
+                res.status(400).send({
+                    success: 0,
+                    data: [],
+                    text: error.toString(),
+                });
+            });
+
+            // promises.push(deletedAccRef.set(deletedAccData))
+            // promises.push(studentRef.delete())
+            // promises.push(deviceRef.delete())
+            // promises.push(otpRef.delete())
+            // promises.push(removeSubCollections(`student/${request.id}/lastread`))
+            // paymentRef.where('studentId', '==', request.id).get().then((snaphots) => {
+            //     snaphots.forEach((doc) => {
+            //         promises.push(doc.ref.delete())
+            //     })
+            // })
+            // Promise.all(promises).then(() => {
+            //     res.status(201).send({
+            //         success: 0,
+            //         data: [],
+            //         text: 'Account remove successfully',
+            //     });
+            // }, error => {
+            //     res.status(201).send({
+            //         success: 0,
+            //         data: [],
+            //         text: error.toString(),
+            //     });
+            // })
+            res.status(201).send({
+                success: 0,
+                data: [],
+                text: 'Account remove successfully',
+            });
+        } catch (error: any) {
+            res.status(400).send({
+                success: 0,
+                data: [],
+                text: error.toString(),
+            });
+        }
+
+    });
+});
+
+export const removeSubCollections = async (path: string) => {
+    return client.firestore.delete(path, {
+        project: process.env.GCLOUD_PROJECT,
+        recursive: true,
+        yes: true,
+        force: true,
+    });
+};
+
 function updatePublish() {
     const now = admin.firestore.Timestamp.now();
     return new Promise(async (resolve, reject) => {
