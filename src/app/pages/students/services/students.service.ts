@@ -21,7 +21,7 @@ export class StudentsService {
     const path = `student`;
 
     return combineLatest([this._firebaseService
-      .getCollection(path), this._firebaseService
+      .getCollection(path, [], "createdOn", "desc"), this._firebaseService
         .getCollection('classes')])
       .pipe(
         //     catchError((error) => {
@@ -47,7 +47,7 @@ export class StudentsService {
             el.subjects = stdSubjects
             return el
           })
-
+          console.log(students)
           return students
         }),
         tap((response: any) => {

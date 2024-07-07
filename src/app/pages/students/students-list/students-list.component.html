@@ -36,6 +36,20 @@
                                     </mat-checkbox>
                                 </ng-container>
                             </span>
+                            <span *ngSwitchCase="'name'">
+                                <ng-container>
+                                    <span>{{element[column]}}</span>
+                                    <br>
+                                    <div>{{(element['createdOn'] |firebaseDate) |date:'MM-dd-YYYY hh:mm a'}}</div>
+                                </ng-container>
+                            </span>
+                            <span *ngSwitchCase="'email'">
+                                <ng-container>
+                                    <span>{{element[column]}}</span>
+
+                                    <div>{{element['mobile']}}</div>
+                                </ng-container>
+                            </span>
                             <span *ngSwitchCase="'subjects'">
                                 <ng-container *ngFor="let subject of  ( element[column] | toArray) ">
                                     <span class="students-table__content-badge "

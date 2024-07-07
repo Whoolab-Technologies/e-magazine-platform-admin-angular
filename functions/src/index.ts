@@ -150,6 +150,7 @@ exports.listenStudent = functions.firestore
     .onCreate(async (studentSnapshot, context) => {
         const data = studentSnapshot.data();
         return new Promise(async (resolve, reject) => {
+            await studentSnapshot.ref.set({ createdOn: admin.firestore.Timestamp.now() }, { merge: true })
 
             if (data.referrer) {
                 database.collection(`student`)
