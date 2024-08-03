@@ -423,8 +423,6 @@ export const verifyOtp = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
         const request = req.body;
         database.collection('otp').doc(request.mobile).get().then((doc: any) => {
-
-
             if (!doc.exists) {
                 res.status(404).send({
                     success: 0,
@@ -466,20 +464,15 @@ export const verifyOtp = functions.https.onRequest((req, res) => {
                     });
                 }
             }
-
         }, (error: any) => {
-
             res.status(404).send({
                 success: 0,
                 data: [],
                 text: error.toString(),
             });
         });
-
     });
 });
-
-
 
 export const updateRole = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
@@ -493,9 +486,7 @@ export const updateRole = functions.https.onRequest((req, res) => {
             res.status(204).send(userRecord);
         } catch (error: any) {
             res.status(error.code || 400).send(error);
-
         }
-
     });
 });
 
@@ -511,13 +502,16 @@ export const deleteAccount = functions.https.onRequest((req, res) => {
             const deviceRef = database.collection(`device`).doc(request.id);
             const deletedAccRef = database.collection(`deleted_acccounts`).doc(request.id)
             const paymentRef = database.collection(`payments`);
-
             const studentDoc = await studentRef.get()
             const studentData = studentDoc.data() || {};
             if (studentData?.mobile)
                 otpRef = database.collection(`otp`).doc(studentData?.mobile);
-            const deletedAccData = { ...studentData, ...request };
-
+            const deletedAccData = {
+                name: studentData.name || "",
+                email: studentData.email || "",
+                phone: studentData.mobile || "",
+                ...request,
+            };
             if (studentDoc.exists) {
                 batch.set(deletedAccRef, deletedAccData);
                 batch.delete(studentRef);
@@ -530,7 +524,6 @@ export const deleteAccount = functions.https.onRequest((req, res) => {
                     })
                 })
             }
-
             batch.commit().then(() => {
                 functions.logger.info(["    batch.commit", "completed"]);
                 removeSubCollections(`student/${request.id}/lastread`)
@@ -548,8 +541,6 @@ export const deleteAccount = functions.https.onRequest((req, res) => {
                     text: error.toString(),
                 });
             });
-
-
         } catch (error: any) {
             res.status(400).send({
                 success: 0,
@@ -557,37 +548,19 @@ export const deleteAccount = functions.https.onRequest((req, res) => {
                 text: error.toString(),
             });
         }
-
     });
 });
-
 
 export const publishEditions = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
-        const promises: any = [];
-        const now = admin.firestore.Timestamp.now();
-        console.log(" now ", now);
-        return new Promise((resolve, reject) => {
-            const update = { published: true, featureTag: "Published", };
-            database.collection('editions').where('published', '==', true).where('featureTag', '!=', "Complementary").get().then((snapshots) => {
-                snapshots.forEach(doc => {
-                    console.log(" docs to set published ", doc.data());
-                    promises.push(doc.ref.update(update))
-                })
-                Promise.all(promises).then(() => {
-                    resolve(true);
-                }, error => {
-                    reject(error);
-                })
-            }, error => {
-                reject(error)
-            });
-        })
-
+        try {
+            await updatePublish()
+            res.status(200).send({ message: "update success" })
+        } catch (error) {
+            res.status(400).send(error)
+        }
     });
 });
-
-
 
 export const removeSubCollections = async (path: string) => {
     return client.firestore.delete(path, {
@@ -601,59 +574,84 @@ export const removeSubCollections = async (path: string) => {
 export const updatePublish = () => {
     const now = admin.firestore.Timestamp.now();
     return new Promise(async (resolve, reject) => {
-        var promises: any = [];
-        const update = { published: true, featureTag: "Published", };
-        updateExpiryStatus()
-        updateTagStatus()
-        database.collection('editions').where('published', '==', false).where('date', '<', now).get().then((snapshots) => {
-            snapshots.forEach(doc => {
-                console.log(" docs to set published ", doc.data());
+        try {
+            var promises: any = [];
+            const update = { published: true, featureTag: "Published", };
+            updateExpiryStatus()
+            const querySnapshot = await database.collection('editions').where('published', '==', false).where('date', '<', now).get()
+            const classObj: any = {};
+            querySnapshot.forEach(doc => {
+                const data: any = doc.data();
+                if (!classObj[data.class])
+                    classObj[data.class] = [];
+                classObj[data.class].push(data.subject)
+                const subjectSet = (new Set(classObj[data.class]))
+                classObj[data.class] = Array.from(subjectSet);
                 promises.push(doc.ref.update(update))
-            })
-            Promise.all(promises).then(() => {
-                resolve(true);
-            }, error => {
-                reject(error);
-            })
-        }, error => {
-            reject(error)
-        });
-    });
-};
-
-export const updateTagStatus = () => {
-    const now = admin.firestore.Timestamp.now();
-    let oneMonthAgo = moment(now).subtract(1, 'months').toDate();
-
-    let promises: any = [];
-    return new Promise(async (resolve, reject) => {
-        const update = {
-            featureTag: ""
-        }
-        database.collection('editions')
-            .where('published', '==', true)
-            .where('featureTag', '==', 'Published')
-            .where('date', '<', oneMonthAgo)
-            .get().then((snapshots) => {
-                snapshots.forEach(doc => {
-                    console.log(" docs to reset tags ", doc.data());
-                    promises.push(doc.ref.update(update))
-                })
+            });
+            if (promises.length) {
+                updateTagStatus(classObj)
                 Promise.all(promises).then(() => {
                     resolve(true);
                 }, error => {
                     reject(error);
                 })
-            }, error => {
-                reject(error)
-            });
+            }
+            else {
+                resolve(true);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+export const updateTagStatus = (classObj: any) => {
+    const now = admin.firestore.Timestamp.now();
+    let onedayAgo = moment(now).subtract(1, 'day').endOf('day').toDate();
+    let promises: any = [];
+    return new Promise(async (resolve, reject) => {
+        const update = {
+            featureTag: ""
+        }
+        const classArray: any = []
+        for (var key in classObj) {
+            if (classObj.hasOwnProperty(key)) {
+                classObj[key].forEach((element: any) => {
+                    classArray.push({ class: key, subject: element });
+                });
+            }
+        }
+        classArray.forEach((element: any) => {
+            promises.push(database.collection('editions')
+                .where('class', '==', element.class)
+                .where('subject', '==', element.subject)
+                .where('published', '==', true)
+                .where('featureTag', '==', 'Published')
+                .where('date', '<', onedayAgo)
+                .get());
+        });
+        Promise.all(promises).then((results) => {
+            promises = []
+            const resultList = [].concat.apply([], results);
+            resultList.forEach((snapshots: any) =>
+                snapshots.forEach((doc: any) => {
+                    let data = doc.data();
+                    console.log(" docs to reset tags ", data.id, " => ", data.name);
+                    promises.push(doc.ref.update(update));
+                })
+            )
+            return Promise.all(promises)
+        }).then((_) => {
+            resolve(true);
+        }, error => {
+            reject(error);
+        });
     });
 };
 
 export const updateExpiryStatus = () => {
     return new Promise(async (resolve, reject) => {
-        //   try {
-
         const now = admin.firestore.Timestamp.now();
         const classesColltn = await database.collection('classes').where('expiry_date', '<', now).get();
         let classIds: any[] = []
@@ -662,11 +660,6 @@ export const updateExpiryStatus = () => {
             classIds.push(doc.id)
 
         });
-
-        // const classIds = classesColltn.docs.map(async (doc) => {
-        //     // doc.ref.update({ expiry_date: null });
-        //     return doc.id;
-        // });
         let students: any[] = []
         if (classIds.length) {
             const studentsCollection = await database.collection('student').where('class', 'in', classIds).get();
@@ -681,13 +674,6 @@ export const updateExpiryStatus = () => {
                 });
             });
         }
-        resolve({ now: now, classIds, students })
-        //   res.status(201).send({ now: now, classIds, students });
-
-        // } catch (error: any) {
-        //     res.status(error.code || 400).send(error);
-
-        // }
-
+        resolve({ now: now, classIds, students });
     });
 };

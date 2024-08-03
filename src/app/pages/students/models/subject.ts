@@ -1,6 +1,4 @@
 export interface Subjects {
+    SCIENCE: boolean
     MATHS: boolean
-    PHYSICS: boolean
-    BIOLOGY: boolean
-    CHEMISTRY: boolean
 }
