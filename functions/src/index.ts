@@ -37,7 +37,6 @@ const auth = admin.auth();
 exports.listenDeviceChange = functions.firestore
     .document('device/{studentId}')
     .onUpdate(async (change, context) => {
-        console.log("listenDeviceChange onUpdate ");
         return new Promise(async (resolve, reject) => {
             const beforeData = change.before.data()
             const afterData = change.after.data()

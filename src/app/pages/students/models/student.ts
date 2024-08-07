@@ -8,5 +8,6 @@ export interface Student {
     name: string
     subjects: Subjects
     syllabus: string
+    createdOn: string
 }
 

@@ -1,14 +1,65 @@
 <div class="students">
     <mat-card class="students-table">
         <mat-card-title class="students-table__header">
-            <div class="students-table__btn">
-                <button mat-flat-button color="warn" [disabled]="!selection.selected.length"
-                    (click)="delete(selection.selected)">Delete</button>
+            <div class="students-table__right">
+                <div>
+                    <button mat-icon-button [matMenuTriggerFor]="menu" yPosition="above"
+                        aria-label="Example icon-button with a menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="export()">
+                            <mat-icon color="accent">download</mat-icon>
+                            <span>Export</span>
+                        </button>
+
+                        <button mat-menu-item [disabled]="!selection.selected.length"
+                            (click)="delete(selection.selected)">
+                            <mat-icon color="warn">delete</mat-icon>
+                            <span>Delete</span>
+                        </button>
+                    </mat-menu>
+                </div>
             </div>
+            <div class="students-table__filters">
+                <div class="students-table__date-filters">
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                        <div fxFlex="40">
+                            <mat-form-field appearance='outline'>
+                                <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date"
+                                    [(ngModel)]="startDate" (dateChange)="applyDateRangeFilter()">
+                                <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #startDatePicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="40">
+                            <mat-form-field appearance='outline'>
+                                <input matInput [matDatepicker]="endDatePicker" placeholder="End Date"
+                                    [(ngModel)]="endDate" (dateChange)="applyDateRangeFilter()">
+                                <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #endDatePicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="15" style="padding-top: .25em;">
+                            <button mat-mini-fab (click)="clear()"> <mat-icon class="white">cancel</mat-icon></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="">
+                    <mat-form-field appearance='outline'>
+                        <mat-label> Filter</mat-label>
+                        <input matInput (keyup)="applyFilter($event)" #input>
+                    </mat-form-field>
+                </div>
+            </div>
+
+
         </mat-card-title>
 
 
         <mat-card-content class="students-table__content">
+
 
             <table mat-table [dataSource]="dataSource" class="students-table__table">
                 <ng-container *ngFor="let column of displayedColumns" matColumnDef="{{column}}"
@@ -17,7 +68,7 @@
                         <container-element [ngSwitch]="column">
                             <span *ngSwitchCase="'select'">
                                 <ng-container>
-                                    <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                    <mat-checkbox (change)="$event ? toggleAllRows($event) : null"
                                         [checked]="selection.hasValue() && isAllSelected()"
                                         [indeterminate]="selection.hasValue() && !isAllSelected()">
                                     </mat-checkbox>
@@ -31,7 +82,7 @@
                             <span *ngSwitchCase="'select'">
                                 <ng-container>
                                     <mat-checkbox (click)="$event.stopPropagation()"
-                                        (change)="$event ? selection.toggle(element) : null"
+                                        (change)="$event ? onSelectRow(element) : null"
                                         [checked]="selection.isSelected(element)">
                                     </mat-checkbox>
                                 </ng-container>
@@ -40,7 +91,7 @@
                                 <ng-container>
                                     <span>{{element[column]}}</span>
                                     <br>
-                                    <div>{{(element['createdOn'] |firebaseDate) |date:'MM-dd-YYYY hh:mm a'}}</div>
+                                    <div>{{element['createdOn'] }}</div>
                                 </ng-container>
                             </span>
                             <span *ngSwitchCase="'email'">

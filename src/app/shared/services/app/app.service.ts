@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, throwError, from, switchMap, map } from 'r
 import { FirebaseService } from '@services/firebase/firebase.service';
 import 'firebase/storage';
 import { getStorage, TaskState, TaskEvent, FirebaseStorage, ref, uploadString, uploadBytesResumable, UploadTask, getDownloadURL } from 'firebase/storage';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -125,3 +126,15 @@ export const isNullish = (obj) => Object.values(obj).some(x => {
   }
   return false
 });
+
+
+export const formatDateTime = (): void => {
+  Array.prototype.formatDateTime = function () {
+    return this.map(item => {
+      if (item.createdOn && item.createdOn.seconds) {
+        item.createdOn = moment(item.createdOn.toDate()).format('MM-DD-YYYY hh:mm a');
+      }
+      return item;
+    });
+  };
+}

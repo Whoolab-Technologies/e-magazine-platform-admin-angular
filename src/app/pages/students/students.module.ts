@@ -9,6 +9,9 @@ import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy
 
 import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
 import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -17,7 +20,14 @@ import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/
   ],
   imports: [
     CommonModule,
-    StudentsRoutingModule, SharedModule, MatTableModule, MatPaginatorModule, MatCheckboxModule,
+    MatMenuModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    StudentsRoutingModule,
+    SharedModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatCheckboxModule,
   ]
 })
 export class StudentsModule { }

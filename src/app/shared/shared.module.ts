@@ -29,7 +29,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { LoaderComponent } from './loader/loader.component';
 import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
-
+import { formatDateTime } from 'app/shared/services/app/app.service';
 @NgModule({
   declarations: [
     SidebarComponent,
@@ -61,4 +61,9 @@ import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@ang
   ],
 
 })
-export class SharedModule { }
+export class SharedModule {
+  constructor() {
+    formatDateTime()
+  }
+}
+

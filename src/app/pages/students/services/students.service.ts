@@ -19,16 +19,10 @@ export class StudentsService {
 
   getStudents(): Observable<any[]> {
     const path = `student`;
-
     return combineLatest([this._firebaseService
       .getCollection(path, [], "createdOn", "desc"), this._firebaseService
         .getCollection('classes')])
       .pipe(
-        //     catchError((error) => {
-        //      return this._appService.handleError(error);
-        //     }),
-
-
         map(([studentsSnapshot, classesSnapshot]) => {
           const students = snapshotToArray(studentsSnapshot)
           const classes = snapshotToObj(classesSnapshot)
@@ -47,7 +41,6 @@ export class StudentsService {
             el.subjects = stdSubjects
             return el
           })
-          console.log(students)
           return students
         }),
         tap((response: any) => {

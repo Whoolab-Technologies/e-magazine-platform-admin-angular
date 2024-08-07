@@ -105,7 +105,6 @@ export class EditionDetailsComponent implements OnInit, OnDestroy {
       this.published = JSON.parse(JSON.stringify(this.edition.published))
       this.edition.videos = this.edition.videos ? this.edition.videos : [];
       this.edition.featureTag = this.edition.featureTag ?? "";
-      console.log(" this.edition.featureTag ", this.edition.featureTag);
     })).subscribe();
     this._settingsService.settings$.subscribe(data => {
       this.settings = data
