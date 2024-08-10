@@ -49,9 +49,10 @@ export class StudentsService {
       );
   }
 
-  updatePurchaseStatus(index, student): Observable<any> {
+  updatePurchaseStatus(index, data): Observable<any> {
+    const student = JSON.parse(JSON.stringify(data))
+    delete student.createdOn
     const collection = `student/${student.id}`;
-
     return this._students.pipe(
       take(1),
       switchMap((students: any) => this._firebaseService

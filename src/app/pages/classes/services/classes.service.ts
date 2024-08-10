@@ -37,9 +37,9 @@ export class ClassesService {
         mergeMap((response) => {
           const classes = snapshotToArray(response);
           this._classes.next(classes);
-          if (classes.length)
-
+          if (!classes.length)
             return of([])
+          return of(classes)
         }),
 
         tap((response: any) => {
