@@ -55,11 +55,12 @@ export class NotificationService {
   getClasses(): Observable<any[]> {
     const path = `classes`;
     return this._firebaseService
-      .getCollection(path)
+      .getCollection(path, [], "order")
       .pipe(
 
         mergeMap((response) => {
           const classes = snapshotToArray(response);
+          console.log("classes ", classes)
           this._classes.next(classes);
           if (classes.length) {
             return this.getFilteredStudents(classes[0].id)
@@ -106,6 +107,7 @@ export class NotificationService {
     data["students"] = students;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
     const path = `notifications`;
+    console.log("  { notification: data, students: students }", { notification: data, students: students })
     return this._notifications.pipe(take(1),
       switchMap((_notifications: any) =>
         this._httpClient.post(`${env.cloudBaseUrl}${env.endPoints.notification}`,
@@ -143,7 +145,7 @@ export class NotificationService {
         _notifications = _notifications.filter((notification) =>
           !notifications.some(obj => obj.id === notification.id)
         )
-
+        console.log("_notifications ", _notifications)
         this._notifications.next(_notifications);
         return _notifications
       })

@@ -223,33 +223,30 @@ exports.listenDeleteStudent = functions.firestore
 
 export const notification = functions.https.onRequest((req, res) => {
     return cors(req, res, async () => {
-        const request = req.body;
-        const students = request.students;
-        const notification = request.notification;
+        try {
+            const request = req.body;
+            const students = request.students;
+            const notification = request.notification;
 
-        functions.logger.info([" notification", notification]);
-        notification['createdOn'] = moment(notification['createdOn']).toDate()
-        functions.logger.info([" notification createdOn", notification['createdOn']]);
+            functions.logger.info([" notification", notification]);
+            notification['createdOn'] = moment(notification['createdOn']).toDate()
 
-        var doc = await database.collection('notifications').add(notification);
-        notification['id'] = doc.id;
-        const payload = {
-            notification: {
-                title: notification.title,
-                body: notification.message
+            var doc = await database.collection('notifications').add(notification);
+            notification['id'] = doc.id;
+            const payload = {
+                notification: {
+                    title: notification.title,
+                    body: notification.message
+                }
+            };
+            const tokens: any = await getToken(students, notification);
+            if (tokens.length) {
+                await admin.messaging().sendToDevice([...tokens], payload)
             }
-        };
-        const tokens: any = await getToken(students, notification);
-        if (tokens.length) {
-            admin.messaging().sendToDevice([...tokens], payload).then((su) => {
-                res.status(200).send({ id: doc.id, message: 'Notifications send successfully' })
+            res.status(200).send({ id: doc.id, message: 'Notifications send successfully' })
 
-            }, (error) => {
-                res.status(500).send(error)
-            })
-        }
-        else {
-            res.status(200).send({ message: 'Notifications send' })
+        } catch (error) {
+            res.status(500).send({ message: error })
 
         }
 
@@ -426,6 +423,7 @@ export const verifyOtp = functions.https.onRequest((req, res) => {
         const request = req.body;
         database.collection('otp').doc(request.mobile).get().then((doc: any) => {
             if (!doc.exists) {
+                console.log(" Status: 404  mobile:" + request.mobile + " code : " + request.code)
                 res.status(404).send({
                     success: 0,
                     data: [],
@@ -444,6 +442,7 @@ export const verifyOtp = functions.https.onRequest((req, res) => {
                 // Convert milliseconds to minutes
                 const timeDifferenceInMinutes = Math.abs(moment.duration(timeDifferenceInMillis).asMinutes());
                 if (timeDifferenceInMinutes > 10) {
+                    console.log(" Status: 400  mobile:" + request.mobile + " code : " + request.code, "Msg : Expired");
                     res.status(400).send({
                         success: 0,
                         data: [],
@@ -459,6 +458,7 @@ export const verifyOtp = functions.https.onRequest((req, res) => {
                     });
                 }
                 else {
+                    console.log(" Status: 404  mobile:" + request.mobile + " code : " + request.code, "Msg : Incorrect OTP");
                     res.status(404).send({
                         success: 0,
                         data: [],
@@ -467,6 +467,7 @@ export const verifyOtp = functions.https.onRequest((req, res) => {
                 }
             }
         }, (error: any) => {
+            console.log(" Status: 404  mobile:" + request.mobile + " code : " + request.code, "Msg : " + error.toString());
             res.status(404).send({
                 success: 0,
                 data: [],

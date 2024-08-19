@@ -114,4 +114,23 @@ export class AddNotificationComponent implements OnInit, OnDestroy {
     }
     this.disableBtn = false
   }
+
+  applyFilter(event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    let filteredData = this.dataSource.data;
+    console.log("filteredData ", filteredData)
+    filteredData = filteredData.filter(row =>
+      row.name.toLowerCase().includes(filterValue) ||
+      row.email.toLowerCase().includes(filterValue) ||
+      row.mobile.toLowerCase().includes(filterValue) ||
+      row.class.toLowerCase().includes(filterValue)
+    );
+
+    this.dataSource.data = [...filteredData];
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+
+    // this._changeDetectorRef.detectChanges();
+  }
 }

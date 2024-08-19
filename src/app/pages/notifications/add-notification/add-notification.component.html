@@ -10,6 +10,15 @@
                 </mat-select>
 
             </div>
+            <div class="item70">
+                <div style="width:50%; float: right;">
+                    <div class="field-label">Filter Student</div>
+                    <mat-form-field appearance='outline'>
+
+                        <input matInput (keyup)="applyFilter($event)" placeholder="Filter...." #input>
+                    </mat-form-field>
+                </div>
+            </div>
         </div>
 
         <mat-card-content class="students-table__content">
