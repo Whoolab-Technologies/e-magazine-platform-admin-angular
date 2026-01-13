@@ -13,7 +13,7 @@ Platform Overview
 👉 https://github.com/Whoolab-Technologies/e-magazine-platform
 
 Admin Web App  
-👉 https://github.com/Whoolab-Technologies/emagazine-admin-web
+👉 https://github.com/Whoolab-Technologies/e-magazine-platform-admin-angular
 
 ---
 
