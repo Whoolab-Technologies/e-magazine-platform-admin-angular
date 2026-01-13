@@ -1,63 +1,57 @@
-# README #
+# E-Magazine Platform — Student Mobile App
 
-This README would normally document whatever steps are necessary to get your application up and running.
+The Student Mobile App allows users to browse, read, and subscribe
+to digital magazine editions securely.
 
-### What is this repository for? ###
+It is optimized for smooth reading experience and content protection.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+---
 
-### How do I get set up? ###
+## 🧩 Part of the E-Magazine Platform
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+Platform Overview  
+👉 https://github.com/Whoolab-Technologies/e-magazine-platform
 
-### Contribution guidelines ###
+Admin Web App  
+👉 https://github.com/Whoolab-Technologies/emagazine-admin-web
 
-* Writing tests
-* Code review
-* Other guidelines
+---
 
-### Who do I talk to? ###
+## ✨ Student Features
 
-* Repo owner or admin
-* Other community or team contact
+- Browse class & subject editions
+- Access free demo editions
+- Secure paid content access
+- Razorpay subscription payments
+- Last read resume option
+- Screenshot protection
+- Push notifications
+- Banner promotions
+- Tag-based edition grouping
+- Referral link generation
+- Referral bonus tracking
 
+---
 
-### Add Classes and Subjects
+## 🛠️ Tech Stack
 
-curl --location 'https://us-central1-ezlessons-v1.cloudfunctions.net/createClass' \
---header 'Content-Type: application/json' \
---data '{
-    "class": [
-        {
-            "name": "JEE",
-            "desc": "",
-            "subjects": [
-                {
-                    "name": "CHEMISTRY",
-                    "image": "https://d20x1nptavktw0.cloudfront.net/wordpress_media/2022/03/excellent-scores-in-NEET-Chemistry.jpg",
-                    "amount": 99,
-                    "desc": ""
-                },
-                {
-                    "name": "MATHS",
-                    "desc": "",
-                    "image": "https://yt3.googleusercontent.com/ytc/AGIKgqMYgHqYg4eBP1jZGBsBXYpfhTPTFXYyPsswUCdG=s900-c-k-c0x00ffffff-no-rj",
-                    "amount": 99
-                },
-                {
-                    "name": "PHYSICS",
-                    "desc": "",
-                    "image": "https://d20x1nptavktw0.cloudfront.net/wordpress_media/2022/04/Blog-Image-49.jpg",
-                    "amount": 99
-                }
-            ]
-        }
-    ]
-}'
+- Flutter
+- Firebase Firestore
+- Firebase Cloud Functions
+- Firebase Cloud Messaging
+- Razorpay Payment Gateway
+
+---
+
+## 🎯 Usage
+
+This app is designed for educational content distribution and
+subscription-based learning platforms.
+
+---
+
+## 💼 Customization & Licensing
+
+For institutional deployment, branding, or feature customization:
+
+📩 contact@whoolab.com
