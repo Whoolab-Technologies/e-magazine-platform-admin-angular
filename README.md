@@ -1,9 +1,9 @@
-# E-Magazine Platform — Student Mobile App
+# E-Magazine Platform — Admin Web Application
 
-The Student Mobile App allows users to browse, read, and subscribe
-to digital magazine editions securely.
+The Admin Web App is the control center of the e-magazine platform.
 
-It is optimized for smooth reading experience and content protection.
+Administrators can manage content publishing, subscriptions, pricing,
+users, referrals, notifications, and reporting from a single dashboard.
 
 ---
 
@@ -12,46 +12,46 @@ It is optimized for smooth reading experience and content protection.
 Platform Overview  
 👉 https://github.com/Whoolab-Technologies/e-magazine-platform
 
-Admin Web App  
-👉 https://github.com/Whoolab-Technologies/e-magazine-platform-admin-angular
+Student Mobile App  
+👉 https://github.com/Whoolab-Technologies/e-magazine-platform-flutter-m¯obile
 
 ---
 
-## ✨ Student Features
+## ✨ Admin Features
 
-- Browse class & subject editions
-- Access free demo editions
-- Secure paid content access
-- Razorpay subscription payments
-- Last read resume option
-- Screenshot protection
-- Push notifications
-- Banner promotions
+- Class and subject management
+- Edition publishing (scheduled or instant)
+- Free demo edition control
+- Subscription price configuration
+- Student enrollment management
+- Purchase status updates
+- Export student lists
+- Push notification campaigns
+- Banner management
+- Custom tag creation
 - Tag-based edition grouping
-- Referral link generation
+- Video link embedding inside editions
 - Referral bonus tracking
+- Referral performance monitoring
 
 ---
 
 ## 🛠️ Tech Stack
 
-- Flutter
+- Angular
 - Firebase Firestore
 - Firebase Cloud Functions
 - Firebase Cloud Messaging
-- Razorpay Payment Gateway
 
 ---
 
-## 🎯 Usage
+## 💼 Business Deployment
 
-This app is designed for educational content distribution and
-subscription-based learning platforms.
+We provide:
 
----
-
-## 💼 Customization & Licensing
-
-For institutional deployment, branding, or feature customization:
+- Admin customization
+- Workflow adjustments
+- Hosting & cloud setup
+- Reporting enhancements
 
 📩 contact@whoolab.com
