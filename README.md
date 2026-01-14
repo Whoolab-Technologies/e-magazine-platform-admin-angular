@@ -13,7 +13,7 @@ Platform Overview
 👉 https://github.com/Whoolab-Technologies/e-magazine-platform
 
 Student Mobile App  
-👉 https://github.com/Whoolab-Technologies/e-magazine-platform-flutter-m¯obile
+👉 https://github.com/Whoolab-Technologies/e-magazine-platform-flutter-mobile
 
 ---
 
