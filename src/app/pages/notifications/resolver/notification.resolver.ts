@@ -1,9 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import {
-  Router, Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
-} from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { StudentsService } from '@app/pages/students/services/students.service';
 import { Observable, Subject, forkJoin, of, takeUntil, tap } from 'rxjs';
 import { NotificationService } from '@app/pages/notifications/service/notification.service';
@@ -11,7 +7,7 @@ import { NotificationService } from '@app/pages/notifications/service/notificati
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationsResolver implements Resolve<boolean> {
+export class NotificationsResolver  {
   constructor(private _service: NotificationService) {
 
   }
@@ -24,7 +20,7 @@ export class NotificationsResolver implements Resolve<boolean> {
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationResolver implements Resolve<boolean>, OnDestroy {
+export class NotificationResolver  implements OnDestroy {
   private _onDestroy: Subject<any> = new Subject<any>()
   constructor(private _service: NotificationService) {
 

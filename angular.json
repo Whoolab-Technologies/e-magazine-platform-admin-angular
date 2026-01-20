@@ -96,39 +96,26 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ez-lesson:build"
+            "buildTarget": "ez-lesson:build"
           },
           "defaultConfiguration": "development",
           "configurations": {
             "production": {
-              "browserTarget": "ez-lesson:build:production"
+              "buildTarget": "ez-lesson:build:production"
             },
             "development": {
-              "browserTarget": "ez-lesson:build:development"
+              "buildTarget": "ez-lesson:build:development"
             },
             "hmr": {
               "hmr": true,
-              "browserTarget": "ez-lesson:build:hmr"
+              "buildTarget": "ez-lesson:build:hmr"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ez-lesson:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "buildTarget": "ez-lesson:build"
           }
         }
       }

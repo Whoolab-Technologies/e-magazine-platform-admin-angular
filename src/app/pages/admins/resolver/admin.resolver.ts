@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
-import {
-  Router, Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
-} from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, catchError, forkJoin, map, of, throwError } from 'rxjs';
 import { AdminService } from '../service/admin.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AdminResolver implements Resolve<any> {
+export class AdminResolver  {
 
   constructor(private _service: AdminService) {
 
@@ -25,7 +21,7 @@ export class AdminResolver implements Resolve<any> {
 @Injectable({
   providedIn: 'root'
 })
-export class AdminEditResolver implements Resolve<boolean> {
+export class AdminEditResolver  {
 
   constructor(private _service: AdminService, private _router: Router,) {
 

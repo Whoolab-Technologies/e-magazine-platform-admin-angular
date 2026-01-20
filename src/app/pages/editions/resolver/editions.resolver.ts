@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
-import {
-  Router, Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
-} from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, catchError, forkJoin, of, throwError } from 'rxjs';
 import { EditionsService } from '@app/pages/editions/services/editions.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EditionsResolver implements Resolve<boolean> {
+export class EditionsResolver  {
   constructor(private _editionService: EditionsService) {
 
   }
@@ -23,7 +19,7 @@ export class EditionsResolver implements Resolve<boolean> {
 @Injectable({
   providedIn: 'root'
 })
-export class EditionResolver implements Resolve<boolean> {
+export class EditionResolver  {
   constructor(private _service: EditionsService, private _router: Router,) {
 
   }

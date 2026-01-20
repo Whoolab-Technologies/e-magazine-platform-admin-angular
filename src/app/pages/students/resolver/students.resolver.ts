@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  Router, Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
-} from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, forkJoin, of } from 'rxjs';
 import { StudentsService } from '@app/pages/students/services/students.service';
 
@@ -11,7 +7,7 @@ import { StudentsService } from '@app/pages/students/services/students.service';
   providedIn: 'root'
 })
 
-export class StudentsResolver implements Resolve<boolean> {
+export class StudentsResolver  {
   constructor(private _studentsService: StudentsService) {
 
   }

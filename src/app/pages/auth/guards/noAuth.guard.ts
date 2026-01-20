@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, CanMatch, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from "@angular/router";
+import { ActivatedRouteSnapshot, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from "@angular/router";
 import { routes } from "@app/consts/routes";
 import { AuthService } from "@app/shared/services/auth/auth.service";
 import { Observable, switchMap, of } from "rxjs";
 
 
 @Injectable()
-export class NoAuthGuard implements CanActivate {
+export class NoAuthGuard  {
     public routers: typeof routes = routes;
 
     /*

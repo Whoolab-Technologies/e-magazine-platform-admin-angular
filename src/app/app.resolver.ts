@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  Router, Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
-} from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, catchError, forkJoin, switchMap } from 'rxjs';
 import { AuthService } from '@app/shared/services/auth/auth.service';
 import { SettingsService } from './pages/settings/service/settings.service';
@@ -11,7 +7,7 @@ import { SettingsService } from './pages/settings/service/settings.service';
 @Injectable({
   providedIn: 'root'
 })
-export class InitialDataResolver implements Resolve<boolean> {
+export class InitialDataResolver  {
   constructor(private _authService: AuthService,
     private _setingsService: SettingsService,
     private _router: Router,
