@@ -25,6 +25,7 @@ enum ProjectsType {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-project-stat-chart',
   templateUrl: './project-stat-chart.component.html',
   styleUrls: ['./project-stat-chart.component.scss']

@@ -10,6 +10,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { TableUtil } from '@app/shared/utils/table-utils';
 
 @Component({
+  standalone: false,
   selector: 'app-students-list',
   templateUrl: './students-list.component.html',
   styleUrls: ['./students-list.component.scss'],

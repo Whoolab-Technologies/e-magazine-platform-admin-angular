@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ClassesService } from '../services/classes.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AddEditClassComponent } from '../add-edit-class/add-edit-class.component';
 import { ConfirmationService } from '@app/shared/services/confirmation/confirmation.service';
 import { filter, map, switchMap, take } from 'rxjs';
 import { ToastService } from '@app/shared/services/toast/toast.service';
 
 @Component({
+  standalone: false,
   selector: 'app-class-list',
   templateUrl: './class-list.component.html',
   styleUrls: ['./class-list.component.scss']

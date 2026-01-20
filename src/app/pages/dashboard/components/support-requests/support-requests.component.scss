@@ -1,4 +1,4 @@
-@import '/src/assets/styles/styles';
+@use '/src/assets/styles/styles' as *;
 
 .support-requests {
   margin: 0 24px;

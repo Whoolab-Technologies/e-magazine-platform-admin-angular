@@ -1,7 +1,7 @@
-@import '/src/assets/styles/styles';
+@use '/src/assets/styles/styles' as *;
 
 .email-button {
-  
+
   box-shadow: none;
   margin-left: 16px;
 

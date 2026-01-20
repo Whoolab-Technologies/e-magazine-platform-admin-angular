@@ -1,52 +1,59 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use '/src/assets/styles/styles' as *;
 
-@import '/src/assets/styles/styles';
-
-
+/* -----------------------------------------
+   Color mixin (Material 2)
+------------------------------------------ */
 @mixin color($theme) {
-    $color-config: mat.get-color-config($theme);
-    $primary: map.get($color-config, 'primary');
-    $accent: map.get($color-config, 'accent');
-    $warn: map.get($color-config, 'warn');
-    
-    .sidebar{
-        .mat-mdc-list-base {
-            & .mat-mdc-list-item {
-              &.active {
-                color: mat.get-color-from-palette($primary) !important;
-                background-color: $sidebar-background-color-hover;
-                outline: none;
-          
-                & .mat-icon {
-                  color:mat.get-color-from-palette($primary);
-                }
-          
-                & .circle {
-                  background-color:mat.get-color-from-palette($primary);
-                }
-              }
-          
-              &:hover {
-                background-color: mat.get-color-from-palette($primary,100);
-              }
-          
-              &:focus {
-                outline: none;
-              }
+  $color-config: mat.m2-get-color-config($theme);
+
+  @if $color-config !=null {
+    $primary: map.get($color-config, primary);
+    $accent: map.get($color-config, accent);
+    $warn: map.get($color-config, warn);
+
+    .sidebar {
+      .mat-mdc-list-base {
+        .mat-mdc-list-item {
+          &.active {
+            color: mat.m2-get-color-from-palette($primary) !important;
+            background-color: $sidebar-background-color-hover;
+            outline: none;
+
+            .mat-icon {
+              color: mat.m2-get-color-from-palette($primary);
             }
-        }
-        .mat-icon {
-          color: $sidebar-icon-color;
+
+            .circle {
+              background-color: mat.m2-get-color-from-palette($primary);
+            }
           }
+
+          &:hover {
+            background-color: mat.m2-get-color-from-palette($primary, 100);
+          }
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+
+      .mat-icon {
+        color: $sidebar-icon-color;
+      }
     }
-  
+  }
 }
 
+/* -----------------------------------------
+   Theme entry mixin
+------------------------------------------ */
 @mixin theme($theme) {
-    $color-config: mat.get-color-config($theme);
-    @if $color-config != null {
-      @include color($theme);
-    }
-  
+  $color-config: mat.m2-get-color-config($theme);
+
+  @if $color-config !=null {
+    @include color($theme);
   }
+}

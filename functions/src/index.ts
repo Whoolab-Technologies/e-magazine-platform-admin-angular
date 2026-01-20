@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import * as moment from 'moment';
+import moment from 'moment';
 const Razorpay = require('razorpay');
 
 const _rPayOption = {

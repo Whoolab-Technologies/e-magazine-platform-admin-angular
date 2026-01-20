@@ -9,9 +9,10 @@ import { UserService } from '@app/shared/services/user/user.service';
 import { routes } from '../../../../consts';
 
 @Component({
+  standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
   @Input() isMenuOpened: boolean;

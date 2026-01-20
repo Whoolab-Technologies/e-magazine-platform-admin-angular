@@ -1,8 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Timestamp } from 'firebase/firestore';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Pipe({
+  standalone: false,
   name: 'firebaseDate'
 })
 export class FirebaseDatePipe implements PipeTransform {

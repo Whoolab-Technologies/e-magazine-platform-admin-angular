@@ -1,4 +1,5 @@
-@import '/src/assets/styles/styles';
+@use '/src/assets/styles/styles' as *;
+
 .form {
   width: 100%;
 

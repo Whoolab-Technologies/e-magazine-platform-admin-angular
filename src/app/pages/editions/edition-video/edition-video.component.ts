@@ -6,6 +6,7 @@ import { filter, map } from 'rxjs';
 import { Video } from '../models/video';
 
 @Component({
+  standalone: false,
   selector: 'app-edition-video',
   templateUrl: './edition-video.component.html',
   styleUrls: ['./edition-video.component.scss']

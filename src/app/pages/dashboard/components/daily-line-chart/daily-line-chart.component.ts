@@ -37,6 +37,7 @@ enum matSelectedFields {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-daily-line-chart',
   templateUrl: './daily-line-chart.component.html',
   styleUrls: ['./daily-line-chart.component.scss']
@@ -149,7 +150,7 @@ export class DailyLineChartComponent implements OnInit, AfterViewInit {
         },
       },
       tooltip: {
-        custom: ({series, seriesIndex, dataPointIndex, w}) => {
+        custom: ({ series, seriesIndex, dataPointIndex, w }) => {
           return customTooltip;
         }
       }

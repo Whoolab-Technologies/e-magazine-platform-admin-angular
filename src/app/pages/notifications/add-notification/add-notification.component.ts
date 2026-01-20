@@ -1,16 +1,17 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NotificationService } from '@app/pages/notifications/service/notification.service';
 import { ToastPositionTypes } from '@app/shared/model/toast';
 import { isNullish } from '@app/shared/services/app/app.service';
 import { ToastService } from '@app/shared/services/toast/toast.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Observable, Subject, map, takeUntil, tap } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-add-notification',
   templateUrl: './add-notification.component.html',
   styleUrls: ['./add-notification.component.scss']

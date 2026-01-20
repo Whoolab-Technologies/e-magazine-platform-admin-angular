@@ -8,6 +8,7 @@ import { filter, finalize, map, tap } from 'rxjs';
 
 
 @Component({
+  standalone: false,
   selector: 'app-image-selector',
   templateUrl: './image-selector.component.html',
   styleUrls: ['./image-selector.component.scss']

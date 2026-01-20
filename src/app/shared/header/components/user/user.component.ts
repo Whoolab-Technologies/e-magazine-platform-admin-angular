@@ -4,6 +4,7 @@ import { routes } from '../../../../consts';
 import { User } from '@app/shared/model/user';
 
 @Component({
+  standalone: false,
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']

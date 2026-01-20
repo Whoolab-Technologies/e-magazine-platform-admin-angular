@@ -1,12 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef, MatLegacyDialog as MatDialog, } from '@angular/material/legacy-dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, } from '@angular/material/dialog';
 import { ClassesService } from '../services/classes.service';
 import { Subject, catchError, filter, map, of, switchMap, take, takeLast, takeUntil, tap } from 'rxjs';
 import { ToastService } from '@app/shared/services/toast/toast.service';
 import { ConfirmationService } from '@app/shared/services/confirmation/confirmation.service';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-class',
   templateUrl: './add-edit-class.component.html',
   styleUrls: ['./add-edit-class.component.scss']
@@ -56,7 +57,7 @@ export class AddEditClassComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.classObj = { ...this.classObj, ...this.data } || { ...this.classObj };
+    this.classObj = { ...this.classObj, ...this.data } | { ...this.classObj };
     if (this.data) {
       this.btnText = "Update";
       this.isEdit = true
@@ -152,6 +153,7 @@ export class AddEditClassComponent implements OnInit {
 
 
 @Component({
+  standalone: false,
   selector: 'app-edit-subject',
   templateUrl: './edit-subject.component.html',
   styleUrls: ['./add-edit-class.component.scss']

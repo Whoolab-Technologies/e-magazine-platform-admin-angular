@@ -5,24 +5,23 @@ import { NotificationsComponent } from './notifications.component';
 import { NotificationsListComponent } from './notifications-list/notifications-list.component';
 import { SharedModule } from '@app/shared/shared.module';
 import { NotificationsRoutingModule } from './notifications-routing.module';
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
+import { MatSelectModule } from '@angular/material/select';
 
 import {
   ErrorToastrComponent,
   InfoToastrComponent,
-  NotificationPageComponent,
   SuccessToastComponent
 } from './toast/containers';
 import { AddNotificationComponent } from './add-notification/add-notification.component';
-import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
-import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
     NotificationsComponent,
     NotificationsListComponent,
-    NotificationPageComponent,
+    //   NotificationPageComponent,
     SuccessToastComponent,
     ErrorToastrComponent,
     InfoToastrComponent,

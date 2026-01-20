@@ -5,6 +5,7 @@ import { Subject, catchError, filter, map, take, takeUntil, tap } from 'rxjs';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-admin-edit-update',
   templateUrl: './admin-edit-update.component.html',
   styleUrls: ['./admin-edit-update.component.scss']

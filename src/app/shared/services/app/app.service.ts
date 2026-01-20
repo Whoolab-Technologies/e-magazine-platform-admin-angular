@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, throwError, from, switchMap, map } from 'r
 import { FirebaseService } from '@services/firebase/firebase.service';
 import 'firebase/storage';
 import { getStorage, TaskState, TaskEvent, FirebaseStorage, ref, uploadString, uploadBytesResumable, UploadTask, getDownloadURL } from 'firebase/storage';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root'

@@ -7,24 +7,29 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "module": "es2020",
-    "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2020",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
-    "paths": {    
-            "@env/*": ["environments/*"],
-            "@app/*": ["app/*"],
-            "@services/*": ["app/shared/services/*"]
-          }
+
+    "target": "ES2022",
+    "lib": ["ES2022", "dom"],
+
+    "paths": {
+      "@env/*": ["environments/*"],
+      "@app/*": ["app/*"],
+      "@services/*": ["app/shared/services/*"]
+    },
+
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+
+    "esModuleInterop": true,
+    "useDefineForClassFields": false
   },
-  "emitDecoratorMetadata":false,
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true,
-
+    "strictInjectionParameters": true
   }
 }

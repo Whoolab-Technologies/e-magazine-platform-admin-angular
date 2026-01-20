@@ -7,6 +7,7 @@ import { map, tap } from 'rxjs';
 import { ToastService } from '@app/shared/services/toast/toast.service';
 
 @Component({
+  standalone: false,
   selector: 'app-auth-page',
   templateUrl: './auth-page.component.html',
   styleUrls: ['./auth-page.component.scss']

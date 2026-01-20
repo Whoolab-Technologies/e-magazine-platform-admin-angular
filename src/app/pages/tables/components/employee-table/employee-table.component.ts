@@ -6,6 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Employee } from '../../models/employee';
 
 @Component({
+  standalone: false,
   selector: 'app-employee-table',
   templateUrl: './employee-table.component.html',
   styleUrls: ['./employee-table.component.scss']
@@ -18,7 +19,7 @@ export class EmployeeTableComponent implements OnInit {
 
   public isShowFilterInput = false;
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   public ngOnInit(): void {
     this.dataSource = new MatTableDataSource<Employee>(this.employeeTableData);

@@ -120,5 +120,13 @@
         }
       }
     }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "standalone": false
+    },
+    "@schematics/angular:application": {
+      "standalone": false
+    }
   }
 }

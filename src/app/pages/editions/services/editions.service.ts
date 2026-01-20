@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService, Where, snapshot, snapshotToArray } from '@app/shared/services/firebase/firebase.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { BehaviorSubject, Observable, forkJoin, map, mergeMap, of, switchMap, take, tap, throwError } from 'rxjs';
 
 @Injectable({

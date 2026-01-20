@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { ToastService } from '@app/shared/services/toast/toast.service';
 import { Observable, Subject, filter, map, switchMap, take, takeUntil } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-editions-list',
   templateUrl: './editions-list.component.html',
   styleUrls: ['./editions-list.component.scss']

@@ -56,6 +56,6 @@
     "resize-observer-polyfill": "^1.5.1",
     "ts-node": "^1.7.1",
     "tslint": "^3.3.0",
-    "typescript": "5.4.5"
+    "typescript": "^5.9.3"
   }
 }

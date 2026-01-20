@@ -3,6 +3,7 @@ import { HttpLoaderService } from '../services/http-loader.service';
 import { Subject } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-http-loader',
   templateUrl: './http-loader.component.html',
   styleUrls: ['./http-loader.component.scss']

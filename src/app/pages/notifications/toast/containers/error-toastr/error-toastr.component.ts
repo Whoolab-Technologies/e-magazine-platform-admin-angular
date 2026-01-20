@@ -3,6 +3,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Toast, ToastPackage, ToastrService } from 'ngx-toastr';
 
 @Component({
+  standalone: false,
   selector: 'app-error-toastr',
   templateUrl: './error-toastr.component.html',
   styleUrls: ['./error-toastr.component.scss'],

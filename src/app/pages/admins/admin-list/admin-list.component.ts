@@ -8,6 +8,7 @@ import { ToastService } from '@app/shared/services/toast/toast.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-admin-list',
   templateUrl: './admin-list.component.html',
   styleUrls: ['./admin-list.component.scss']

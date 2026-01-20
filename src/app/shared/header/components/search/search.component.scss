@@ -1,4 +1,4 @@
-@import '/src/assets/styles/styles';
+@use '/src/assets/styles/styles' as *;
 
 
 .search {
@@ -55,6 +55,32 @@
   padding-left: 4px;
 }
 
-@keyframes open_search { from { width: 36px; } to { width: 250px; }  }
-@keyframes open_search_large { from { width: 36px; } to { width: 150px; }  }
-@keyframes move_search-icon { from { padding: 0 7px 3px 0; } to { padding-right: 16px; }  }
+@keyframes open_search {
+  from {
+    width: 36px;
+  }
+
+  to {
+    width: 250px;
+  }
+}
+
+@keyframes open_search_large {
+  from {
+    width: 36px;
+  }
+
+  to {
+    width: 150px;
+  }
+}
+
+@keyframes move_search-icon {
+  from {
+    padding: 0 7px 3px 0;
+  }
+
+  to {
+    padding-right: 16px;
+  }
+}

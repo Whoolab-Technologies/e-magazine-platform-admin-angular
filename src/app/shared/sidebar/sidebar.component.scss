@@ -1,4 +1,4 @@
-@import '/src/assets/styles/styles';
+@use '/src/assets/styles/styles' as *;
 
 .mat-mdc-list-base {
   border-bottom: 1px solid $gray-80;

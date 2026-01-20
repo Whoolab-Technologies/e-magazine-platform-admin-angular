@@ -6,7 +6,7 @@ import { ClassListComponent } from './class-list/class-list.component';
 import { ClassesComponent } from './classes/classes.component';
 import { SharedModule } from '@app/shared/shared.module';
 
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { AddEditClassComponent, EditSubjectComponent } from './add-edit-class/add-edit-class.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -27,6 +27,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     SharedModule,
     HttpClientModule,
     MatMenuModule,
-  ], entryComponents: [EditSubjectComponent]
+  ],
 })
 export class ClassesModule { }

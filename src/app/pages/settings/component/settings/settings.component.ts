@@ -4,6 +4,7 @@ import { SettingsService } from '../../service/settings.service';
 import { Subject, filter, map, take, takeUntil } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']

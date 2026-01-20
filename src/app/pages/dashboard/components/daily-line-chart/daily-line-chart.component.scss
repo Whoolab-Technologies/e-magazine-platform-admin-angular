@@ -1,35 +1,36 @@
-@import '/src/assets/styles/styles';
+@use '/src/assets/styles/styles' as *;
 
 .chart {
   box-shadow: 0 3px 11px 0 $shadow-white, 0 3px 3px -2px $shadow-grey, 0 1px 8px 0 $shadow-dark-grey;
   margin: 16px 24px;
 
-   &__header {
-     display: flex;
-     justify-content: space-between;
-     padding: 8px;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
 
-     @media (max-width: $small) {
-       flex-wrap: wrap;
-     }
-   }
+    @media (max-width: $small) {
+      flex-wrap: wrap;
+    }
+  }
 
-   &__title {
-     margin: 0;
-     display: flex;
-     align-items: center;
-     color: $grey;
-     font-weight: $fw-normal;
-     font-size: $fs-regular;
-     text-transform: none;
-     line-height: 1.6;
-     letter-spacing: 0.12px;
-     order: 1;
-   }
+  &__title {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    color: $grey;
+    font-weight: $fw-normal;
+    font-size: $fs-regular;
+    text-transform: none;
+    line-height: 1.6;
+    letter-spacing: 0.12px;
+    order: 1;
+  }
 
   &__content {
     height: 380px;
     width: 100%;
+
     @media (max-width: $small) {
       overflow-x: scroll;
     }
@@ -92,4 +93,3 @@
 .light-blue {
   background-color: $white-blue;
 }
-

@@ -7,10 +7,10 @@ import { AdminListComponent } from './admin-list/admin-list.component';
 import { AdminEditUpdateComponent } from './admin-edit-update/admin-edit-update.component';
 import { SharedModule } from '@app/shared/shared.module';
 
-import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
+import { MatTableModule } from '@angular/material/table';
 
-import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
-import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { OnlyNumbersDirective } from './directive/only-numbers.directive';
 import { EmailValidatorDirective } from './directive/email-validator.directive';
 

@@ -3,13 +3,14 @@ import { EditionsService } from '../services/editions.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, filter, map, takeUntil, tap } from 'rxjs';
 import { AppService, allowedImageTypes, isNullish } from '@app/shared/services/app/app.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { ToastPositionTypes } from '@app/shared/model/toast'
 import { ToastService } from '@app/shared/services/toast/toast.service';
 import { SettingsService } from '@app/pages/settings/service/settings.service';
 
 
 @Component({
+  standalone: false,
   selector: 'app-edition-details',
   templateUrl: './edition-details.component.html',
   styleUrls: ['./edition-details.component.scss']

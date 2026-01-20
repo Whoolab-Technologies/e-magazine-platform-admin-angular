@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { RevenueChartData } from '../../models';
-import {colors} from '../../../../consts';
+import { colors } from '../../../../consts';
 
 @Component({
+  standalone: false,
   selector: 'app-revenue-chart',
   templateUrl: './revenue-chart.component.html',
   styleUrls: ['./revenue-chart.component.scss']

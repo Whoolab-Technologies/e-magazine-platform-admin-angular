@@ -3,13 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, filter, map, switchMap, take, takeUntil } from 'rxjs';
 import { NotificationService } from '@app/pages/notifications/service/notification.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ConfirmationService } from '@app/shared/services/confirmation/confirmation.service';
 import { ToastService } from '@app/shared/services/toast/toast.service';
 
 @Component({
+  standalone: false,
   selector: 'app-notifications-list',
   templateUrl: './notifications-list.component.html',
   styleUrls: ['./notifications-list.component.scss']

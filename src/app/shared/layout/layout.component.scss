@@ -1,11 +1,11 @@
-@import '/src/assets/styles/styles';
+@use '/src/assets/styles/styles' as *;
 
 .layout {
   width: 100%;
 }
 
 .layout-sidebar {
-  height:calc(100vh - 64px);
+  height: calc(100vh - 64px);
   margin-top: 64px;
 
   @media (max-width: $small) {
@@ -15,7 +15,7 @@
 
 .layout-content {
   background-color: $background-color;
-  height:calc(100vh - 64px);
+  height: calc(100vh - 64px);
   margin-top: 64px;
 
   @media (max-width: $small) {
