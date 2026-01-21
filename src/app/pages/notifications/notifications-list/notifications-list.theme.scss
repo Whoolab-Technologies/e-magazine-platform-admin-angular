@@ -3,7 +3,7 @@
 @use '/src/assets/styles/styles' as *;
 
 @mixin color($theme) {
-    $color-config: mat.get-color-config($theme);
+    $color-config: mat.m2-get-color-config($theme);
     $primary: map.get($color-config, 'primary');
     $accent: map.get($color-config, 'accent');
     $warn: map.get($color-config, 'warn');
@@ -43,7 +43,7 @@
                     padding: 10px;
                     font-size: $fs-small;
                     font-weight: $fw-lighter;
-                    color: mat.get-color-from-palette($warn);
+                    color: mat.m2-get-color-from-palette($warn);
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -93,7 +93,7 @@
 
 
 @mixin theme($theme) {
-    $color-config: mat.get-color-config($theme);
+    $color-config: mat.m2-get-color-config($theme);
 
     @if $color-config !=null {
         @include color($theme);

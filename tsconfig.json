@@ -11,6 +11,7 @@
 
     "target": "ES2022",
     "lib": ["ES2022", "dom"],
+    "useDefineForClassFields": false,
 
     "paths": {
       "@env/*": ["environments/*"],
@@ -21,12 +22,9 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
 
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-
     "esModuleInterop": true,
-    "useDefineForClassFields": false
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

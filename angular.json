@@ -39,6 +39,11 @@
               "src/custom-theme.scss",
               "src/assets/styles/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src"
+              ]
+            },
             "scripts": [],
             "allowedCommonJsDependencies": [
               "apexcharts",

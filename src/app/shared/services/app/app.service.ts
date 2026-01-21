@@ -128,13 +128,11 @@ export const isNullish = (obj) => Object.values(obj).some(x => {
 });
 
 
-export const formatDateTime = (): void => {
-  Array.prototype.formatDateTime = function () {
-    return this.map(item => {
-      if (item.createdOn && item.createdOn.seconds) {
-        item.createdOn = moment(item.createdOn.toDate()).format('MM-DD-YYYY hh:mm a');
-      }
-      return item;
-    });
-  };
-}
+export const formatDateTime = <T extends { createdOn?: any }>(items: T[]): T[] => {
+  return items.map(item => {
+    if (item.createdOn?.seconds) {
+      item.createdOn = moment(item.createdOn.toDate()).format('MM-DD-YYYY hh:mm a');
+    }
+    return item;
+  });
+};

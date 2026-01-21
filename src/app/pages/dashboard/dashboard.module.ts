@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
-import { NgxEchartsModule } from 'ngx-echarts';
 import { TrendModule } from 'ngx-trend';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,8 +19,6 @@ import {
   VisitsChartComponent,
   PerformanceChartComponent,
   ServerChartComponent,
-  RevenueChartComponent,
-  DailyLineChartComponent,
   SupportRequestsComponent,
   ProjectStatChartComponent
 } from './components';
@@ -53,8 +50,6 @@ export class DashboardRoutingModule {
     VisitsChartComponent,
     PerformanceChartComponent,
     ServerChartComponent,
-    RevenueChartComponent,
-    DailyLineChartComponent,
     SupportRequestsComponent,
     ProjectStatChartComponent
   ],
@@ -75,12 +70,8 @@ export class DashboardRoutingModule {
     FormsModule,
     SharedModule, DashboardRoutingModule
   ],
-  exports: [
-    DailyLineChartComponent
-  ],
-  providers: [
-    DashboardService
-  ]
+
+
 })
 export class DashboardModule { }
 

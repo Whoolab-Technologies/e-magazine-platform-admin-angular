@@ -61,9 +61,5 @@ import { formatDateTime } from 'app/shared/services/app/app.service';
   ],
 
 })
-export class SharedModule {
-  constructor() {
-    formatDateTime()
-  }
-}
+export class SharedModule { }
 

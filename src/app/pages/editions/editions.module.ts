@@ -16,6 +16,7 @@ import { EditionDetailsComponent } from './edition-details/edition-details.compo
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatCardModule } from '@angular/material/card';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -23,6 +24,7 @@ import { EditionVideoComponent } from './edition-video/edition-video.component';
 import { VideoListComponent } from './components/video-list/video-list.component';
 
 import { VideoItemComponent } from './components/video-item/video-item.component';
+import { TopicComponent } from './components/topic/topic.component';
 @NgModule({
   declarations: [
     EditionsComponent,
@@ -30,9 +32,11 @@ import { VideoItemComponent } from './components/video-item/video-item.component
     EditionDetailsComponent,
     EditionVideoComponent,
     VideoListComponent,
-    VideoItemComponent
+    VideoItemComponent,
+    TopicComponent
   ],
   imports: [
+    MatCardModule,
     CommonModule, MatNativeDateModule, MatMomentDateModule,
     EditionsRoutingModule, MatDatepickerModule, DragDropModule, MatSlideToggleModule,
     SharedModule, MatTableModule, MatPaginatorModule, MatSelectModule, MatButtonModule

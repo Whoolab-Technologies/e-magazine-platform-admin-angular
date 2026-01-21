@@ -388,7 +388,7 @@ mat-select.mat-select {
   font-size: 60px !important;
   height: 60px !important;
   width: 60px !important;
-  color: mat.get-color-from-palette($ez-lesson-primary);
+  color: mat.m2-get-color-from-palette($ez-lesson-primary);
 }
 
 .text-center {
@@ -413,11 +413,11 @@ mat-select.mat-select {
 }
 
 .text-warn {
-  color: mat.get-color-from-palette($ez-lesson-warn);
+  color: mat.m2-get-color-from-palette($ez-lesson-warn);
 }
 
 .text-secondary {
-  color: mat.get-color-from-palette($ez-lesson-accent);
+  color: mat.m2-get-color-from-palette($ez-lesson-accent);
 }
 
 .remove-file {

@@ -2,29 +2,36 @@
 @use '@angular/material' as mat;
 @use '/src/assets/styles/styles' as *;
 
+/* -----------------------------------------
+   Color mixin (Material 2)
+------------------------------------------ */
 @mixin color($theme) {
-  $color-config: mat.get-color-config($theme);
-  $primary: map.get($color-config, 'primary');
-  $accent: map.get($color-config, 'accent');
-  $warn: map.get($color-config, 'warn');
+  $color-config: mat.m2-get-color-config($theme);
 
-  .auth-page {
-    &__content-block {
-      background-color: mat.get-color-from-palette($accent, 100);
-    }
+  @if $color-config !=null {
+    $primary: map.get($color-config, primary);
+    $accent: map.get($color-config, accent);
+    $warn: map.get($color-config, warn);
 
-    &__logo {
-      background-color: mat.get-color-from-palette($primary);
+    .auth-page {
+      &__content-block {
+        background-color: mat.m2-get-color-from-palette($accent, 100);
+      }
+
+      &__logo {
+        background-color: mat.m2-get-color-from-palette($primary);
+      }
     }
   }
-
 }
 
+/* -----------------------------------------
+   Theme entry mixin
+------------------------------------------ */
 @mixin theme($theme) {
-  $color-config: mat.get-color-config($theme);
+  $color-config: mat.m2-get-color-config($theme);
 
   @if $color-config !=null {
     @include color($theme);
   }
-
 }

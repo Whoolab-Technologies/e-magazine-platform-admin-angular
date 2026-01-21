@@ -8,6 +8,7 @@ import { ToastService } from '@app/shared/services/toast/toast.service';
 import { ConfirmationConfig } from '@app/shared/model/confirmation-config';
 import { SelectionModel } from '@angular/cdk/collections';
 import { TableUtil } from '@app/shared/utils/table-utils';
+import { formatDateTime } from '@app/shared/services/app/app.service';
 
 @Component({
   standalone: false,
@@ -44,7 +45,7 @@ export class StudentsListComponent implements OnInit, OnDestroy {
     this._service.students$
       .pipe(
         takeUntil(this._unsubscribeAll),
-        map((_students) => _students.formatDateTime())
+        map((_students) => formatDateTime(_students))
       )
       .subscribe((students: Student[]) => {
         this.dataSource.data = JSON.parse(JSON.stringify(students))

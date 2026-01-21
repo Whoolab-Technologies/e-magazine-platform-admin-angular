@@ -12,7 +12,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './pages/dashboard/dashboard.module';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AuthModule } from './pages/auth/auth.module';
-import { NgxEchartsModule } from 'ngx-echarts';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpLoaderInterceptor } from './interceptors/http-loader.interceptor';
 import { HttpLoaderComponent } from './shared/http-loader/http-loader.component';
@@ -34,9 +33,6 @@ import { HttpLoaderComponent } from './shared/http-loader/http-loader.component'
     ToastrModule.forRoot(),
     MatCardModule,
     MatButtonModule,
-    NgxEchartsModule.forRoot({
-      echarts: () => import('echarts')
-    }),
     HttpClientModule
   ], providers: [
     {

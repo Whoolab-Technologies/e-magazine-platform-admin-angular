@@ -6,7 +6,7 @@ import { Observable, switchMap, of } from "rxjs";
 
 
 @Injectable()
-export class NoAuthGuard  {
+export class NoAuthGuard {
     public routers: typeof routes = routes;
 
     /*
@@ -14,7 +14,7 @@ export class NoAuthGuard  {
     */
     constructor(private _authService: AuthService, private _router: Router) { }
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-
+        console.log(" NoAuthGuard canActivate ");
         return this._check();
     }
 
@@ -30,6 +30,8 @@ export class NoAuthGuard  {
     private _check(): Observable<any> {
         // Check the authentication status and return an observable of
         // "true" or "false" to allow or prevent the access
+        console.log("NoAuthGuard _check ");
+
         return this._authService.check().pipe(
             switchMap((authenticated) => {
                 if (!authenticated) {
