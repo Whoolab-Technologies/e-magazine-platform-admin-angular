@@ -8,7 +8,7 @@ import { AuthenticatedGuard } from './pages/auth/guards/authenticated.guard';
 const routes: Routes = [
   {
     path: '',
-    canActivate: [AuthenticatedGuard],
+    canActivate: [AuthGuard],
     resolve: { initialData: InitialDataResolver },
     children: [
       {

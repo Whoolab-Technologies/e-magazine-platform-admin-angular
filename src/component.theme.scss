@@ -1,20 +1,20 @@
-@use '/src/app/shared/header/containers/header/header.component.theme' as header;
-@use '/src/app/shared/header/components/user/user.component.theme' as user;
-@use '/src/app/shared/sidebar/sidebar.component.theme' as sidebar;
-@use '/src/app/pages/auth/containers/auth-page/auth-page.component.theme' as auth;
-@use '/src/app/pages/students/students-list/students-list.component.theme' as students;
-@use '/src/app/pages/editions/editions-list/editions-list.component.theme' as editions;
+@use 'app/shared/header/containers/header/header.component.theme' as header;
+@use 'app/shared/header/components/user/user.component.theme' as user;
+@use 'app/shared/sidebar/sidebar.component.theme' as sidebar;
+@use 'app/pages/auth/containers/auth-page/auth-page.component.theme' as auth;
+@use 'app/pages/students/students-list/students-list.component.theme' as students;
+@use 'app/pages/editions/editions-list/editions-list.component.theme' as editions;
 
-@use '/src/app/pages/editions/edition-details/edition-details.component.theme' as editions-details;
-@use '/src/app/pages/editions/edition-video/edition-video.component.theme.scss' as edition-video;
-@use '/src/app/shared/confirmation/confirmation.component.theme.scss' as confirmation;
-@use '/src/app/pages/notifications/notifications-list/notifications-list.theme.scss' as notifications;
-@use '/src/app/pages/notifications/add-notification/add-notification.component.theme.scss' as notification;
-@use '/src/app/pages/classes/class-list/class-list.component.theme.scss' as classes;
-@use '/src/app/pages/classes/add-edit-class/add-edit-class.component.theme.scss' as add-edit-class;
-@use '/src/app/pages/settings/component/settings/settings.component.theme.scss' as settings;
-@use '/src/app/pages/admins/admin-list/admin-list.component.theme.scss' as admins;
-@use '/src/app/pages/admins/admin-edit-update/admin-edit-update.component.theme.scss' as edit-admin;
+@use 'app/pages/editions/edition-details/edition-details.component.theme' as editions-details;
+@use 'app/pages/editions/edition-video/edition-video.component.theme.scss' as edition-video;
+@use 'app/shared/confirmation/confirmation.component.theme.scss' as confirmation;
+@use 'app/pages/notifications/notifications-list/notifications-list.theme.scss' as notifications;
+@use 'app/pages/notifications/add-notification/add-notification.component.theme.scss' as notification;
+@use 'app/pages/classes/class-list/class-list.component.theme.scss' as classes;
+@use 'app/pages/classes/add-edit-class/add-edit-class.component.theme.scss' as add-edit-class;
+@use 'app/pages/settings/component/settings/settings.component.theme.scss' as settings;
+@use 'app/pages/admins/admin-list/admin-list.component.theme.scss' as admins;
+@use 'app/pages/admins/admin-edit-update/admin-edit-update.component.theme.scss' as edit-admin;
 
 @mixin app-component($theme) {
     @include header.theme($theme);

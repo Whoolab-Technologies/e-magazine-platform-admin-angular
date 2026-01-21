@@ -13,7 +13,10 @@
     $accent: map.get($color-config, accent);
     $warn: map.get($color-config, warn);
 
+
     .sidebar {
+      --mat-list-list-item-label-text-color: mat.m2-get-color-from-palette($primary) !important;
+
       .mat-mdc-list-base {
         .mat-mdc-list-item {
           &.active {

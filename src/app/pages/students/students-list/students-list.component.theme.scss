@@ -13,7 +13,7 @@
         $accent: map.get($color-config, accent);
         $warn: map.get($color-config, warn);
 
-        mat-card .mat-form-field {
+        mat-card .mat-mdc-form-field {
             margin: 0;
             padding: 0;
         }
@@ -88,7 +88,7 @@
                 }
 
                 &__btn {
-                    .mat-flat-button {
+                    .mat-mdc-unelevated-button {
                         margin-right: 2rem;
                     }
                 }

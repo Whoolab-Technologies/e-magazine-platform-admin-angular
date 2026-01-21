@@ -14,13 +14,13 @@
   $accent: map.get($color-config, accent);
 
   .header {
-    background-color: mat.m2-get-color-from-palette($primary);
+    background-color: mat.m2-get-color-from-palette($primary) !important;
 
     &__title-text {
       color: $header-title-font-color;
 
       .suffix {
-        color: mat.m2-get-color-from-palette($accent);
+        color: mat.m2-get-color-from-palette($accent) !important;
       }
     }
   }

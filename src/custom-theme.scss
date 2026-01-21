@@ -61,7 +61,7 @@ button.mat-menu-item:hover:not([disabled]),
 }
 
 mat-form-field {
-  mat-select.mat-select {
+  mat-select.mat-mdc-select {
     width: 90%;
     //background-color: red;
     border: 0px solid $light-grey;
@@ -69,7 +69,7 @@ mat-form-field {
   }
 }
 
-mat-select.mat-select {
+mat-select.mat-mdc-select {
   width: 90%;
   display: inline;
   font-size: 16px;
@@ -174,12 +174,12 @@ button.mat-fab .mat-button-wrapper {
   padding: 0;
 }
 
-.mat-card {
+.mat-mdc-card {
   color: $card-font-color;
   margin: 16px;
 }
 
-.mat-card-title p {
+.mat-mdc-card-title p {
   font-size: 21px;
   font-weight: 400;
   color: $card-title-font-color;
@@ -199,8 +199,8 @@ mat-toolbar.page-header {
 }
 
 .mat-toolbar h1 {
-  font-weight: 400;
-  font-size: 38.4px;
+  font-weight: 400 !important;
+  font-size: 38.4px !important;
   color: $toolbar-title-font-color;
   line-height: 1;
   letter-spacing: -0.2186px;
@@ -353,11 +353,11 @@ div.apexcharts-xaxistooltip-bottom:after {
   font-weight: $fw-lighter;
 }
 
-.mat-form-field {
+.mat-mdc-form-field {
   width: 100%;
 }
 
-mat-select.mat-select {
+mat-select.mat-mdc-select {
   display: inline-block !important;
   //width: inherit !important;
 
