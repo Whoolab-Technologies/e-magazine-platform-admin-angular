@@ -408,8 +408,16 @@ mat-select.mat-mdc-select {
   padding: 0 !important;
 }
 
-.mat-dialog-container {
+.mat-mdc-dialog-surface,
+.mat-mdc-dialog-container {
   border-radius: 40px !important;
+}
+
+.mat-mdc-dialog-container {
+  box-shadow: 0 11px 15px -7px #0003, 0 24px 38px 3px #00000024, 0 9px 46px 8px #0000001f;
+  background: white;
+  color: #000000de;
+
 }
 
 .text-warn {

@@ -57,7 +57,7 @@ export class AddEditClassComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.classObj = { ...this.classObj, ...this.data } | { ...this.classObj };
+    this.classObj = { ...this.classObj, ...this.data };
     if (this.data) {
       this.btnText = "Update";
       this.isEdit = true
