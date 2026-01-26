@@ -22,6 +22,26 @@ export class AuthPageComponent {
     private _toastService: ToastService
   ) { }
 
+
+  greeting: string = '';
+  userName: string = 'User';
+
+  ngOnInit(): void {
+    this.setGreeting();
+  }
+
+  setGreeting(): void {
+    const hour = new Date().getHours();
+
+    if (hour < 12) {
+      this.greeting = 'Good Morning';
+    } else if (hour < 18) {
+      this.greeting = 'Good Afternoon';
+    } else {
+      this.greeting = 'Good Evening';
+    }
+  }
+
   public sendLoginForm(event): void {
 
     this._service.signIn(event).pipe(map(el => {
