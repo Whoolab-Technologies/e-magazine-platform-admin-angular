@@ -53,3 +53,7 @@ docs/*
 *.cache
 .firebase/
 ._*
+firebase.json
+functions/.env
+src/environments/environment.prod.ts
+src/environments/environment.ts

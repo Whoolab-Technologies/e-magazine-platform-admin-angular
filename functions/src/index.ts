@@ -5,18 +5,14 @@ const Razorpay = require('razorpay');
 
 const _rPayOption = {
 
-    key_id: 'rzp_live_qs5T4yjZ2v0LQH',
-    key_secret: '4Sh81NXb7qy0qBG15xIu1s7Z',
+    key_id: process.env.RAZORPAY_KEY,
+    key_secret: process.env.RAZORPAY_SECRET,
 
 }
 const _rPayOptionTest = {
-    key_id: 'rzp_test_PgXrQp07PbCOhm',
-    key_secret: 'oAKkRrCJOpvUU6tHhcSEUO5a',
+    key_id: process.env.RAZORPAY_TEST_KEY,
+    key_secret: process.env.RAZORPAY_TEST_SECRET,
 }
-// const _rPayOptionLive = {
-//     key_id: 'rzp_live_qs5T4yjZ2v0LQH',
-//     key_secret: '4Sh81NXb7qy0qBG15xIu1s7Z',
-// }
 
 const _razorPay = new Razorpay(_rPayOption);
 const _razorPayTest = new Razorpay(_rPayOptionTest);
